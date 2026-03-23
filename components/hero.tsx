@@ -5,7 +5,7 @@ import { useRef } from "react"
 import Header from "./header"
 
 export default function Hero() {
-  const container = useRef()
+  const container = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
     target: container,
     offset: ["start start", "end start"],
@@ -14,25 +14,43 @@ export default function Hero() {
   const y = useTransform(scrollYProgress, [0, 1], ["0vh", "150vh"])
 
   return (
-    <div className="h-screen overflow-hidden">
+    <div ref={container} className="h-screen overflow-hidden">
       <Header />
       <motion.div style={{ y }} className="relative h-full">
         <Image
-          src="/images/mountain-landscape.jpg"
+          src="/images/kiri-hero.jpg"
           fill
-          alt="Mountain landscape background"
+          alt="Árbol Kiri en flor — el árbol que más rápido crece del planeta"
           style={{ objectFit: "cover" }}
+          priority
         />
+        {/* Purple overlay for brand tone */}
+        <div className="absolute inset-0 bg-purple-900/40" />
         <div className="absolute inset-0 flex items-center justify-start z-10">
-          <div className="text-left text-white max-w-3xl px-6">
-            <h1 className="text-3xl md:text-5xl font-bold mb-6 leading-tight">Where Ideas Learn to Breathe</h1>
-            <p className="text-sm md:text-base leading-relaxed mb-8">
-              A landing space for bold experiments, half-finished thoughts, and sparks of inspiration. Built to grow,
-              adapt, and surprise—just like the projects you're about to launch.
+          <div className="text-left text-white max-w-3xl px-8 md:px-16">
+            <p className="text-sm uppercase tracking-[0.2em] mb-4 text-purple-200 font-medium">
+              Cuenta de inversión para niños
             </p>
-            <button className="px-4 py-2 border-2 border-white bg-transparent text-white text-sm transition-all duration-300 hover:bg-white hover:text-black cursor-pointer">
-              GET STARTED
-            </button>
+            <h1 className="font-serif text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-balance">
+              La cuenta que les asegura un futuro mejor
+            </h1>
+            <p className="text-base md:text-lg leading-relaxed mb-8 text-white/80 max-w-xl">
+              Regala una cuenta Kiri. Invierte en su futuro. Los niños podrán ver crecer sus ahorros, como el árbol más rápido del planeta.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <a
+                href="#reserva"
+                className="px-7 py-3 bg-white text-primary font-semibold text-sm rounded-full hover:bg-purple-100 transition-colors duration-300 text-center"
+              >
+                Abre tu cuenta
+              </a>
+              <a
+                href="#sobre"
+                className="px-7 py-3 border-2 border-white/60 text-white text-sm font-medium rounded-full hover:bg-white/10 transition-colors duration-300 text-center"
+              >
+                Descubre más
+              </a>
+            </div>
           </div>
         </div>
       </motion.div>

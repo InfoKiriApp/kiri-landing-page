@@ -4,8 +4,8 @@ import Image from "next/image"
 import { useScroll, useTransform, motion } from "framer-motion"
 import { useRef } from "react"
 
-export default function Section() {
-  const container = useRef()
+export default function Promo() {
+  const container = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
     target: container,
     offset: ["start end", "end start"],
@@ -20,18 +20,34 @@ export default function Section() {
     >
       <div className="fixed top-[-10vh] left-0 h-[120vh] w-full">
         <motion.div style={{ y }} className="relative w-full h-full">
-          <Image src="/images/spiral-circles.jpg" fill alt="Abstract spiral circles" style={{ objectFit: "cover" }} />
+          <Image
+            src="/images/kiri-tree-growth.jpg"
+            fill
+            alt="El árbol Kiri, el que más rápido crece en el planeta"
+            style={{ objectFit: "cover" }}
+          />
+          <div className="absolute inset-0 bg-purple-900/60" />
         </motion.div>
       </div>
 
-      <h3 className="absolute top-12 right-6 text-white uppercase z-10 text-sm md:text-base lg:text-lg">
-        Anatomy of Possibility
-      </h3>
-
-      <p className="absolute bottom-12 right-6 text-white text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-5xl z-10">
-        Every section is a frame for your story. Shape it, remix it, and let your content spill into unexpected patterns
-        that keep people scrolling.
+      <p className="absolute top-12 right-6 md:right-10 text-purple-200 uppercase z-10 text-sm tracking-[0.2em] font-medium">
+        Kiri — El árbol más rápido del planeta
       </p>
+
+      <div className="absolute bottom-12 left-6 md:left-10 z-10 max-w-2xl">
+        <h2 className="font-serif text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-balance">
+          Como el árbol Kiri, sus ahorros crecerán sanos y fuertes
+        </h2>
+        <p className="text-purple-200 text-base md:text-lg leading-relaxed max-w-lg mb-8">
+          El árbol Kiri puede alcanzar los 30 metros de altura. Queremos que los ahorros de tus hijos crezcan igual: rápido, fuerte y con raíces sólidas para toda la vida.
+        </p>
+        <a
+          href="#reserva"
+          className="inline-block px-7 py-3 bg-white text-primary rounded-full text-sm font-semibold hover:bg-purple-100 transition-colors duration-300"
+        >
+          Reserva tu Kiri
+        </a>
+      </div>
     </div>
   )
 }
