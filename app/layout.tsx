@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Plus_Jakarta_Sans, Playfair_Display } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
+import CookieBanner from "@/components/cookie-banner"
 import "./globals.css"
 
 const plusJakarta = Plus_Jakarta_Sans({
@@ -37,6 +38,7 @@ export default function RootLayout({
     <html lang="es">
       <body className={`${plusJakarta.variable} ${playfair.variable} font-sans antialiased`}>
         {children}
+        <CookieBanner />
         <Analytics />
       </body>
     </html>
