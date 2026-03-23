@@ -106,13 +106,13 @@ export default function Featured() {
         <div className="max-w-3xl mx-auto">
           {/* Card */}
           <div className="bg-background rounded-3xl border border-border overflow-hidden shadow-sm">
-            <div className="overflow-hidden">
+            <div className="overflow-hidden w-full">
               <div
-                className="flex transition-transform duration-500 ease-out"
+                className="flex w-full transition-transform duration-500 ease-out"
                 style={{ transform: `translateX(-${currentSlide * 100}%)` }}
               >
                 {slides.map((slide) => (
-                  <div key={slide.number} className="min-w-full flex flex-col md:flex-row">
+                  <div key={slide.number} className="min-w-0 w-full flex-shrink-0 flex flex-col md:flex-row">
                     {/* Illustration panel */}
                     <div className="flex-shrink-0 bg-primary/5 flex items-center justify-center p-10 md:w-72 lg:w-80">
                       <Image
