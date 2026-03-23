@@ -92,92 +92,95 @@ export default function Featured() {
 
   return (
     <section id="sobre" className="bg-background">
-      {/* About / How it works — full-bleed slideshow */}
-      <div id="como-funciona" className="bg-muted">
+      {/* Cómo funciona — card slideshow */}
+      <div id="como-funciona" className="bg-muted py-24 px-4 md:px-8 lg:px-12">
         {/* Section header */}
-        <div className="px-8 md:px-12 lg:px-20 pt-24 pb-12 text-center">
+        <div className="text-center mb-14">
           <p className="text-sm uppercase tracking-[0.2em] text-primary font-semibold mb-3">Cómo funciona</p>
           <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-foreground text-balance">
             Tres pasos para garantizar su futuro
           </h2>
         </div>
 
-        {/* Slide track */}
-        <div className="relative overflow-hidden pb-20">
-          <div
-            className="flex transition-transform duration-500 ease-out"
-            style={{ transform: `translateX(-${currentSlide * 100}%)` }}
-          >
-            {slides.map((slide) => (
+        {/* Slide container */}
+        <div className="max-w-3xl mx-auto">
+          {/* Card */}
+          <div className="bg-background rounded-3xl border border-border overflow-hidden shadow-sm">
+            <div className="overflow-hidden">
               <div
-                key={slide.number}
-                className="min-w-full px-8 md:px-12 lg:px-20"
+                className="flex transition-transform duration-500 ease-out"
+                style={{ transform: `translateX(-${currentSlide * 100}%)` }}
               >
-                <div className="max-w-5xl mx-auto flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-                  {/* Illustration */}
-                  <div className="flex-shrink-0 w-64 h-64 md:w-80 md:h-80 relative">
-                    <Image
-                      src={slide.image}
-                      alt={slide.title}
-                      fill
-                      className="object-contain drop-shadow-xl"
-                    />
-                  </div>
+                {slides.map((slide) => (
+                  <div key={slide.number} className="min-w-full flex flex-col md:flex-row">
+                    {/* Illustration panel */}
+                    <div className="flex-shrink-0 bg-primary/5 flex items-center justify-center p-10 md:w-72 lg:w-80">
+                      <Image
+                        src={slide.image}
+                        alt={slide.title}
+                        width={220}
+                        height={220}
+                        className="object-contain w-44 h-44 md:w-52 md:h-52 drop-shadow-md"
+                      />
+                    </div>
 
-                  {/* Text */}
-                  <div className="flex-1 text-center lg:text-left">
-                    <span className="font-serif text-8xl md:text-9xl font-bold text-primary/10 leading-none block">
-                      {slide.number}
-                    </span>
-                    <div className="flex items-center gap-3 justify-center lg:justify-start -mt-4 mb-5">
-                      <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                        <slide.icon className="w-5 h-5 text-primary" />
+                    {/* Text panel */}
+                    <div className="flex flex-col justify-center gap-5 p-8 md:p-10 flex-1">
+                      <div className="flex items-center gap-3">
+                        <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground text-xs font-bold flex-shrink-0">
+                          {slide.number}
+                        </span>
+                        <div className="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <slide.icon className="w-4 h-4 text-primary" />
+                        </div>
                       </div>
-                      <h3 className="font-serif text-2xl md:text-3xl font-bold text-foreground leading-tight">
+                      <h3 className="font-serif text-2xl md:text-3xl font-bold text-foreground leading-snug">
                         {slide.title}
                       </h3>
+                      <p className="text-muted-foreground leading-relaxed text-base">
+                        {slide.description}
+                      </p>
                     </div>
-                    <p className="text-muted-foreground leading-relaxed text-base md:text-lg max-w-lg mx-auto lg:mx-0">
-                      {slide.description}
-                    </p>
                   </div>
-                </div>
+                ))}
               </div>
-            ))}
+            </div>
+
+            {/* Card footer: arrows + dots */}
+            <div className="flex items-center justify-between px-8 py-5 border-t border-border bg-background">
+              <button
+                onClick={prevSlide}
+                className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                aria-label="Diapositiva anterior"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+
+              <div className="flex gap-2.5">
+                {slides.map((slide, index) => (
+                  <button
+                    key={index}
+                    onClick={() => goToSlide(index)}
+                    className={`h-2 rounded-full transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                      index === currentSlide
+                        ? "bg-primary w-8"
+                        : "w-2 bg-primary/25 hover:bg-primary/50"
+                    }`}
+                    aria-label={`Ir al paso ${index + 1}: ${slide.title}`}
+                    aria-current={index === currentSlide ? "true" : undefined}
+                  />
+                ))}
+              </div>
+
+              <button
+                onClick={() => { nextSlide(); setIsAutoPlaying(false) }}
+                className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                aria-label="Siguiente diapositiva"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
           </div>
-
-          {/* Prev / Next arrows */}
-          <button
-            onClick={prevSlide}
-            className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-background border border-border shadow-md flex items-center justify-center text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-colors duration-200"
-            aria-label="Diapositiva anterior"
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-          <button
-            onClick={() => { nextSlide(); setIsAutoPlaying(false) }}
-            className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-background border border-border shadow-md flex items-center justify-center text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-colors duration-200"
-            aria-label="Siguiente diapositiva"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </button>
-        </div>
-
-        {/* Dot indicators */}
-        <div className="flex justify-center gap-3 pb-20">
-          {slides.map((slide, index) => (
-            <button
-              key={index}
-              onClick={() => goToSlide(index)}
-              className={`h-2.5 rounded-full transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
-                index === currentSlide
-                  ? "bg-primary w-10"
-                  : "w-2.5 bg-primary/25 hover:bg-primary/50"
-              }`}
-              aria-label={`Ir al paso ${index + 1}: ${slide.title}`}
-              aria-current={index === currentSlide ? "true" : undefined}
-            />
-          ))}
         </div>
       </div>
 
