@@ -159,6 +159,33 @@ export default function Footer() {
         </div>
       </section>
 
+      {/* MyInvestor Info */}
+      <section className="bg-background px-8 md:px-12 lg:px-20 py-16 md:py-20 border-t border-border">
+        <div className="max-w-4xl mx-auto">
+          <h3 className="font-serif text-xl md:text-2xl font-bold text-foreground mb-6">Mi Investor</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <h4 className="font-semibold text-foreground mb-3 text-sm uppercase tracking-widest text-primary">
+                Sobre Mi Investor
+              </h4>
+              <p className="text-muted-foreground leading-relaxed text-sm md:text-base">
+                MyInvestor es un banco experto en inversión. Está respaldado por el Grupo Andbank, El Corte Inglés
+                Seguros, AXA España y varios family offices.
+              </p>
+            </div>
+            <div>
+              <h4 className="font-semibold text-foreground mb-3 text-sm uppercase tracking-widest text-primary">
+                Seguridad y Regulación
+              </h4>
+              <p className="text-muted-foreground leading-relaxed text-sm md:text-base">
+                MyInvestor Banco S.A. es una entidad de crédito supervisada por el Banco de España y la CNMV. Tus
+                ahorros con nosotros están garantizados por el Fondo de Garantía de Depósitos Español.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Sticky footer */}
       <div
         className="relative h-[400px] sm:h-[600px] lg:h-[800px] max-h-[800px]"
