@@ -1,27 +1,56 @@
-import Image from "next/image"
+"use client"
 
-const steps = [
+import Image from "next/image"
+import { useState, useEffect, useCallback } from "react"
+import { ChevronLeft, ChevronRight, Wallet, Gift, TrendingUp } from "lucide-react"
+
+const slides = [
   {
+    icon: Wallet,
     number: "01",
-    title: "Date de alta con nosotros",
+    title: "Abre una cuenta Kiri",
     description:
-      "Rellena tus datos como tutor (papá o mamá) y comienza la experiencia Kiri en esta misma página.",
+      "Abre una cuenta de ahorro e inversión para tus seres queridos de 0 a 18 años en nuestro banco colaborador MyInvestor",
   },
   {
+    icon: Gift,
     number: "02",
-    title: "Abre su cuenta Kiri",
+    title: "Regala en sus ocasiones especiales",
     description:
-      "A través de nuestro banco colaborador MyInvestor, tu cuenta estará garantizada por el Fondo de Garantías de Depósitos español.",
+      "En su cumpleaños, bautizo, primera comunión, confirmación, vuelta al colegio, comienza a contribuir para garantizarles un futuro financiero mejor",
   },
   {
+    icon: TrendingUp,
     number: "03",
-    title: "Comienza la experiencia",
+    title: "Invierte en su futuro",
     description:
-      "El niño recibe un kit de bienvenida con semillas, un álbum de recuerdos y personajes Kiri que le enseñan educación financiera.",
+      "Los menores podrán establecer metas de ahorro y a los 18 años podrán disponer de la inversión y sus rendimientos",
   },
 ]
 
 export default function Featured() {
+  const [currentSlide, setCurrentSlide] = useState(0)
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true)
+
+  const nextSlide = useCallback(() => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length)
+  }, [])
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)
+  }
+
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index)
+    setIsAutoPlaying(false)
+  }
+
+  useEffect(() => {
+    if (!isAutoPlaying) return
+    const interval = setInterval(nextSlide, 5000)
+    return () => clearInterval(interval)
+  }, [isAutoPlaying, nextSlide])
+
   return (
     <section id="sobre" className="bg-background">
       {/* About section */}
@@ -49,18 +78,64 @@ export default function Featured() {
             anual, fortaleciendo el lazo emocional con quienes aportan.
           </p>
 
-          {/* Feature cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-            {[
-              { icon: "🌱", label: "Invierte desde el nacimiento" },
-              { icon: "🎁", label: "Regala en ocasiones especiales" },
-              { icon: "📈", label: "Fondos garantizados" },
-            ].map((feat) => (
-              <div key={feat.label} className="bg-background rounded-xl p-4 border border-border flex flex-col gap-2">
-                <span className="text-2xl" aria-hidden="true">{feat.icon}</span>
-                <p className="text-sm font-semibold text-foreground">{feat.label}</p>
+          {/* Slideshow */}
+          <div className="relative mb-8">
+            {/* Slides container */}
+            <div className="overflow-hidden rounded-2xl bg-background border border-border">
+              <div
+                className="flex transition-transform duration-500 ease-out"
+                style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+              >
+                {slides.map((slide) => (
+                  <div key={slide.number} className="min-w-full p-8">
+                    <div className="flex items-start gap-6">
+                      <div className="flex-shrink-0 w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center">
+                        <slide.icon className="w-7 h-7 text-primary" />
+                      </div>
+                      <div className="flex-1">
+                        <span className="text-xs font-bold text-primary/60 tracking-widest uppercase">
+                          Paso {slide.number}
+                        </span>
+                        <h3 className="font-semibold text-xl text-foreground mt-1 mb-3">{slide.title}</h3>
+                        <p className="text-muted-foreground leading-relaxed">{slide.description}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
+
+            {/* Navigation arrows */}
+            <button
+              onClick={prevSlide}
+              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-10 h-10 rounded-full bg-background border border-border shadow-lg flex items-center justify-center text-foreground hover:bg-muted transition-colors"
+              aria-label="Diapositiva anterior"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <button
+              onClick={() => { nextSlide(); setIsAutoPlaying(false); }}
+              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-10 h-10 rounded-full bg-background border border-border shadow-lg flex items-center justify-center text-foreground hover:bg-muted transition-colors"
+              aria-label="Siguiente diapositiva"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+
+            {/* Dots indicator */}
+            <div className="flex justify-center gap-2 mt-6">
+              {slides.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => goToSlide(index)}
+                  className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                    index === currentSlide
+                      ? "bg-primary w-8"
+                      : "bg-primary/30 hover:bg-primary/50"
+                  }`}
+                  aria-label={`Ir a diapositiva ${index + 1}`}
+                />
+              ))}
+            </div>
           </div>
 
           <a
@@ -72,7 +147,7 @@ export default function Featured() {
         </div>
       </div>
 
-      {/* How it works */}
+      {/* How it works - full cards view */}
       <div id="como-funciona" className="px-8 md:px-12 lg:px-20 py-24 bg-background">
         <div className="max-w-6xl mx-auto">
           <p className="text-sm uppercase tracking-[0.2em] text-primary font-semibold mb-3 text-center">Pasos</p>
@@ -80,13 +155,15 @@ export default function Featured() {
             Cómo funciona Kiri
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-            {steps.map((step) => (
-              <div key={step.number} className="flex flex-col gap-4">
-                <span className="font-serif text-6xl font-bold text-secondary-foreground/20 leading-none">
+            {slides.map((step) => (
+              <div key={step.number} className="bg-muted rounded-2xl p-8 border border-border">
+                <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6">
+                  <step.icon className="w-7 h-7 text-primary" />
+                </div>
+                <span className="font-serif text-5xl font-bold text-primary/20 leading-none">
                   {step.number}
                 </span>
-                <div className="w-12 h-1 bg-primary rounded-full" />
-                <h3 className="font-semibold text-xl text-foreground">{step.title}</h3>
+                <h3 className="font-semibold text-xl text-foreground mt-4 mb-3">{step.title}</h3>
                 <p className="text-muted-foreground leading-relaxed">{step.description}</p>
               </div>
             ))}
