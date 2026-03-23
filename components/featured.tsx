@@ -1,8 +1,9 @@
 "use client"
 
 import Image from "next/image"
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 import { ChevronLeft, ChevronRight, Wallet, Gift, TrendingUp } from "lucide-react"
+import { motion, useInView } from "framer-motion"
 
 const slides = [
   {
@@ -66,6 +67,35 @@ const experienceItems = [
   },
 ]
 
+const fadeUp = {
+  hidden: { opacity: 0, y: 32 },
+  visible: (i = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] },
+  }),
+}
+
+function SectionHeader({ label, title }: { label: string; title: string }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const isInView = useInView(ref, { once: true, amount: 0.5 })
+  return (
+    <motion.div
+      ref={ref}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+      className="text-center mb-14"
+    >
+      <motion.p variants={fadeUp} custom={0} className="text-sm uppercase tracking-[0.2em] text-primary font-semibold mb-3">
+        {label}
+      </motion.p>
+      <motion.h2 variants={fadeUp} custom={1} className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-foreground text-balance">
+        {title}
+      </motion.h2>
+    </motion.div>
+  )
+}
+
 export default function Featured() {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
@@ -90,21 +120,28 @@ export default function Featured() {
     return () => clearInterval(interval)
   }, [isAutoPlaying, nextSlide])
 
+  // Animate the slideshow card into view
+  const slideRef = useRef<HTMLDivElement>(null)
+  const slideInView = useInView(slideRef, { once: true, amount: 0.2 })
+
+  // Animate the experience grid
+  const expRef = useRef<HTMLDivElement>(null)
+  const expInView = useInView(expRef, { once: true, amount: 0.15 })
+
   return (
     <section id="sobre" className="bg-background">
       {/* Cómo funciona — card slideshow */}
       <div id="como-funciona" className="bg-muted py-24 px-4 md:px-8 lg:px-12">
-        {/* Section header */}
-        <div className="text-center mb-14">
-          <p className="text-sm uppercase tracking-[0.2em] text-primary font-semibold mb-3">Cómo funciona</p>
-          <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-foreground text-balance">
-            Tres pasos para garantizar su futuro
-          </h2>
-        </div>
+        <SectionHeader label="Cómo funciona" title="Tres pasos para garantizar su futuro" />
 
         {/* Slide container */}
-        <div className="max-w-3xl mx-auto">
-          {/* Card */}
+        <motion.div
+          ref={slideRef}
+          className="max-w-3xl mx-auto"
+          initial={{ opacity: 0, y: 40 }}
+          animate={slideInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+          transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+        >
           <div className="bg-background rounded-3xl border border-border overflow-hidden shadow-sm">
             <div className="overflow-hidden w-full">
               <div
@@ -181,25 +218,32 @@ export default function Featured() {
               </button>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
 
       {/* Kiri Experience */}
-      <div className="px-8 md:px-12 lg:px-20 py-24 bg-muted">
+      <div id="experiencia" className="px-8 md:px-12 lg:px-20 py-24 bg-muted">
         <div className="max-w-6xl mx-auto">
-          <p className="text-sm uppercase tracking-[0.2em] text-primary font-semibold mb-3 text-center">
-            La experiencia Kiri
-          </p>
-          <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4 text-center text-balance">
-            Mucho más que una cuenta de inversión
-          </h2>
-          <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-16 leading-relaxed">
+          <SectionHeader
+            label="La experiencia Kiri"
+            title="Mucho más que una cuenta de inversión"
+          />
+          <motion.p
+            ref={expRef}
+            initial={{ opacity: 0, y: 20 }}
+            animate={expInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="text-muted-foreground text-center max-w-2xl mx-auto -mt-8 mb-16 leading-relaxed"
+          >
             Cada Kiri viene con una experiencia completa que une finanzas, emociones y recuerdos familiares para toda la vida.
-          </p>
+          </motion.p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-            {experienceItems.map((item) => (
-              <div
+            {experienceItems.map((item, i) => (
+              <motion.div
                 key={item.title}
+                initial={{ opacity: 0, y: 36 }}
+                animate={expInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.55, delay: 0.15 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
                 className={`rounded-2xl p-8 border ${item.color} flex gap-6`}
               >
                 <div className={`flex-shrink-0 w-14 h-14 rounded-xl ${item.iconBg} flex items-center justify-center text-2xl`}>
@@ -209,7 +253,7 @@ export default function Featured() {
                   <h3 className="font-semibold text-xl text-foreground mb-3">{item.title}</h3>
                   <p className="text-muted-foreground leading-relaxed">{item.description}</p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>

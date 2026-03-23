@@ -2,7 +2,8 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { useRef, useEffect } from "react"
+import { useRef } from "react"
+import { motion, useInView } from "framer-motion"
 
 const testimonials = [
   {
@@ -39,19 +40,33 @@ const testimonials = [
 
 export default function Footer() {
   const trackRef = useRef<HTMLDivElement>(null)
-
-  // CSS-animation-based infinite scroll — no JS scroll loop needed
+  const testiRef = useRef<HTMLDivElement>(null)
+  const testiInView = useInView(testiRef, { once: true, amount: 0.2 })
+  const ctaRef = useRef<HTMLDivElement>(null)
+  const ctaInView = useInView(ctaRef, { once: true, amount: 0.2 })
+  const miRef = useRef<HTMLDivElement>(null)
+  const miInView = useInView(miRef, { once: true, amount: 0.2 })
   return (
     <>
       {/* Testimonials */}
       <section id="testimonios" className="bg-muted py-24 overflow-hidden">
-        <div className="px-8 md:px-12 lg:px-20 mb-14">
-          <p className="text-sm uppercase tracking-[0.2em] text-primary font-semibold mb-3 text-center">
+        <div ref={testiRef} className="px-8 md:px-12 lg:px-20 mb-14">
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={testiInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5 }}
+            className="text-sm uppercase tracking-[0.2em] text-primary font-semibold mb-3 text-center"
+          >
             Testimonios
-          </p>
-          <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground text-center text-balance">
+          </motion.p>
+          <motion.h2
+            initial={{ opacity: 0, y: 22 }}
+            animate={testiInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.55, delay: 0.1 }}
+            className="font-serif text-3xl md:text-4xl font-bold text-foreground text-center text-balance"
+          >
             Lo que dicen las familias Kiri
-          </h2>
+          </motion.h2>
         </div>
 
         {/* Marquee track — doubled for seamless loop */}
@@ -107,16 +122,37 @@ export default function Footer() {
 
       {/* Reserve CTA */}
       <section id="reserva" className="bg-primary py-24 px-8 md:px-12 lg:px-20">
-        <div className="max-w-2xl mx-auto text-center">
-          <p className="text-sm uppercase tracking-[0.2em] text-purple-200 font-semibold mb-3">Próximamente</p>
-          <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 text-balance">
+        <div ref={ctaRef} className="max-w-2xl mx-auto text-center">
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={ctaInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5 }}
+            className="text-sm uppercase tracking-[0.2em] text-purple-200 font-semibold mb-3"
+          >
+            Próximamente
+          </motion.p>
+          <motion.h2
+            initial={{ opacity: 0, y: 24 }}
+            animate={ctaInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.55, delay: 0.08 }}
+            className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 text-balance"
+          >
             Reserva tu Kiri
-          </h2>
-          <p className="text-purple-200 leading-relaxed mb-10">
-            Ya queda menos para regalar Kiri a tus seres queridos. Rellena este formulario y te informaremos cuando
-            esté disponible.
-          </p>
-          <form className="flex flex-col gap-4 text-left max-w-md mx-auto">
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={ctaInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, delay: 0.14 }}
+            className="text-purple-200 leading-relaxed mb-10"
+          >
+            Ya queda menos para regalar Kiri a tus seres queridos. Rellena este formulario y te informaremos cuando esté disponible.
+          </motion.p>
+          <motion.form
+            initial={{ opacity: 0, y: 28 }}
+            animate={ctaInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="flex flex-col gap-4 text-left max-w-md mx-auto"
+          >
             <input
               type="email"
               placeholder="Correo electrónico"
@@ -149,7 +185,7 @@ export default function Footer() {
             >
               Enviar datos
             </button>
-          </form>
+          </motion.form>
           <p className="text-purple-300 text-sm mt-6">
             O escríbenos a{" "}
             <a href="mailto:marta@kiriapp.com" className="text-white underline underline-offset-4 hover:text-purple-200">
@@ -161,27 +197,38 @@ export default function Footer() {
 
       {/* MyInvestor Info */}
       <section className="bg-background px-8 md:px-12 lg:px-20 py-16 md:py-20 border-t border-border">
-        <div className="max-w-4xl mx-auto">
-          <h3 className="font-serif text-xl md:text-2xl font-bold text-foreground mb-6">Mi Investor</h3>
+        <div ref={miRef} className="max-w-4xl mx-auto">
+          <motion.h3
+            initial={{ opacity: 0, y: 16 }}
+            animate={miInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5 }}
+            className="font-serif text-xl md:text-2xl font-bold text-foreground mb-6"
+          >
+            Mi Investor
+          </motion.h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div>
-              <h4 className="font-semibold text-foreground mb-3 text-sm uppercase tracking-widest text-primary">
-                Sobre Mi Investor
-              </h4>
-              <p className="text-muted-foreground leading-relaxed text-sm md:text-base">
-                MyInvestor es un banco experto en inversión. Está respaldado por el Grupo Andbank, El Corte Inglés
-                Seguros, AXA España y varios family offices.
-              </p>
-            </div>
-            <div>
-              <h4 className="font-semibold text-foreground mb-3 text-sm uppercase tracking-widest text-primary">
-                Seguridad y Regulación
-              </h4>
-              <p className="text-muted-foreground leading-relaxed text-sm md:text-base">
-                MyInvestor Banco S.A. es una entidad de crédito supervisada por el Banco de España y la CNMV. Tus
-                ahorros con nosotros están garantizados por el Fondo de Garantía de Depósitos Español.
-              </p>
-            </div>
+            {[
+              {
+                heading: "Sobre Mi Investor",
+                text: "MyInvestor es un banco experto en inversión. Está respaldado por el Grupo Andbank, El Corte Inglés Seguros, AXA España y varios family offices.",
+              },
+              {
+                heading: "Seguridad y Regulación",
+                text: "MyInvestor Banco S.A. es una entidad de crédito supervisada por el Banco de España y la CNMV. Tus ahorros con nosotros están garantizados por el Fondo de Garantía de Depósitos Español.",
+              },
+            ].map((block, i) => (
+              <motion.div
+                key={block.heading}
+                initial={{ opacity: 0, y: 24 }}
+                animate={miInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.55, delay: 0.1 + i * 0.12 }}
+              >
+                <h4 className="font-semibold text-foreground mb-3 text-sm uppercase tracking-widest text-primary">
+                  {block.heading}
+                </h4>
+                <p className="text-muted-foreground leading-relaxed text-sm md:text-base">{block.text}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
