@@ -46,12 +46,13 @@ export default function Media() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
           {/* Founder column */}
           <div className="flex flex-col items-center lg:items-start gap-6">
-            <div className="relative w-64 h-64 rounded-3xl overflow-hidden shadow-2xl ring-4 ring-primary/20 flex-shrink-0">
+            <div className="rounded-3xl overflow-hidden shadow-2xl ring-4 ring-primary/20 flex-shrink-0">
               <Image
                 src="/images/marta-echarri.png"
                 alt="Marta Echarri, fundadora de Kiri"
-                fill
-                className="object-cover"
+                width={256}
+                height={256}
+                className="object-cover w-64 h-64"
               />
             </div>
             <div className="text-center lg:text-left">
