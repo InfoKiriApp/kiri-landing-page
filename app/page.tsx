@@ -4,6 +4,7 @@ import { useEffect } from "react"
 import Lenis from "@studio-freight/lenis"
 import Hero from "@/components/hero"
 import Featured from "@/components/featured"
+import Calculator from "@/components/calculator"
 import Promo from "@/components/promo"
 import Media from "@/components/media"
 import Footer from "@/components/footer"
@@ -24,6 +25,7 @@ export default function Home() {
     <main>
       <Hero />
       <Featured />
+      <Calculator />
       <Promo />
       <Media />
       <Footer />
