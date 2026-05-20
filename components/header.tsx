@@ -11,6 +11,7 @@ const navLinks = [
   { label: "Sobre Kiri", href: "/#sobre" },
   { label: "Cómo funciona", href: "/#como-funciona" },
   { label: "La Experiencia", href: "/#experiencia" },
+  { label: "Calculadora", href: "/#calculadora" },
   { label: "En los Medios", href: "/#medios" },
   { label: "Testimonios", href: "/#testimonios" },
   { label: "Kiri Academy", href: "/kiri-academy" },
