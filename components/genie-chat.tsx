@@ -182,7 +182,7 @@ export default function GenieChat() {
     setTimeout(() => addMessage("genie", matchResponse(trimmed)), 420)
   }
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") handleSend()
   }
 
@@ -300,7 +300,7 @@ export default function GenieChat() {
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                onKeyDown={handleKeyDown}
+                onKeyDown={handleInputKeyDown}
                 placeholder="Escribe tu pregunta..."
                 className="flex-1 text-sm bg-[hsl(270,100%,97%)] rounded-xl px-3.5 py-2 outline-none focus:ring-2 focus:ring-primary/40 placeholder:text-muted-foreground text-foreground"
                 aria-label="Escribe tu pregunta al Genio"
