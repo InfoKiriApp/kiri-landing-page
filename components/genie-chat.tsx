@@ -93,23 +93,14 @@ const GREETING: Message = {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-// Detect a "rub" gesture: pointer must move ≥ RUB_DISTANCE px while held down
-const RUB_DISTANCE = 30
-const RUB_DURATION = 600 // ms of continuous movement before triggering
-
 export default function GenieChat() {
   const [open, setOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([GREETING])
   const [input, setInput] = useState("")
   const [faqsShown, setFaqsShown] = useState(true)
-  const [rubbing, setRubbing] = useState(false)
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
-
-  // Rub tracking refs
-  const pointerDownPos = useRef<{ x: number; y: number } | null>(null)
-  const rubTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const totalMovement = useRef(0)
+  const hoverTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Scroll to bottom on new messages
   useEffect(() => {
@@ -118,47 +109,18 @@ export default function GenieChat() {
 
   // Focus input when panel opens
   useEffect(() => {
-    if (open) setTimeout(() => inputRef.current?.focus(), 300)
+    if (open) {
+      setTimeout(() => inputRef.current?.focus(), 300)
+    }
   }, [open])
 
-  const clearRub = useCallback(() => {
-    if (rubTimer.current) clearTimeout(rubTimer.current)
-    rubTimer.current = null
-    pointerDownPos.current = null
-    totalMovement.current = 0
-    setRubbing(false)
+  const handleOpen = useCallback(() => {
+    if (hoverTimer.current) clearTimeout(hoverTimer.current)
+    hoverTimer.current = setTimeout(() => setOpen(true), 180)
   }, [])
 
-  const handlePointerDown = useCallback((e: React.PointerEvent) => {
-    if (open) return
-    pointerDownPos.current = { x: e.clientX, y: e.clientY }
-    totalMovement.current = 0
-    ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
-  }, [open])
-
-  const handlePointerMove = useCallback((e: React.PointerEvent) => {
-    if (!pointerDownPos.current || open) return
-    const dx = e.clientX - pointerDownPos.current.x
-    const dy = e.clientY - pointerDownPos.current.y
-    totalMovement.current += Math.sqrt(dx * dx + dy * dy)
-    pointerDownPos.current = { x: e.clientX, y: e.clientY }
-
-    if (totalMovement.current >= RUB_DISTANCE && !rubTimer.current) {
-      setRubbing(true)
-      rubTimer.current = setTimeout(() => {
-        setOpen(true)
-        clearRub()
-      }, RUB_DURATION)
-    }
-  }, [open, clearRub])
-
-  const handlePointerUp = useCallback(() => {
-    clearRub()
-  }, [clearRub])
-
-  // Fallback: keyboard Enter still opens the panel
-  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (e.key === "Enter") setOpen((v) => !v)
+  const handleLeave = useCallback(() => {
+    if (hoverTimer.current) clearTimeout(hoverTimer.current)
   }, [])
 
   const addMessage = (role: MessageRole, text: string) => {
@@ -182,7 +144,7 @@ export default function GenieChat() {
     setTimeout(() => addMessage("genie", matchResponse(trimmed)), 420)
   }
 
-  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") handleSend()
   }
 
@@ -300,7 +262,7 @@ export default function GenieChat() {
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                onKeyDown={handleInputKeyDown}
+                onKeyDown={handleKeyDown}
                 placeholder="Escribe tu pregunta..."
                 className="flex-1 text-sm bg-[hsl(270,100%,97%)] rounded-xl px-3.5 py-2 outline-none focus:ring-2 focus:ring-primary/40 placeholder:text-muted-foreground text-foreground"
                 aria-label="Escribe tu pregunta al Genio"
@@ -320,19 +282,17 @@ export default function GenieChat() {
 
       {/* Genie trigger button */}
       <div
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
-        onPointerCancel={handlePointerUp}
-        onClick={() => open && setOpen(false)}
+        onMouseEnter={handleOpen}
+        onMouseLeave={handleLeave}
+        onClick={() => setOpen((v) => !v)}
         role="button"
         tabIndex={0}
-        onKeyDown={handleKeyDown}
-        aria-label="Frota al genio para abrir el chat de Kiri"
+        onKeyDown={(e) => e.key === "Enter" && setOpen((v) => !v)}
+        aria-label="Abrir chat con el Genio de Kiri"
         aria-expanded={open}
-        className="relative cursor-grab active:cursor-grabbing select-none touch-none group"
+        className="relative cursor-pointer select-none group"
       >
-        {/* Rub hint tooltip — always visible until first open */}
+        {/* Tooltip on hover when closed */}
         <AnimatePresence>
           {!open && (
             <motion.div
@@ -340,38 +300,25 @@ export default function GenieChat() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 8 }}
               transition={{ duration: 0.18 }}
-              className="absolute right-full mr-3 bottom-4 pointer-events-none whitespace-nowrap"
+              className="absolute right-full mr-3 bottom-4 pointer-events-none"
             >
-              <div className="bg-primary text-primary-foreground text-xs font-medium px-3 py-1.5 rounded-full shadow-lg">
-                {rubbing ? "¡Sigue frotando...!" : "¡Frótame para pedir un deseo!"}
+              <div className="bg-primary text-primary-foreground text-xs font-medium px-3 py-1.5 rounded-full whitespace-nowrap shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                ¡Pide un deseo!
               </div>
             </motion.div>
           )}
         </AnimatePresence>
 
-        {/* Pulse ring — intensifies while rubbing */}
+        {/* Pulse ring */}
         {!open && (
-          <span
-            className={`absolute inset-0 rounded-full pointer-events-none ${
-              rubbing ? "animate-ping bg-primary/40" : "animate-ping bg-primary/20"
-            }`}
-          />
+          <span className="absolute inset-0 rounded-full animate-ping bg-primary/20 pointer-events-none" />
         )}
 
         {/* Genie avatar */}
         <motion.div
-          animate={
-            rubbing
-              ? { rotate: [0, -8, 8, -8, 8, 0], scale: 1.12 }
-              : open
-              ? { scale: 1.05, rotate: 0 }
-              : { scale: 1, rotate: 0 }
-          }
-          transition={
-            rubbing
-              ? { duration: 0.5, repeat: Infinity, ease: "easeInOut" }
-              : { type: "spring", stiffness: 300, damping: 20 }
-          }
+          animate={open ? { scale: 1.05 } : { scale: 1 }}
+          whileHover={{ scale: 1.08, rotate: -4 }}
+          transition={{ type: "spring", stiffness: 300, damping: 20 }}
           className="w-16 h-16 rounded-full bg-white shadow-xl border-2 border-primary/30 overflow-hidden"
         >
           <Image
