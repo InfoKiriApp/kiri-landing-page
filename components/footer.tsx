@@ -241,8 +241,8 @@ export default function Footer() {
                   </a>
                 </div>
               </div>
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 sm:gap-0">
-                <div className="mt-4 sm:mt-6 lg:mt-10 flex flex-col gap-4">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 sm:gap-8">
+                <div className="mt-4 sm:mt-6 lg:mt-10">
                   <Image
                     src="/images/kiri-logo.svg"
                     alt="Kiri"
@@ -250,15 +250,17 @@ export default function Footer() {
                     height={176}
                     className="brightness-0 invert w-32 sm:w-48 lg:w-64 h-auto"
                   />
+                </div>
+                <div className="flex flex-col items-start sm:items-end gap-2 sm:gap-3">
                   <Image
                     src="/images/agente-de-my-investor.png"
                     alt="Agente de MyInvestor"
-                    width={200}
-                    height={50}
-                    className="brightness-0 invert h-6 sm:h-7 w-auto object-contain opacity-70"
+                    width={280}
+                    height={70}
+                    className="brightness-0 invert h-10 sm:h-12 lg:h-14 w-auto object-contain"
                   />
+                  <p className="text-purple-400 text-xs sm:text-sm">© {new Date().getFullYear()} Kiri. Agente Financiero de MyInvestor.</p>
                 </div>
-                <p className="text-purple-400 text-sm sm:text-base">© {new Date().getFullYear()} Kiri. Agente Financiero de MyInvestor.</p>
               </div>
             </div>
           </div>
