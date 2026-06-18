@@ -137,9 +137,9 @@ export default function Header() {
           <Image
             src="/images/agente-de-my-investor.png"
             alt="Agente de MyInvestor"
-            width={150}
-            height={38}
-            className={`h-5 w-auto object-contain hidden md:block ${
+            width={180}
+            height={45}
+            className={`h-7 sm:h-8 w-auto object-contain hidden md:block ${
               isLight ? "opacity-60" : "brightness-0 invert opacity-70"
             }`}
           />
