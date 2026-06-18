@@ -4,7 +4,7 @@ import Header from "@/components/header"
 import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
-import { ChevronRight } from "lucide-react"
+import { ChevronRight, ChevronLeft } from "lucide-react"
 
 const occasions = [
   "Primera Comunión",
@@ -37,7 +37,13 @@ const steps = [
   },
 ]
 
+const GALLERY_IMAGES = [
+  { src: "/images/regalo-comunion.png", alt: "Abuelos entregando un regalo Kiri en una Primera Comunión" },
+  { src: "/images/ninos-arbol-kiri.png", alt: "Niños cuidando su árbol Kiri" },
+]
+
 export default function RegalaKiriPage() {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [form, setForm] = useState({
     gifterName: "",
     gifterEmail: "",
@@ -88,23 +94,52 @@ export default function RegalaKiriPage() {
           </div>
         </section>
 
-        {/* Gallery */}
+        {/* Gallery Slideshow */}
         <section className="bg-background py-14 px-4 md:px-8">
-          <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Image
-              src="/images/regalo-comunion.png"
-              alt="Abuelos entregando un regalo Kiri en una Primera Comunión"
-              width={700}
-              height={420}
-              className="w-full h-64 md:h-80 object-cover rounded-3xl"
-            />
-            <Image
-              src="/images/ninos-arbol-kiri.png"
-              alt="Niños cuidando su árbol Kiri"
-              width={700}
-              height={420}
-              className="w-full h-64 md:h-80 object-cover rounded-3xl"
-            />
+          <div className="max-w-3xl mx-auto">
+            <div className="relative group">
+              {/* Main image */}
+              <div className="relative w-full overflow-hidden rounded-3xl">
+                <Image
+                  src={GALLERY_IMAGES[currentImageIndex].src}
+                  alt={GALLERY_IMAGES[currentImageIndex].alt}
+                  width={800}
+                  height={500}
+                  className="w-full h-96 md:h-[500px] object-cover transition-opacity duration-300"
+                  priority
+                />
+              </div>
+
+              {/* Navigation buttons */}
+              <button
+                onClick={() => setCurrentImageIndex((prev) => (prev - 1 + GALLERY_IMAGES.length) % GALLERY_IMAGES.length)}
+                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-primary p-2.5 rounded-full transition-all duration-300 opacity-0 group-hover:opacity-100 backdrop-blur-sm"
+                aria-label="Previous image"
+              >
+                <ChevronLeft className="w-6 h-6" />
+              </button>
+              <button
+                onClick={() => setCurrentImageIndex((prev) => (prev + 1) % GALLERY_IMAGES.length)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-primary p-2.5 rounded-full transition-all duration-300 opacity-0 group-hover:opacity-100 backdrop-blur-sm"
+                aria-label="Next image"
+              >
+                <ChevronRight className="w-6 h-6" />
+              </button>
+
+              {/* Dots indicator */}
+              <div className="flex justify-center gap-2 mt-4">
+                {GALLERY_IMAGES.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentImageIndex(index)}
+                    className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                      index === currentImageIndex ? "bg-primary w-7" : "bg-primary/30 hover:bg-primary/50"
+                    }`}
+                    aria-label={`Go to image ${index + 1}`}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
         </section>
 
