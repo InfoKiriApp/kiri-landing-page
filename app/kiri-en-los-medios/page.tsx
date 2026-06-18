@@ -12,52 +12,39 @@ export const metadata: Metadata = {
 
 const publications = [
   {
-    title: "Entrevista Marta Echarri en WorldCa$t con Pedro Buerbaum",
+    title: "#164 - Ex-Banquera de JP Morgan Lo Confirma: \"No Tendrás Pensión de Mayor\" - Marta Echarri",
     date: "Febrero 2025",
     source: "WorldCa$t",
-    href: "#",
+    href: "https://www.youtube.com/watch?v=5p368IbLs_E",
+    thumbnail: "https://i.ytimg.com/vi/5p368IbLs_E/maxresdefault.jpg",
+  },
+  {
+    title: "¿Por qué invertimos mal en España? Neobancos y educación financiera con Marta Echarri",
+    date: "Abril 2025",
+    source: "Finect – Invertir mejor",
+    href: "https://www.youtube.com/watch?v=mqeW3HNCXdE",
+    thumbnail: "https://i.ytimg.com/vi/mqeW3HNCXdE/maxresdefault.jpg",
+  },
+  {
+    title: 'Marta Echarri: "El gran freno de las \'startups\' femeninas es la aversión de las mujeres al riesgo"',
+    date: "Febrero 2026",
+    source: "Artículo 14",
+    href: "https://www.articulo14.es/economia/marta-echarri-el-gran-freno-de-las-startups-femeninas-es-la-aversion-de-las-mujeres-al-riesgo-20260219.html",
+    thumbnail: "/images/marta-articulo14.jpg",
   },
   {
     title: "Invierte en su Futuro, Hoy | Marta Echarri | TEDxU Comillas",
     date: "Mayo 2025",
     source: "TEDx",
-    href: "#",
+    href: "https://www.youtube.com/watch?v=dcTR5Dc7_a0",
+    thumbnail: "/images/marta-tedx.png",
   },
   {
     title: "Entrevista First Movers con Kiri | Capital Radio",
     date: "Febrero 2025",
     source: "Capital Radio",
-    href: "#",
-  },
-  {
-    title: "Kiri: la innovadora plataforma que revoluciona la educación financiera infantil",
-    date: "Febrero 2025",
-    source: "Capital Radio",
-    href: "#",
-  },
-  {
-    title: "Why are we investing poorly in Spain? Neobanks and financial education with Marta Echarri",
-    date: "Abril 2025",
-    source: "Finect – Invertir mejor",
-    href: "#",
-  },
-  {
-    title: 'Marta Echarri: "El gran freno de las \'startups\' femeninas es la aversión de las mujeres al riesgo"',
-    date: "Marzo 2025",
-    source: "Artículo 14",
-    href: "#",
-  },
-  {
-    title: 'Marta Echarri: "No somos más agresivas como jefas"',
-    date: "Mayo 2025",
-    source: "Artículo 14",
-    href: "#",
-  },
-  {
-    title: "Ex-Banquera De JP Morgan Revela El Secreto De Los Ricos | Marta Echarri",
-    date: "Septiembre 2024",
-    source: "YouTube",
-    href: "#",
+    href: "https://www.capitalradio.es/audio/680d03116edddb3679ea2091/138017033",
+    thumbnail: null,
   },
 ]
 
@@ -97,20 +84,33 @@ export default function KiriEnLosMediosPage() {
                   href={pub.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group bg-background rounded-2xl border border-border p-6 hover:border-primary/40 hover:shadow-md transition-all duration-300 flex flex-col gap-3"
+                  className="group bg-background rounded-2xl border border-border overflow-hidden hover:border-primary/40 hover:shadow-md transition-all duration-300 flex flex-col gap-0 h-full"
                 >
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-xs font-semibold uppercase tracking-widest text-primary bg-primary/8 px-2.5 py-1 rounded-full">
-                      {pub.source}
+                  {pub.thumbnail && (
+                    <div className="relative h-40 md:h-48 overflow-hidden bg-primary/10">
+                      <Image
+                        src={pub.thumbnail}
+                        alt={pub.title}
+                        width={500}
+                        height={300}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                  )}
+                  <div className="p-6 flex flex-col gap-3 flex-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-xs font-semibold uppercase tracking-widest text-primary bg-primary/8 px-2.5 py-1 rounded-full">
+                        {pub.source}
+                      </span>
+                      <span className="text-xs text-muted-foreground">{pub.date}</span>
+                    </div>
+                    <h3 className="font-serif text-base md:text-lg font-bold text-foreground leading-snug group-hover:text-primary transition-colors">
+                      {pub.title}
+                    </h3>
+                    <span className="text-xs text-primary font-semibold mt-auto">
+                      Ver aquí →
                     </span>
-                    <span className="text-xs text-muted-foreground">{pub.date}</span>
                   </div>
-                  <h3 className="font-serif text-base md:text-lg font-bold text-foreground leading-snug group-hover:text-primary transition-colors">
-                    {pub.title}
-                  </h3>
-                  <span className="text-xs text-primary font-semibold mt-auto">
-                    Ver aquí →
-                  </span>
                 </a>
               ))}
             </div>
@@ -121,13 +121,13 @@ export default function KiriEnLosMediosPage() {
         <section className="bg-background py-20 px-4 md:px-8 border-t border-border">
           <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
             <div className="lg:col-span-1 flex flex-col items-center lg:items-start gap-4">
-              <div className="w-32 h-32 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden">
+              <div className="w-40 h-40 lg:w-48 lg:h-48 rounded-2xl bg-primary/10 flex items-center justify-center overflow-hidden">
                 <Image
-                  src="/images/kiri-logo.svg"
+                  src="/images/marta-echarri.png"
                   alt="Marta Echarri"
-                  width={80}
-                  height={80}
-                  className="w-16 h-16 object-contain"
+                  width={200}
+                  height={200}
+                  className="w-full h-full object-cover"
                 />
               </div>
               <div className="text-center lg:text-left">
