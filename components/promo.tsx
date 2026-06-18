@@ -54,14 +54,14 @@ export default function Promo() {
           El árbol Kiri puede alcanzar los 30 metros de altura. Queremos que los ahorros de tus hijos crezcan igual: rápido, fuerte y con raíces sólidas para toda la vida.
         </motion.p>
         <motion.a
-          href="#reserva"
+          href="/regala-kiri"
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.55, delay: 0.22 }}
           className="inline-block px-7 py-3 bg-white text-primary rounded-full text-sm font-semibold hover:bg-purple-100 transition-colors duration-300"
         >
-          Reserva tu Kiri
+          Abre tu Cuenta Ahora
         </motion.a>
       </div>
     </div>

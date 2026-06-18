@@ -67,10 +67,10 @@ export default function Hero() {
             </motion.p>
             <motion.div custom={3} variants={fadeUp} className="flex flex-col sm:flex-row gap-4">
               <a
-                href="#reserva"
+                href="/regala-kiri"
                 className="px-7 py-3 bg-white text-primary font-semibold text-sm rounded-full hover:bg-purple-100 transition-colors duration-300 text-center"
               >
-                Abre tu cuenta
+                Abre tu Cuenta Ahora
               </a>
               <a
                 href="#sobre"
