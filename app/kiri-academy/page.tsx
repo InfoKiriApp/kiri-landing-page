@@ -2,9 +2,57 @@ import Header from "@/components/header"
 import Footer from "@/components/footer"
 import { Sprout } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 import AcademyGrid from "@/components/academy-grid"
 
 const categories = ["Todos", "Fundamentos", "Ahorro", "Inversión", "Objetivos", "Valores", "Comportamiento", "Metáforas", "Inicio", "Errores"]
+
+const KIRI_CATEGORIES = [
+  {
+    id: "raices",
+    title: "Las Raíces",
+    subtitle: "Los fundamentos",
+    description: "Por qué y cuándo empezar a hablar de dinero con los hijos. Cómo modelar buenos hábitos financieros desde los primeros años.",
+    image: "/images/kiri-raices-categoria.png",
+    bg: "bg-rose-50",
+    accent: "text-rose-500",
+    border: "border-rose-100",
+    filter: "Fundamentos",
+  },
+  {
+    id: "tronco",
+    title: "El Tronco y las Ramas",
+    subtitle: "Crecer con fuerza",
+    description: "Activos y pasivos, interés compuesto y los pilares de una base financiera sólida que aguante el paso del tiempo.",
+    image: "/images/kiri-tronco-y-ramas-categoria.png",
+    bg: "bg-violet-50",
+    accent: "text-violet-600",
+    border: "border-violet-100",
+    filter: "Inversión",
+  },
+  {
+    id: "frutos",
+    title: "Los Frutos",
+    subtitle: "La cosecha",
+    description: "Metas de ahorro con significado y la inversión a largo plazo como herramienta para hacer realidad los sueños de los niños.",
+    image: "/images/kiri-frutos-categoria.png",
+    bg: "bg-amber-50",
+    accent: "text-amber-600",
+    border: "border-amber-100",
+    filter: "Objetivos",
+  },
+  {
+    id: "bosque",
+    title: "El Bosque",
+    subtitle: "La comunidad",
+    description: "Errores comunes en la educación financiera infantil y cómo construir una cultura de ahorro que involucre a toda la familia.",
+    image: "/images/kiri-bosque-categoria.png",
+    bg: "bg-emerald-50",
+    accent: "text-emerald-600",
+    border: "border-emerald-100",
+    filter: "Errores",
+  },
+]
 
 export default function KiriAcademyPage() {
   return (
@@ -33,6 +81,47 @@ export default function KiriAcademyPage() {
               <span key={tag} className="bg-white/10 text-white/80 border border-white/20 px-4 py-1.5 rounded-full text-sm">
                 {tag}
               </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Category cards */}
+      <section className="bg-background px-6 md:px-12 lg:px-20 py-16">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-10">
+            <p className="text-xs font-semibold uppercase tracking-widest text-primary mb-2">Categorías</p>
+            <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground text-balance">
+              Aprende como crece un Kiri
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {KIRI_CATEGORIES.map((cat) => (
+              <div
+                key={cat.id}
+                className={`rounded-3xl border ${cat.border} ${cat.bg} flex flex-col overflow-hidden`}
+              >
+                <div className="flex items-center justify-center pt-8 pb-4 px-8">
+                  <Image
+                    src={cat.image}
+                    alt={cat.title}
+                    width={120}
+                    height={120}
+                    className="w-28 h-28 object-contain"
+                  />
+                </div>
+                <div className="px-6 pb-7 flex flex-col gap-2 flex-1">
+                  <p className={`text-xs font-semibold uppercase tracking-widest ${cat.accent}`}>
+                    {cat.subtitle}
+                  </p>
+                  <h3 className="font-serif text-lg font-bold text-foreground leading-snug">
+                    {cat.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed flex-1">
+                    {cat.description}
+                  </p>
+                </div>
+              </div>
             ))}
           </div>
         </div>

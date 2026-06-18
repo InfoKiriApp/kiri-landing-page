@@ -7,24 +7,29 @@ import { useState, useEffect, useRef } from "react"
 import { Menu, X, ChevronDown } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
+// Groups that get a dropdown
 const NAV_GROUPS = [
   {
     label: "Kiri",
     items: [
-      { label: "Sobre Kiri", href: "/#sobre" },
+      { label: "Sobre Kiri",    href: "/#sobre" },
       { label: "Cómo funciona", href: "/#como-funciona" },
-      { label: "La Experiencia", href: "/#experiencia" },
-      { label: "Calculadora", href: "/#calculadora" },
     ],
   },
   {
     label: "Recursos",
     items: [
-      { label: "Kiri Academy", href: "/kiri-academy" },
       { label: "Kiri en los Medios", href: "/kiri-en-los-medios" },
-      { label: "Testimonios", href: "/#testimonios" },
+      { label: "Testimonios",        href: "/#testimonios" },
     ],
   },
+]
+
+// Standalone links always visible in the nav bar
+const NAV_LINKS = [
+  { label: "La Experiencia", href: "/#experiencia-kiri" },
+  { label: "Calculadora",    href: "/#calculadora" },
+  { label: "Kiri Academy",   href: "/kiri-academy" },
 ]
 
 function DropdownMenu({
@@ -50,7 +55,9 @@ function DropdownMenu({
       <button
         onClick={() => setOpen((v) => !v)}
         className={`flex items-center gap-1 text-sm font-medium transition-colors duration-300 ${
-          isLight ? "text-foreground/70 hover:text-foreground" : "text-white/80 hover:text-white"
+          isLight
+            ? "text-foreground/70 hover:text-foreground"
+            : "text-white/80 hover:text-white"
         }`}
         aria-expanded={open}
         aria-haspopup="true"
@@ -88,9 +95,10 @@ function DropdownMenu({
 
 export default function Header() {
   const pathname = usePathname()
-  const isAcademy = pathname === "/kiri-academy"
-  const isMedias = pathname === "/kiri-en-los-medios"
-  const isSecondaryPage = isAcademy || isMedias || pathname === "/regala-kiri"
+  const isSecondaryPage =
+    pathname === "/kiri-academy" ||
+    pathname === "/kiri-en-los-medios" ||
+    pathname === "/regala-kiri"
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
@@ -101,6 +109,7 @@ export default function Header() {
   }, [])
 
   const overlayActive = !isSecondaryPage && scrolled
+  const isLight = overlayActive || isSecondaryPage
 
   return (
     <motion.header
@@ -108,53 +117,74 @@ export default function Header() {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
       className={`${isSecondaryPage ? "sticky" : "absolute"} top-0 left-0 right-0 z-50 px-6 transition-all duration-500 ${
-        overlayActive
+        isLight
           ? "py-3 bg-white/95 backdrop-blur-md border-b border-border shadow-sm"
-          : isSecondaryPage
-          ? "py-4 bg-white/95 backdrop-blur-md border-b border-border shadow-sm"
           : "py-4"
       }`}
     >
-      <div className="flex justify-between items-center max-w-7xl mx-auto">
-        {/* Logo + MyInvestor side by side */}
-        <Link href="/" className="flex items-center gap-4 flex-shrink-0">
+      <div className="flex justify-between items-center max-w-7xl mx-auto gap-4">
+
+        {/* Logo + MyInvestor */}
+        <Link href="/" className="flex items-center gap-3 flex-shrink-0">
           <Image
             src="/images/kiri-logo.svg"
             alt="Kiri"
-            width={80}
-            height={50}
-            className={overlayActive || isSecondaryPage ? "" : "brightness-0 invert"}
+            width={72}
+            height={44}
+            className={isLight ? "" : "brightness-0 invert"}
             priority
           />
           <Image
             src="/images/agente-de-my-investor.png"
             alt="Agente de MyInvestor"
-            width={160}
-            height={40}
-            className={`h-5 w-auto object-contain hidden sm:block ${
-              overlayActive || isSecondaryPage ? "opacity-60" : "brightness-0 invert opacity-70"
+            width={150}
+            height={38}
+            className={`h-5 w-auto object-contain hidden md:block ${
+              isLight ? "opacity-60" : "brightness-0 invert opacity-70"
             }`}
           />
         </Link>
 
-        {/* Desktop nav — two dropdowns */}
-        <nav className="hidden lg:flex gap-2 items-center" aria-label="Navegación principal">
+        {/* Desktop nav */}
+        <nav
+          className="hidden lg:flex items-center gap-5"
+          aria-label="Navegación principal"
+        >
+          {/* Dropdown groups */}
           {NAV_GROUPS.map((group) => (
-            <DropdownMenu
-              key={group.label}
-              group={group}
-              isLight={overlayActive || isSecondaryPage}
-            />
+            <DropdownMenu key={group.label} group={group} isLight={isLight} />
+          ))}
+
+          {/* Separator */}
+          <span
+            className={`w-px h-4 ${isLight ? "bg-border" : "bg-white/20"}`}
+            aria-hidden="true"
+          />
+
+          {/* Standalone links */}
+          {NAV_LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={`text-sm font-medium transition-colors duration-300 whitespace-nowrap ${
+                isLight
+                  ? "text-foreground/70 hover:text-foreground"
+                  : "text-white/80 hover:text-white"
+              }`}
+            >
+              {link.label}
+            </Link>
           ))}
         </nav>
 
         {/* CTA buttons + mobile toggle */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-shrink-0">
+
           {/* Iniciar Sesión */}
           <a
             href="#"
-            className={`hidden sm:inline-flex text-sm font-medium px-4 py-2 rounded-full transition-all duration-300 ${
-              overlayActive || isSecondaryPage
+            className={`hidden xl:inline-flex text-sm font-medium px-4 py-2 rounded-full transition-all duration-300 ${
+              isLight
                 ? "text-foreground/70 hover:text-foreground border border-border hover:border-foreground/30"
                 : "text-white/80 hover:text-white border border-white/30 hover:border-white/60"
             }`}
@@ -165,8 +195,8 @@ export default function Header() {
           {/* Abre tu Cuenta */}
           <a
             href="#"
-            className={`hidden sm:inline-flex text-sm font-semibold px-5 py-2 rounded-full transition-all duration-300 ${
-              overlayActive || isSecondaryPage
+            className={`hidden sm:inline-flex text-sm font-semibold px-4 py-2 rounded-full transition-all duration-300 ${
+              isLight
                 ? "bg-primary text-primary-foreground hover:bg-accent"
                 : "bg-white text-primary hover:bg-white/90"
             }`}
@@ -174,27 +204,31 @@ export default function Header() {
             Abre tu Cuenta
           </a>
 
-          {/* Regala Kiri — corner ribbon via CSS clip triangle */}
-          <Link
-            href="/regala-kiri"
-            className="relative hidden sm:inline-flex overflow-hidden text-sm font-semibold px-5 py-2 rounded-full transition-all duration-300 group bg-[hsl(330,80%,62%)] text-white hover:bg-[hsl(330,80%,55%)]"
-            aria-label="Regala Kiri"
-          >
-            {/* Ribbon triangle — always present, scales in on hover */}
-            <span
+          {/* Regala Kiri — pink bow ribbon positioned at top-right corner */}
+          <div className="relative hidden sm:block">
+            <Link
+              href="/regala-kiri"
+              className="inline-flex text-sm font-semibold px-5 py-2 rounded-full transition-all duration-300 bg-[hsl(330,80%,62%)] text-white hover:bg-[hsl(330,80%,55%)]"
+              aria-label="Regala Kiri"
+            >
+              Regala Kiri
+            </Link>
+            {/* Pink satin bow ribbon at top-right corner */}
+            <Image
+              src="/images/pink-bow-ribbon.png"
+              alt=""
               aria-hidden="true"
-              className="absolute top-0 right-0 w-0 h-0 transition-all duration-200 group-hover:w-7 group-hover:h-7"
-              style={{
-                borderStyle: "solid",
-                borderWidth: "0 28px 28px 0",
-                borderColor: "transparent hsl(50,100%,70%) transparent transparent",
-              }}
+              width={44}
+              height={44}
+              className="absolute -top-4 -right-3 w-10 h-10 object-contain pointer-events-none select-none drop-shadow-sm"
             />
-            Regala Kiri
-          </Link>
+          </div>
 
+          {/* Mobile hamburger */}
           <button
-            className={`lg:hidden p-2 rounded-lg ${overlayActive || isSecondaryPage ? "text-foreground" : "text-white"}`}
+            className={`lg:hidden p-2 rounded-lg ${
+              isLight ? "text-foreground" : "text-white"
+            }`}
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
             aria-expanded={menuOpen}
@@ -204,7 +238,7 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Mobile dropdown */}
+      {/* Mobile menu */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -214,6 +248,7 @@ export default function Header() {
             transition={{ duration: 0.22, ease: "easeOut" }}
             className="lg:hidden absolute top-full left-0 right-0 bg-white/97 backdrop-blur-md border-b border-border shadow-lg px-6 py-4 flex flex-col gap-1"
           >
+            {/* Dropdown group items flattened */}
             {NAV_GROUPS.map((group) => (
               <div key={group.label}>
                 <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground px-3 pt-3 pb-1">
@@ -231,6 +266,25 @@ export default function Header() {
                 ))}
               </div>
             ))}
+
+            {/* Standalone links */}
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground px-3 pt-3 pb-1">
+                Descubre
+              </p>
+              {NAV_LINKS.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMenuOpen(false)}
+                  className="block text-sm font-medium py-2.5 px-3 rounded-lg text-foreground hover:bg-muted transition-colors"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+
+            {/* CTAs */}
             <div className="flex flex-col gap-2 mt-3 pt-3 border-t border-border">
               <a
                 href="#"
