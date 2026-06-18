@@ -88,6 +88,26 @@ export default function RegalaKiriPage() {
           </div>
         </section>
 
+        {/* Gallery */}
+        <section className="bg-background py-14 px-4 md:px-8">
+          <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Image
+              src="/images/regalo-comunion.png"
+              alt="Abuelos entregando un regalo Kiri en una Primera Comunión"
+              width={700}
+              height={420}
+              className="w-full h-64 md:h-80 object-cover rounded-3xl"
+            />
+            <Image
+              src="/images/ninos-arbol-kiri.png"
+              alt="Niños cuidando su árbol Kiri"
+              width={700}
+              height={420}
+              className="w-full h-64 md:h-80 object-cover rounded-3xl"
+            />
+          </div>
+        </section>
+
         {/* How it works */}
         <section className="bg-muted py-20 px-4 md:px-8">
           <div className="max-w-4xl mx-auto">

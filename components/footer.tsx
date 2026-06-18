@@ -211,10 +211,10 @@ export default function Footer() {
                     Testimonios
                   </Link>
                   <Link
-                    href="/#medios"
+                    href="/kiri-en-los-medios"
                     className="text-purple-100 hover:text-white transition-colors duration-300 text-sm sm:text-base"
                   >
-                    En los Medios
+                    Kiri en los Medios
                   </Link>
                 </div>
                 <div className="flex flex-col gap-1 sm:gap-2">
