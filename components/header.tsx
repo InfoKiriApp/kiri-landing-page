@@ -22,6 +22,7 @@ export default function Header() {
   const isAcademy = pathname === "/kiri-academy"
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [ribbonHover, setRibbonHover] = useState(false)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60)
@@ -90,20 +91,64 @@ export default function Header() {
           })}
         </nav>
 
-        {/* CTA + mobile toggle */}
-        <div className="flex items-center gap-3">
+        {/* CTA buttons + mobile toggle */}
+        <div className="flex items-center gap-2">
+          {/* Iniciar Sesión */}
           <a
-            href="https://myinvestor.es"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="#"
+            className={`hidden sm:inline-flex text-sm font-medium px-4 py-2 rounded-full transition-all duration-300 ${
+              overlayActive || isAcademy
+                ? "text-foreground/70 hover:text-foreground border border-border hover:border-foreground/30"
+                : "text-white/80 hover:text-white border border-white/30 hover:border-white/60"
+            }`}
+          >
+            Iniciar Sesión
+          </a>
+
+          {/* Abre tu Cuenta */}
+          <a
+            href="#"
             className={`hidden sm:inline-flex text-sm font-semibold px-5 py-2 rounded-full transition-all duration-300 ${
               overlayActive || isAcademy
                 ? "bg-primary text-primary-foreground hover:bg-accent"
                 : "bg-white text-primary hover:bg-white/90"
             }`}
           >
-            Abre tu cuenta
+            Abre tu Cuenta
           </a>
+
+          {/* Regala Kiri — with pink ribbon on hover */}
+          <Link
+            href="/regala-kiri"
+            onMouseEnter={() => setRibbonHover(true)}
+            onMouseLeave={() => setRibbonHover(false)}
+            className={`relative hidden sm:inline-flex overflow-hidden text-sm font-semibold px-5 py-2 rounded-full transition-all duration-300 ${
+              overlayActive || isAcademy
+                ? "bg-[hsl(330,80%,62%)] text-white hover:bg-[hsl(330,80%,55%)]"
+                : "bg-white/15 text-white border border-white/40 hover:bg-white/25"
+            }`}
+            aria-label="Regala Kiri"
+          >
+            {/* Pink ribbon in top-right corner */}
+            <AnimatePresence>
+              {ribbonHover && (
+                <motion.span
+                  initial={{ opacity: 0, scale: 0.6 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.6 }}
+                  transition={{ duration: 0.18, ease: "easeOut" }}
+                  className="absolute -top-1 -right-1 w-8 h-8 pointer-events-none"
+                  aria-hidden="true"
+                >
+                  <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+                    <path d="M32 0 L32 32 L0 0 Z" fill="hsl(330,90%,70%)" />
+                    <path d="M20 4 L28 4 L28 12" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+                  </svg>
+                </motion.span>
+              )}
+            </AnimatePresence>
+            Regala Kiri
+          </Link>
 
           <button
             className={`lg:hidden p-2 rounded-lg ${overlayActive || isAcademy ? "text-foreground" : "text-white"}`}
@@ -140,15 +185,29 @@ export default function Header() {
                 {link.label}
               </Link>
             ))}
-            <a
-              href="https://myinvestor.es"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => setMenuOpen(false)}
-              className="mt-2 bg-primary text-primary-foreground text-sm font-semibold px-5 py-2.5 rounded-full text-center hover:bg-accent transition-colors"
-            >
-              Abre tu cuenta
-            </a>
+            <div className="flex flex-col gap-2 mt-2">
+              <a
+                href="#"
+                onClick={() => setMenuOpen(false)}
+                className="text-sm font-medium py-2.5 px-3 rounded-lg text-foreground hover:bg-muted transition-colors text-center border border-border"
+              >
+                Iniciar Sesión
+              </a>
+              <a
+                href="#"
+                onClick={() => setMenuOpen(false)}
+                className="bg-primary text-primary-foreground text-sm font-semibold px-5 py-2.5 rounded-full text-center hover:bg-accent transition-colors"
+              >
+                Abre tu Cuenta
+              </a>
+              <Link
+                href="/regala-kiri"
+                onClick={() => setMenuOpen(false)}
+                className="bg-[hsl(330,80%,62%)] text-white text-sm font-semibold px-5 py-2.5 rounded-full text-center hover:bg-[hsl(330,80%,55%)] transition-colors"
+              >
+                Regala Kiri
+              </Link>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

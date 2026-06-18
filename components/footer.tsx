@@ -181,25 +181,37 @@ export default function Footer() {
                     Kiri
                   </h3>
                   <Link
-                    href="#sobre"
+                    href="/#sobre"
                     className="text-purple-100 hover:text-white transition-colors duration-300 text-sm sm:text-base"
                   >
                     Sobre nosotros
                   </Link>
                   <Link
-                    href="#como-funciona"
+                    href="/#como-funciona"
                     className="text-purple-100 hover:text-white transition-colors duration-300 text-sm sm:text-base"
                   >
                     Cómo funciona
                   </Link>
                   <Link
-                    href="#testimonios"
+                    href="/#experiencia-kiri"
+                    className="text-purple-100 hover:text-white transition-colors duration-300 text-sm sm:text-base"
+                  >
+                    Experiencia Kiri
+                  </Link>
+                  <Link
+                    href="/regala-kiri"
+                    className="text-purple-100 hover:text-white transition-colors duration-300 text-sm sm:text-base"
+                  >
+                    Regala Kiri
+                  </Link>
+                  <Link
+                    href="/#testimonios"
                     className="text-purple-100 hover:text-white transition-colors duration-300 text-sm sm:text-base"
                   >
                     Testimonios
                   </Link>
                   <Link
-                    href="#medios"
+                    href="/#medios"
                     className="text-purple-100 hover:text-white transition-colors duration-300 text-sm sm:text-base"
                   >
                     En los Medios
