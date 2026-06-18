@@ -92,16 +92,18 @@ export default function Header() {
 
         {/* CTA + mobile toggle */}
         <div className="flex items-center gap-3">
-          <Link
-            href="/#reserva"
+          <a
+            href="https://myinvestor.es"
+            target="_blank"
+            rel="noopener noreferrer"
             className={`hidden sm:inline-flex text-sm font-semibold px-5 py-2 rounded-full transition-all duration-300 ${
               overlayActive || isAcademy
                 ? "bg-primary text-primary-foreground hover:bg-accent"
                 : "bg-white text-primary hover:bg-white/90"
             }`}
           >
-            Reserva tu Kiri
-          </Link>
+            Abre tu cuenta
+          </a>
 
           <button
             className={`lg:hidden p-2 rounded-lg ${overlayActive || isAcademy ? "text-foreground" : "text-white"}`}
@@ -138,13 +140,15 @@ export default function Header() {
                 {link.label}
               </Link>
             ))}
-            <Link
-              href="/#reserva"
+            <a
+              href="https://myinvestor.es"
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={() => setMenuOpen(false)}
               className="mt-2 bg-primary text-primary-foreground text-sm font-semibold px-5 py-2.5 rounded-full text-center hover:bg-accent transition-colors"
             >
-              Reserva tu Kiri
-            </Link>
+              Abre tu cuenta
+            </a>
           </motion.div>
         )}
       </AnimatePresence>
