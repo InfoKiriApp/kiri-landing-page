@@ -8,7 +8,7 @@ import PiggyBank from "./piggy-bank"
 
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
-  visible: (i = 0) => ({
+  visible: (i: number = 0) => ({
     opacity: 1,
     y: 0,
     transition: { duration: 0.65, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] },
