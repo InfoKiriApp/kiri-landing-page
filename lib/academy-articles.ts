@@ -929,6 +929,312 @@ export const ARTICLES: Article[] = [
       },
     ],
   },
+
+  // ─── Gestión de Activos ───────────────────────────────────────────────────
+  {
+    slug: "que-es-la-gestion-de-activos",
+    icon: "BarChart2",
+    category: "Inversión",
+    kiriCategory: "tronco",
+    ageRange: "15-18" as AgeRange,
+    title: "Gestión de Activos: Quién Cuida Tu Dinero Cuando Inviertes",
+    excerpt:
+      "Cuando alguien invierte en un fondo, hay un equipo de profesionales detrás tomando decisiones cada día. Conocer cómo funciona la gestión de activos te da perspectiva sobre lo que ocurre con tu dinero.",
+    readTime: "7 min",
+    body: [
+      {
+        type: "paragraph",
+        content:
+          "Imagina que tienes dinero ahorrado y quieres que crezca, pero no tienes ni el tiempo ni los conocimientos para analizar cientos de empresas cada semana. Ahí es donde entra en juego la gestión de activos: profesionales especializados que toman esas decisiones por ti, a cambio de una comisión.",
+      },
+      {
+        type: "heading",
+        content: "¿Qué es exactamente un gestor de activos?",
+      },
+      {
+        type: "paragraph",
+        content:
+          "Una gestora de activos (o asset manager, en inglés) es una empresa o profesional que administra dinero de terceros con el objetivo de hacerlo crecer. Pueden gestionar fondos de inversión, planes de pensiones, carteras privadas para grandes fortunas o incluso el capital de otras empresas.",
+      },
+      {
+        type: "paragraph",
+        content:
+          "Las gestoras más grandes del mundo —como BlackRock, Vanguard o Fidelity— manejan decenas de billones de euros. Son actores tan relevantes que sus decisiones pueden mover mercados enteros.",
+      },
+      {
+        type: "heading",
+        content: "Gestión activa vs. gestión pasiva",
+      },
+      {
+        type: "paragraph",
+        content:
+          "Esta es una de las grandes divisiones del mundo de la inversión. En la gestión activa, el gestor analiza el mercado, selecciona valores y cambia la composición de la cartera buscando batir a un índice de referencia. En la gestión pasiva, el objetivo es simplemente replicar ese índice, comprando las mismas empresas en la misma proporción.",
+      },
+      {
+        type: "list",
+        items: [
+          "Gestión activa: mayor coste en comisiones, busca superar al mercado, requiere talento y análisis continuo.",
+          "Gestión pasiva: comisiones muy bajas, replica un índice como el S&P 500 o el MSCI World, estadísticamente bate a la mayoría de gestores activos a largo plazo.",
+          "La evidencia histórica muestra que más del 80% de los fondos activos no superan a su índice de referencia en un horizonte de 10 años.",
+        ],
+      },
+      {
+        type: "heading",
+        content: "Las comisiones: el enemigo silencioso",
+      },
+      {
+        type: "paragraph",
+        content:
+          "En la gestión de activos, las comisiones se expresan como porcentaje anual del patrimonio gestionado. Pueden parecer pequeñas —un 1% o un 2%— pero sobre plazos largos tienen un impacto devastador gracias (o más bien, en contra de) al interés compuesto.",
+      },
+      {
+        type: "callout",
+        content:
+          "Ejemplo real: Si inviertes 10.000€ durante 30 años con una rentabilidad del 7% anual, obtendrás aproximadamente 76.000€ sin comisiones. Con una comisión del 2% anual, terminarías con unos 43.000€. La diferencia de 33.000€ se la ha llevado el gestor.",
+      },
+      {
+        type: "heading",
+        content: "¿Cómo se relaciona esto con Kiri?",
+      },
+      {
+        type: "paragraph",
+        content:
+          "Kiri actúa a través de MyInvestor, que ofrece acceso a fondos indexados de bajo coste. Cuando los padres ahorran para sus hijos a través de Kiri, su dinero se invierte de forma eficiente, minimizando comisiones y maximizando el efecto del interés compuesto a lo largo de los años. Entender gestión de activos ayuda a valorar por qué la elección del vehículo de inversión importa tanto como la cantidad que se ahorra.",
+      },
+    ],
+  },
+
+  // ─── Private Equity ───────────────────────────────────────────────────────
+  {
+    slug: "private-equity-inversion-en-empresas-privadas",
+    icon: "Building2",
+    category: "Inversión",
+    kiriCategory: "frutos",
+    ageRange: "19-22" as AgeRange,
+    title: "Private Equity: Invertir en Empresas que No Cotizan en Bolsa",
+    excerpt:
+      "La mayoría de la gente conoce la bolsa. Pero existe un mundo paralelo donde se mueve tanto o más dinero: el private equity. Empresas privadas, operaciones millonarias y rentabilidades que los mercados públicos rara vez ofrecen.",
+    readTime: "8 min",
+    body: [
+      {
+        type: "paragraph",
+        content:
+          "Cuando una empresa cotiza en bolsa, cualquiera puede comprar una fracción de ella. Pero la inmensa mayoría de las empresas del mundo no cotizan en bolsa. Son privadas. Y hay inversores especializados que ponen capital en ellas con la esperanza de hacerlas crecer y vender su participación con beneficio. A eso se le llama private equity.",
+      },
+      {
+        type: "heading",
+        content: "¿Cómo funciona un fondo de private equity?",
+      },
+      {
+        type: "paragraph",
+        content:
+          "Un fondo de private equity capta capital de grandes inversores institucionales —fondos de pensiones, family offices, aseguradoras— y lo invierte en empresas privadas. El ciclo típico dura entre 7 y 10 años: los primeros 3-4 años se invierten, los siguientes se gestionan las participadas, y al final se venden para repartir los beneficios.",
+      },
+      {
+        type: "list",
+        items: [
+          "Buyout: adquisición de una empresa madura, a menudo con deuda (LBO o leveraged buyout), para mejorarla y revenderla.",
+          "Growth equity: inversión en empresas ya rentables que necesitan capital para escalar.",
+          "Venture capital: inversión en startups en fases tempranas (esto merece su propio artículo).",
+          "Distressed: compra de empresas en dificultades financieras a precio de saldo para reestructurarlas.",
+        ],
+      },
+      {
+        type: "heading",
+        content: "La lógica del apalancamiento",
+      },
+      {
+        type: "paragraph",
+        content:
+          "Una de las estrategias más usadas en private equity es el LBO (Leveraged Buyout). La firma compra una empresa poniendo solo una parte del precio en capital propio y financiando el resto con deuda. Si la empresa genera caja suficiente para pagar esa deuda, la rentabilidad sobre el capital invertido se amplifica enormemente.",
+      },
+      {
+        type: "callout",
+        content:
+          "Analogía: Es como comprar un piso de 200.000€ poniendo solo 40.000€ propios y financiando el resto con hipoteca. Si el piso sube a 260.000€, has ganado 60.000€ sobre una inversión de 40.000€: una rentabilidad del 150% sobre tu capital, aunque el activo solo haya subido un 30%.",
+      },
+      {
+        type: "heading",
+        content: "¿Por qué no está al alcance de todos?",
+      },
+      {
+        type: "paragraph",
+        content:
+          "Los fondos de private equity suelen requerir inversiones mínimas de varios millones de euros y están orientados a inversores institucionales o de muy alto patrimonio. Son inversiones ilíquidas —no puedes salirte cuando quieras— y de largo plazo. La regulación europea (ELTIF) está abriendo poco a poco el acceso a inversores minoristas, pero sigue siendo un activo de difícil acceso para el público general.",
+      },
+      {
+        type: "heading",
+        content: "La conexión con la educación financiera",
+      },
+      {
+        type: "paragraph",
+        content:
+          "Entender el private equity no es solo para los que quieran trabajar en finanzas. Es comprender que el capital puede desplegarse de muchas formas, que el riesgo y la iliquidez tienen precio, y que las empresas que usamos cada día (desde supermercados hasta clínicas dentales) a menudo tienen detrás fondos que las han comprado, optimizado y vendido. La economía real y las finanzas están mucho más conectadas de lo que parece.",
+      },
+    ],
+  },
+
+  // ─── Banca de Inversión ───────────────────────────────────────────────────
+  {
+    slug: "banca-de-inversion-el-motor-de-las-grandes-operaciones",
+    icon: "Landmark",
+    category: "Mercados",
+    kiriCategory: "tronco",
+    ageRange: "19-22" as AgeRange,
+    title: "Banca de Inversión: El Motor Detrás de las Grandes Operaciones",
+    excerpt:
+      "Las fusiones multimillonarias, las salidas a bolsa de grandes empresas y las emisiones de deuda corporativa tienen un denominador común: un banco de inversión que las estructura. ¿Qué hacen exactamente y por qué importa entenderlos?",
+    readTime: "8 min",
+    body: [
+      {
+        type: "paragraph",
+        content:
+          "Un banco de inversión no es el banco donde tienes tu cuenta corriente. No capta depósitos de particulares ni te da una hipoteca. Su negocio es otro: asesorar a empresas, gobiernos e instituciones en sus operaciones financieras más complejas y conectar a quienes necesitan capital con quienes tienen capital para invertir.",
+      },
+      {
+        type: "heading",
+        content: "Los tres pilares del negocio",
+      },
+      {
+        type: "subheading",
+        content: "1. Mercado de capitales (ECM y DCM)",
+      },
+      {
+        type: "paragraph",
+        content:
+          "Cuando una empresa quiere salir a bolsa (IPO) o emitir acciones adicionales, el banco de inversión coordina todo el proceso: valoración, documentación legal, road show con inversores y fijación del precio. Esto se llama Equity Capital Markets (ECM). De forma similar, cuando una empresa emite bonos para financiarse, el banco estructura y coloca esa deuda entre inversores institucionales: es el Debt Capital Markets (DCM).",
+      },
+      {
+        type: "subheading",
+        content: "2. Fusiones y adquisiciones (M&A)",
+      },
+      {
+        type: "paragraph",
+        content:
+          "El equipo de M&A asesora a empresas que quieren comprar a otra empresa, vender su negocio o fusionarse. El banco elabora valoraciones, identifica compradores o targets, negocia las condiciones y gestiona el proceso de due diligence. Es un trabajo intensivo, con presión enorme y comisiones que pueden ascender a decenas de millones en grandes operaciones.",
+      },
+      {
+        type: "subheading",
+        content: "3. Sales & Trading",
+      },
+      {
+        type: "paragraph",
+        content:
+          "Los traders del banco compran y venden activos financieros —acciones, bonos, derivados, divisas— en los mercados. Una parte lo hacen en nombre de clientes institucionales (brokerage); otra, con capital propio del banco (prop trading, aunque muy reducido tras la crisis de 2008).",
+      },
+      {
+        type: "heading",
+        content: "La jerarquía interna",
+      },
+      {
+        type: "list",
+        items: [
+          "Analyst (años 1-2): el escalón de entrada tras la universidad. Modelos financieros, presentaciones y muchas horas.",
+          "Associate (años 3-5): normalmente llegan con un MBA. Más responsabilidad en la relación con clientes.",
+          "VP y Director: lideran proyectos y empiezan a gestionar relaciones.",
+          "Managing Director (MD): generan negocio. Su valor es su red de contactos y su capacidad de cerrar operaciones.",
+        ],
+      },
+      {
+        type: "heading",
+        content: "¿Por qué los salarios son tan altos?",
+      },
+      {
+        type: "paragraph",
+        content:
+          "Los bancos de inversión pagan salarios y bonus muy superiores a la media del sector financiero. La razón es la combinación de alta demanda de talento, trabajo extremadamente exigente (80-100 horas semanales en los primeros años), y el enorme valor económico de las operaciones que facilitan. Un MD que cierra una fusión de 2.000 millones genera para el banco una comisión de entre 15 y 40 millones de euros.",
+      },
+      {
+        type: "callout",
+        content:
+          "Para reflexionar: Entender la banca de inversión no es solo útil si quieres trabajar en ella. Es comprender cómo se asigna el capital en la economía: qué empresas consiguen financiación para crecer, qué sectores se consolidan, y quién toma las decisiones que moldean la estructura productiva de un país.",
+      },
+    ],
+  },
+
+  // ─── Venture Capital ──────────────────────────────────────────────────────
+  {
+    slug: "venture-capital-apostar-por-el-futuro",
+    icon: "Rocket",
+    category: "Inversión",
+    kiriCategory: "frutos",
+    ageRange: "19-22" as AgeRange,
+    title: "Venture Capital: Apostar por el Futuro de las Startups",
+    excerpt:
+      "Google, Airbnb, Spotify, Cabify. Todas tienen algo en común: en sus primeros años, alguien apostó por ellas cuando eran solo una idea. Eso es el venture capital: capital de riesgo para empresas que aún no existen del todo.",
+    readTime: "9 min",
+    body: [
+      {
+        type: "paragraph",
+        content:
+          "El venture capital (VC) es una forma de inversión en empresas en fases muy tempranas —a veces cuando solo existe una idea y un equipo fundador— a cambio de un porcentaje del capital. El inversor asume que la mayoría de las apuestas fracasarán, pero que una sola gran historia de éxito puede compensar todas las pérdidas y generar una rentabilidad extraordinaria.",
+      },
+      {
+        type: "heading",
+        content: "Las etapas de inversión en una startup",
+      },
+      {
+        type: "list",
+        items: [
+          "Pre-seed: primeros cheques, a menudo de business angels (inversores individuales). La empresa aún no tiene producto.",
+          "Seed: hay un MVP (producto mínimo viable) y primeros usuarios. Fondos de entre 500.000€ y 2 millones.",
+          "Serie A: el modelo de negocio funciona y hay que escalar. Tickets de 5 a 15 millones.",
+          "Serie B, C y siguientes: expansión internacional, contratación masiva, dominio de mercado. Pueden superar los 100 millones.",
+          "Exit: salida a bolsa (IPO) o venta a una gran corporación. El momento en que los inversores realizan su retorno.",
+        ],
+      },
+      {
+        type: "heading",
+        content: "La lógica del power law",
+      },
+      {
+        type: "paragraph",
+        content:
+          "En venture capital no se aplica una distribución normal de retornos. Se aplica la ley de potencia (power law): de 10 inversiones, 6 pueden fracasar, 3 devolver lo invertido y 1 generar un retorno de 50x o 100x. Ese unicornio —empresa valorada en más de 1.000 millones— paga toda la cartera. Por eso los VCs invierten en carteras amplias y buscan fundadores con ambición de construir categorías enteras, no solo negocios rentables.",
+      },
+      {
+        type: "callout",
+        content:
+          "Dato: Sequoia Capital invirtió 60.000 dólares en Google en 1999. Esa posición valía más de 12.000 millones cuando Google salió a bolsa en 2004. Un retorno de 200.000x.",
+      },
+      {
+        type: "heading",
+        content: "¿Qué busca un inversor de VC?",
+      },
+      {
+        type: "paragraph",
+        content:
+          "Los inversores de venture capital no evalúan principalmente el producto: evalúan el equipo. La pregunta clave es: ¿tiene este equipo la capacidad, la resiliencia y la visión para construir una empresa que lidere su mercado en 10 años? Después vienen el mercado potencial (tiene que ser muy grande), la ventaja competitiva sostenible y la tracción temprana.",
+      },
+      {
+        type: "subheading",
+        content: "El término sheet y la dilución",
+      },
+      {
+        type: "paragraph",
+        content:
+          "Cuando un VC quiere invertir, emite un term sheet: un documento con las condiciones de la inversión. Una de las más importantes es la valoración pre-money, que determina qué porcentaje del capital se cede a cambio del dinero. Cada ronda de financiación diluye a los fundadores, por lo que la negociación de valoraciones y condiciones es crítica para mantener el control y el incentivo de seguir construyendo.",
+      },
+      {
+        type: "heading",
+        content: "El ecosistema en España",
+      },
+      {
+        type: "paragraph",
+        content:
+          "España ha experimentado un crecimiento notable en su ecosistema de startups. Fondos como Lanzadera, Kibo Ventures, Seaya o K Fund han invertido en empresas que hoy son referentes europeos. Barcelona y Madrid compiten por posicionarse como hubs de innovación, y cada vez más talento que antes emigraba a Silicon Valley elige quedarse a construir aquí.",
+      },
+      {
+        type: "heading",
+        content: "La conexión con Kiri",
+      },
+      {
+        type: "paragraph",
+        content:
+          "Kiri es, en sí misma, una startup financiada con capital riesgo. Comprender el venture capital no es una abstracción: es entender el modelo que permite que proyectos como Kiri existan. Y para los jóvenes que hoy ahorran con Kiri, entender este ecosistema puede ser la semilla de una carrera en tecnología, en finanzas o incluso como fundadores ellos mismos.",
+      },
+    ],
+  },
 ]
 
 export function getArticleBySlug(slug: string): Article | undefined {
