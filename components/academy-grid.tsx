@@ -80,7 +80,7 @@ export default function AcademyGrid({ categoryFilter, kiriFilter, ageFilter }: P
                         {article.category}
                       </span>
                       <span className="text-xs font-medium text-muted-foreground bg-muted px-2.5 py-0.5 rounded-full">
-                        {article.ageRange} anos
+                        {article.ageRange} años
                       </span>
                     </div>
                   </div>

@@ -126,7 +126,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             </div>
             <div className="flex items-center gap-2 text-white/50 text-sm">
               <Users className="w-4 h-4" />
-              <span>{article.ageRange} anos</span>
+              <span>{article.ageRange} años</span>
             </div>
           </div>
 

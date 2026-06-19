@@ -240,7 +240,7 @@ export default function KiriAcademyPage() {
                     : "bg-muted text-muted-foreground hover:bg-secondary hover:text-foreground"
                 }`}
               >
-                {age} anos
+                {age} años
               </button>
             ))}
           </div>
