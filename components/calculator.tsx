@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
+import confetti from "canvas-confetti"
 
 const MIN = 50
 const MAX = 500
@@ -68,10 +69,54 @@ function useAnimatedNumber(target: number, duration = 420) {
   return display
 }
 
+function useConfettiOnTree(stage: Stage) {
+  const prevStageRef = useRef<Stage>(stage)
+  const hasExplodedRef = useRef(false)
+
+  useEffect(() => {
+    const prev = prevStageRef.current
+    prevStageRef.current = stage
+
+    if (stage === "tree" && prev !== "tree") {
+      hasExplodedRef.current = false
+    }
+
+    if (stage === "tree" && !hasExplodedRef.current) {
+      hasExplodedRef.current = true
+      const duration = 3000
+      const end = Date.now() + duration
+      const colors = ["#9333ea", "#c084fc", "#f9a8d4", "#fbbf24", "#ffffff"]
+
+      const frame = () => {
+        confetti({
+          particleCount: 6,
+          angle: 60,
+          spread: 70,
+          origin: { x: 0, y: 0.65 },
+          colors,
+          scalar: 1.1,
+        })
+        confetti({
+          particleCount: 6,
+          angle: 120,
+          spread: 70,
+          origin: { x: 1, y: 0.65 },
+          colors,
+          scalar: 1.1,
+        })
+        if (Date.now() < end) requestAnimationFrame(frame)
+      }
+      requestAnimationFrame(frame)
+    }
+  }, [stage])
+}
+
 export default function Calculator() {
   const [monthly, setMonthly] = useState(50)
   const { total, contributed, returns } = calcFV(monthly)
   const stage = getStage(monthly)
+
+  useConfettiOnTree(stage)
 
   const animTotal = useAnimatedNumber(total)
   const animContributed = useAnimatedNumber(contributed)
@@ -111,17 +156,17 @@ export default function Calculator() {
             <AnimatePresence mode="wait">
               <motion.div
                 key={stage}
-                initial={{ opacity: 0, scale: 0.85, y: 12 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.9, y: -8 }}
-                transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
+                initial={{ opacity: 0, scale: 0.72, y: 24, filter: "blur(6px)" }}
+                animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)" }}
+                exit={{ opacity: 0, scale: 0.88, y: -12, filter: "blur(4px)" }}
+                transition={{ duration: 0.55, ease: [0.34, 1.36, 0.64, 1] }}
               >
                 <Image
                   src={STAGE_IMAGES[stage].src}
                   alt={STAGE_IMAGES[stage].alt}
                   width={320}
                   height={320}
-                  className={`object-contain ${STAGE_IMAGES[stage].size} drop-shadow-md`}
+                  className={`object-contain ${STAGE_IMAGES[stage].size} drop-shadow-xl`}
                   priority
                 />
               </motion.div>

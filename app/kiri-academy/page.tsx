@@ -7,7 +7,8 @@ import AcademyGrid from "@/components/academy-grid"
 import Image from "next/image"
 import Link from "next/link"
 import { Sprout } from "lucide-react"
-import type { KiriCategory } from "@/lib/academy-articles"
+import type { KiriCategory, AgeRange } from "@/lib/academy-articles"
+import { AGE_RANGES, ADRIANA } from "@/lib/academy-articles"
 
 const TAG_FILTERS = [
   "Todos",
@@ -93,6 +94,7 @@ const KIRI_CATEGORIES: KiriCat[] = [
 export default function KiriAcademyPage() {
   const [tagFilter, setTagFilter] = useState("Todos")
   const [kiriFilter, setKiriFilter] = useState<KiriCategory | undefined>(undefined)
+  const [ageFilter, setAgeFilter] = useState<AgeRange | undefined>(undefined)
 
   function handleTagFilter(tag: string) {
     setTagFilter(tag)
@@ -107,6 +109,10 @@ export default function KiriAcademyPage() {
       setKiriFilter(id)
       setTagFilter("Todos")
     }
+  }
+
+  function handleAgeFilter(age: AgeRange) {
+    setAgeFilter(ageFilter === age ? undefined : age)
   }
 
   const activeKiri = KIRI_CATEGORIES.find((c) => c.id === kiriFilter)
@@ -195,19 +201,68 @@ export default function KiriAcademyPage() {
         </div>
       </section>
 
-      {/* Tag filter bar */}
-      <div className="sticky top-[72px] z-40 bg-background/95 backdrop-blur-md border-b border-border px-6 md:px-12 lg:px-20 py-4">
-        <div className="max-w-7xl mx-auto flex items-center gap-3 overflow-x-auto">
-          {/* Active kiri label */}
-          {activeKiri && (
-            <span
-              className={`flex-shrink-0 text-xs font-semibold px-3 py-1.5 rounded-full text-white ${activeKiri.accentBg}`}
+      {/* Adriana author banner */}
+      <section className="bg-muted/40 border-b border-border px-6 md:px-12 lg:px-20 py-8">
+        <div className="max-w-7xl mx-auto flex items-center gap-5">
+          <Image
+            src={ADRIANA.avatar}
+            alt={ADRIANA.name}
+            width={64}
+            height={64}
+            className="w-16 h-16 rounded-2xl object-cover flex-shrink-0"
+          />
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-widest text-primary mb-0.5">Autora</p>
+            <h3 className="font-serif text-lg font-bold text-foreground">{ADRIANA.name}</h3>
+            <p className="text-sm text-primary font-semibold">{ADRIANA.role}</p>
+            <p className="text-sm text-muted-foreground leading-relaxed mt-1 max-w-2xl hidden md:block">
+              {ADRIANA.bio}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Filter bars */}
+      <div className="sticky top-[72px] z-40 bg-background/95 backdrop-blur-md border-b border-border px-6 md:px-12 lg:px-20">
+        {/* Age filter row */}
+        <div className="max-w-7xl mx-auto flex items-center gap-3 overflow-x-auto pt-4 pb-2 border-b border-border/50">
+          <span className="flex-shrink-0 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+            Edad
+          </span>
+          <div className="flex gap-2 w-max">
+            {AGE_RANGES.map((age) => (
+              <button
+                key={age}
+                onClick={() => handleAgeFilter(age)}
+                className={`px-3.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                  ageFilter === age
+                    ? "bg-foreground text-background"
+                    : "bg-muted text-muted-foreground hover:bg-secondary hover:text-foreground"
+                }`}
+              >
+                {age} años
+              </button>
+            ))}
+          </div>
+          {ageFilter && (
+            <button
+              onClick={() => setAgeFilter(undefined)}
+              className="flex-shrink-0 text-xs text-muted-foreground hover:text-foreground transition-colors ml-1"
             >
+              Limpiar
+            </button>
+          )}
+        </div>
+
+        {/* Tag filter row */}
+        <div className="max-w-7xl mx-auto flex items-center gap-3 overflow-x-auto py-3">
+          {activeKiri && (
+            <span className={`flex-shrink-0 text-xs font-semibold px-3 py-1.5 rounded-full text-white ${activeKiri.accentBg}`}>
               {activeKiri.title}
             </span>
           )}
           <div className="flex gap-2 w-max">
-            {TAG_FILTERS.map((cat, i) => (
+            {TAG_FILTERS.map((cat) => (
               <button
                 key={cat}
                 onClick={() => handleTagFilter(cat)}
@@ -225,7 +280,7 @@ export default function KiriAcademyPage() {
       </div>
 
       {/* Article grid */}
-      <AcademyGrid categoryFilter={tagFilter} kiriFilter={kiriFilter} />
+      <AcademyGrid categoryFilter={tagFilter} kiriFilter={kiriFilter} ageFilter={ageFilter} />
 
       {/* CTA banner */}
       <section className="bg-primary px-6 md:px-12 lg:px-20 py-20 mx-6 md:mx-12 lg:mx-20 rounded-3xl mb-16">

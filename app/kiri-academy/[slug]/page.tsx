@@ -3,7 +3,9 @@ import Link from "next/link"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import { getArticleBySlug, getAllSlugs, ARTICLES, type ArticleSection } from "@/lib/academy-articles"
-import { ArrowLeft, Clock, BookOpen } from "lucide-react"
+import { ArrowLeft, Clock, BookOpen, Users } from "lucide-react"
+import Image from "next/image"
+import { ADRIANA } from "@/lib/academy-articles"
 
 export function generateStaticParams() {
   return getAllSlugs().map((slug) => ({ slug }))
@@ -117,9 +119,30 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             {article.excerpt}
           </p>
 
-          <div className="flex items-center gap-2 text-white/50 text-sm">
-            <Clock className="w-4 h-4" />
-            <span>{article.readTime} de lectura</span>
+          <div className="flex items-center gap-4 flex-wrap">
+            <div className="flex items-center gap-2 text-white/50 text-sm">
+              <Clock className="w-4 h-4" />
+              <span>{article.readTime} de lectura</span>
+            </div>
+            <div className="flex items-center gap-2 text-white/50 text-sm">
+              <Users className="w-4 h-4" />
+              <span>{article.ageRange} años</span>
+            </div>
+          </div>
+
+          {/* Author chip */}
+          <div className="flex items-center gap-3 mt-2">
+            <Image
+              src={ADRIANA.avatar}
+              alt={ADRIANA.name}
+              width={40}
+              height={40}
+              className="w-10 h-10 rounded-full object-cover flex-shrink-0"
+            />
+            <div>
+              <p className="text-white text-sm font-semibold">{ADRIANA.name}</p>
+              <p className="text-white/50 text-xs">{ADRIANA.role}</p>
+            </div>
           </div>
         </div>
       </section>
@@ -132,6 +155,27 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           ))}
         </div>
       </article>
+
+      {/* Author bio */}
+      <section className="px-6 md:px-12 lg:px-20 py-12 border-t border-border">
+        <div className="max-w-3xl mx-auto">
+          <div className="bg-muted/40 rounded-2xl p-6 md:p-8 flex flex-col sm:flex-row gap-5 items-start">
+            <Image
+              src={ADRIANA.avatar}
+              alt={ADRIANA.name}
+              width={72}
+              height={72}
+              className="w-16 h-16 rounded-2xl object-cover flex-shrink-0"
+            />
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-widest text-primary mb-1">Autora</p>
+              <h3 className="font-serif text-lg font-bold text-foreground">{ADRIANA.name}</h3>
+              <p className="text-sm text-primary font-semibold mb-2">{ADRIANA.role}</p>
+              <p className="text-sm text-muted-foreground leading-relaxed">{ADRIANA.bio}</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Related articles */}
       {related.length > 0 && (
