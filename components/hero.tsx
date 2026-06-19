@@ -8,7 +8,7 @@ import PiggyBank from "./piggy-bank"
 
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
-  visible: (i = 0) => ({
+  visible: (i: number = 0) => ({
     opacity: 1,
     y: 0,
     transition: { duration: 0.65, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] },
@@ -56,14 +56,14 @@ export default function Hero() {
               variants={fadeUp}
               className="font-serif text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-balance"
             >
-              La cuenta que les asegura un futuro mejor
+              La cuenta de inversión para niños que les asegura un futuro mejor
             </motion.h1>
             <motion.p
               custom={2}
               variants={fadeUp}
               className="text-base md:text-lg leading-relaxed mb-8 text-white/80 max-w-lg"
             >
-              Regala una cuenta Kiri. Invierte en su futuro. Los niños podrán ver crecer sus ahorros, como el árbol más rápido del planeta.
+              Regala una cuenta Kiri. Invierte en su futuro.
             </motion.p>
             <motion.div custom={3} variants={fadeUp} className="flex flex-col sm:flex-row gap-4">
               <a
