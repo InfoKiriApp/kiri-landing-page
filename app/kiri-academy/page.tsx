@@ -8,9 +8,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Sprout } from "lucide-react"
 import type { KiriCategory, AgeRange } from "@/lib/academy-articles"
-import { AGE_RANGES } from "@/lib/academy-articles"
-import Image from "next/image"
-import { ADRIANA } from "@/lib/academy-articles"
+import { AGE_RANGES, ADRIANA } from "@/lib/academy-articles"
 
 const TAG_FILTERS = [
   "Todos",
