@@ -14,7 +14,7 @@ export default function PiggyBank() {
       <motion.div
         animate={{ y: [0, -12, 0] }}
         transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-        className="relative w-full h-full"
+        className="relative w-full h-full max-w-xs mx-auto"
       >
         <Image
           src="/images/piggy.png"
