@@ -54,7 +54,7 @@ export default function Hero() {
             <motion.h1
               custom={1}
               variants={fadeUp}
-              className="font-serif text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-balance"
+              className="font-serif text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-balance max-w-4xl"
             >
               La cuenta de inversión para niños<br />que les asegura un futuro mejor
             </motion.h1>
