@@ -246,7 +246,7 @@ export default function Header() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.22, ease: "easeOut" }}
-            className="lg:hidden absolute top-full left-0 right-0 bg-white/97 backdrop-blur-md border-b border-border shadow-lg px-6 py-4 flex flex-col gap-1"
+            className="lg:hidden absolute top-full left-0 right-0 bg-white border-b border-border shadow-xl px-6 py-4 flex flex-col gap-1"
           >
             {/* Dropdown group items flattened */}
             {NAV_GROUPS.map((group) => (

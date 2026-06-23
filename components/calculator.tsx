@@ -21,10 +21,13 @@ function calcFV(monthly: number) {
 function getEquivalence(total: number): string {
   if (total < 5000) return "el equivalente a un viaje en familia a Disneyland París."
   if (total < 10000) return "suficiente para comprarse un coche nuevo."
-  if (total < 18000) return "más que un año de universidad en el extranjero, matrículas incluidas."
+  if (total < 15000) return "más que un año de universidad en el extranjero, matrículas incluidas."
+  if (total < 22000) return "suficiente para recorrer el mundo durante un año entero."
   if (total < 30000) return "suficiente para dar la entrada de un piso."
+  if (total < 40000) return "equivalente a pagarse un máster MBA en una escuela de negocios top."
   if (total < 50000) return "más que el salario de 2 años de un recién graduado."
-  if (total < 80000) return "suficiente para montar su propio negocio desde cero."
+  if (total < 65000) return "suficiente para montar su propio negocio desde cero."
+  if (total < 80000) return "el equivalente a comprar un velero y navegar el Mediterráneo."
   return "suficiente para comprar un piso en muchas ciudades de España."
 }
 

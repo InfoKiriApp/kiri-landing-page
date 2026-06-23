@@ -8,6 +8,7 @@ import ExperienciaKiri from "@/components/experiencia-kiri"
 import Featured from "@/components/featured"
 import Calculator from "@/components/calculator"
 import Promo from "@/components/promo"
+import Testimonials from "@/components/testimonials"
 import Media from "@/components/media"
 import Footer from "@/components/footer"
 
@@ -27,10 +28,11 @@ export default function Home() {
     <main>
       <Hero />
       <SobreKiri />
-      <ExperienciaKiri />
       <Featured />
       <Calculator />
+      <ExperienciaKiri />
       <Promo />
+      <Testimonials />
       <Media />
       <Footer />
     </main>
