@@ -23,14 +23,19 @@ const NAV_GROUPS = [
       { label: "Testimonios",        href: "/#testimonios" },
     ],
   },
+  {
+    label: "Kiri Academy",
+    items: [
+      { label: "Todos los artículos", href: "/kiri-academy" },
+      { label: "Juegos por edades",   href: "/kiri-academy/juegos" },
+    ],
+  },
 ]
 
 // Standalone links always visible in the nav bar
 const NAV_LINKS = [
   { label: "La Experiencia", href: "/#experiencia-kiri" },
   { label: "Calculadora",    href: "/#calculadora" },
-  { label: "Kiri Academy",   href: "/kiri-academy" },
-  { label: "Juegos",         href: "/kiri-academy/juegos" },
 ]
 
 function DropdownMenu({
