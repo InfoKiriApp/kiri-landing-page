@@ -54,7 +54,7 @@ export default function Hero() {
             <motion.h1
               custom={1}
               variants={fadeUp}
-              className="font-serif text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-balance max-w-4xl"
+              className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-bold mb-6 leading-tight"
             >
               La cuenta de inversión para niños<br />que les asegura un futuro mejor
             </motion.h1>
@@ -83,7 +83,7 @@ export default function Hero() {
 
           {/* Right: piggy bank */}
           <motion.div
-            className="hidden lg:flex items-center justify-center h-full w-[40%] flex-shrink-0"
+            className="hidden lg:flex items-center justify-center h-full w-[30%] flex-shrink-0"
             initial={{ opacity: 0, scale: 0.88, x: 40 }}
             animate={{ opacity: 1, scale: 1, x: 0 }}
             transition={{ duration: 0.85, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
