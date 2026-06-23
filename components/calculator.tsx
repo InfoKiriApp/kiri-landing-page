@@ -18,6 +18,19 @@ function calcFV(monthly: number) {
   return { total: Math.round(fv), contributed: Math.round(contributed), returns: Math.round(returns) }
 }
 
+function getEquivalence(total: number): string {
+  // Slider range: €50–€500/month → total range: ~€36k–€360k
+  if (total < 55000)  return "el equivalente a un viaje en familia a Disneyland París cada año durante 10 años."
+  if (total < 80000)  return "suficiente para comprarse un coche nuevo de gama alta."
+  if (total < 110000) return "más que pagar 4 años de universidad en el extranjero, matrículas y vida incluidas."
+  if (total < 150000) return "suficiente para recorrer el mundo durante 5 años sin parar."
+  if (total < 200000) return "suficiente para dar la entrada de un piso y quedarse con cambio."
+  if (total < 250000) return "equivalente a pagarse un máster MBA en las mejores escuelas del mundo."
+  if (total < 300000) return "más que el salario de 6 años de un recién graduado."
+  if (total < 340000) return "suficiente para montar su propio negocio desde cero con todo incluido."
+  return "suficiente para comprar un piso en muchas ciudades de España."
+}
+
 function formatEur(n: number) {
   return n.toLocaleString("de-DE")
 }
@@ -115,6 +128,7 @@ export default function Calculator() {
   const [monthly, setMonthly] = useState(50)
   const { total, contributed, returns } = calcFV(monthly)
   const stage = getStage(monthly)
+  const equivalence = getEquivalence(total)
 
   useConfettiOnTree(stage)
 
@@ -218,6 +232,14 @@ export default function Calculator() {
               <p className="text-sm text-muted-foreground mt-3">
                 aportando{" "}
                 <strong className="text-foreground">{monthly} €/mes</strong>
+              </p>
+              <p className="text-sm text-muted-foreground mt-4 leading-relaxed max-w-xs mx-auto">
+                Por la magia del interés compuesto, si inviertes{" "}
+                <strong className="text-foreground">{monthly} €</strong> de forma mensual desde que el niño nace, hasta que cumple los 18 años, su árbol Kiri le dará{" "}
+                <strong className="text-primary">{formatEur(total)} €</strong>.
+              </p>
+              <p className="text-xs text-primary/70 font-medium mt-2 italic">
+                Es {equivalence}
               </p>
             </div>
 

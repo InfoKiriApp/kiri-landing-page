@@ -37,10 +37,10 @@ export default function Hero() {
         />
         <div className="absolute inset-0 bg-purple-900/50" />
 
-        <div className="absolute inset-0 flex items-center z-10 px-8 md:px-16">
+        <div className="absolute inset-0 flex items-center z-10 px-8 md:px-16 gap-8">
           {/* Left: text */}
           <motion.div
-            className="flex-1 text-white max-w-xl"
+            className="flex-1 text-white lg:max-w-[60%]"
             initial="hidden"
             animate="visible"
           >
@@ -54,9 +54,9 @@ export default function Hero() {
             <motion.h1
               custom={1}
               variants={fadeUp}
-              className="font-serif text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-balance"
+              className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-bold mb-6 leading-tight"
             >
-              La cuenta de inversión para niños que les asegura un futuro mejor
+              La cuenta de inversión para niños<br />que les asegura un futuro mejor
             </motion.h1>
             <motion.p
               custom={2}
@@ -83,7 +83,7 @@ export default function Hero() {
 
           {/* Right: piggy bank */}
           <motion.div
-            className="hidden lg:flex flex-1 items-center justify-center h-full"
+            className="hidden lg:flex items-center justify-center h-full w-[30%] flex-shrink-0"
             initial={{ opacity: 0, scale: 0.88, x: 40 }}
             animate={{ opacity: 1, scale: 1, x: 0 }}
             transition={{ duration: 0.85, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}

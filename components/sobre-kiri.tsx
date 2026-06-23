@@ -6,19 +6,19 @@ import { motion, useInView } from "framer-motion"
 
 const cards = [
   {
-    image: "/images/imagen-caja-fuerte-rosa.png",
+    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/caja%20fuerte.png-KWkI1I5hyeqCj0c8MYzLpCBkYKF3eS.jpeg",
     title: "Abre una cuenta Kiri",
     description:
       "Abre una cuenta de ahorro e inversión para tus seres queridos de 0 a 18 años en nuestro banco colaborador MyInvestor.",
   },
   {
-    image: "/images/pastel-cumpleanos-rosa.png",
+    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/birthdaycake-n6oxf54DqmB0hQYExRSiNKWbYP40xw.png",
     title: "Regala en sus ocasiones especiales",
     description:
       "En su cumpleaños, bautizo, primera comunión, confirmación, vuelta al colegio, comienza a contribuir para garantizarles un futuro financiero mejor.",
   },
   {
-    image: "/images/reloj-de-arena-rosa.png",
+    image: "/images/hourglass.png",
     title: "Invierte en su futuro",
     description:
       "Los menores podrán establecer metas de ahorro y a los 18 años podrán disponer de la inversión y sus rendimientos.",
@@ -58,7 +58,7 @@ export default function SobreKiri() {
               transition={{ duration: 0.6, delay: 0.1 + i * 0.12, ease: [0.22, 1, 0.36, 1] }}
               className="flex flex-col items-center text-center gap-6 p-8 rounded-3xl border border-border bg-background hover:shadow-md transition-shadow duration-300"
             >
-              <div className="w-28 h-28 rounded-2xl bg-primary/5 flex items-center justify-center overflow-hidden flex-shrink-0">
+              <div className="w-32 h-32 rounded-full bg-primary/5 flex items-center justify-center overflow-hidden flex-shrink-0">
                 <Image
                   src={card.image}
                   alt={card.title}

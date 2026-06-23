@@ -6,7 +6,7 @@ import Footer from "@/components/footer"
 import AcademyGrid from "@/components/academy-grid"
 import Image from "next/image"
 import Link from "next/link"
-import { Sprout } from "lucide-react"
+import { Sprout, Gamepad2, ArrowRight } from "lucide-react"
 import type { KiriCategory, AgeRange } from "@/lib/academy-articles"
 import { AGE_RANGES, ADRIANA } from "@/lib/academy-articles"
 
@@ -147,6 +147,38 @@ export default function KiriAcademyPage() {
               </span>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Games entry point */}
+      <section className="bg-background px-6 md:px-12 lg:px-20 pt-12">
+        <div className="max-w-7xl mx-auto">
+          <Link
+            href="/kiri-academy/juegos"
+            className="group flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 rounded-3xl border border-primary/20 bg-primary/5 p-7 transition-all duration-200 hover:shadow-lg hover:border-primary/40"
+          >
+            <div className="flex items-center gap-5">
+              <div className="w-14 h-14 rounded-2xl bg-primary flex items-center justify-center flex-shrink-0">
+                <Gamepad2 className="w-7 h-7 text-primary-foreground" />
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-widest text-primary mb-1">
+                  Aprender jugando
+                </p>
+                <h3 className="font-serif text-xl md:text-2xl font-bold text-foreground leading-snug">
+                  Juegos por edades: de los 3 a los 22 años
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed mt-1 max-w-xl">
+                  Seis juegos interactivos. Los niños juegan y aprenden una habilidad financiera; los padres
+                  descubren cómo enseñar esa misma lección en casa.
+                </p>
+              </div>
+            </div>
+            <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary flex-shrink-0">
+              Ver los juegos
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
+            </span>
+          </Link>
         </div>
       </section>
 

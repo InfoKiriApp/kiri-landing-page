@@ -57,13 +57,13 @@ export default function ExperienciaKiri() {
             initial={{ opacity: 0, x: 24 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.65, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-            className="relative rounded-3xl overflow-hidden"
+            className="relative rounded-3xl overflow-hidden shadow-2xl"
           >
             <Image
               src="/images/regalos-kiri.png"
               alt="Regalos Kiri — tarjeta regalo con sobre y experiencias soñadas"
-              width={720}
-              height={520}
+              width={960}
+              height={720}
               className="w-full h-auto object-cover rounded-3xl"
               priority={false}
             />
