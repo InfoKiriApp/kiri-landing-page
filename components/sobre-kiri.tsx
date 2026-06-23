@@ -18,7 +18,7 @@ const cards = [
       "En su cumpleaños, bautizo, primera comunión, confirmación, vuelta al colegio, comienza a contribuir para garantizarles un futuro financiero mejor.",
   },
   {
-    image: "/images/reloj-de-arena-rosa.png",
+    image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/reloj-de-arena-rosa-qvqkDKTQhN5kLLG5EocE1eNMQn9YeI.png",
     title: "Invierte en su futuro",
     description:
       "Los menores podrán establecer metas de ahorro y a los 18 años podrán disponer de la inversión y sus rendimientos.",
