@@ -19,15 +19,15 @@ function calcFV(monthly: number) {
 }
 
 function getEquivalence(total: number): string {
-  if (total < 5000) return "el equivalente a un viaje en familia a Disneyland París."
-  if (total < 10000) return "suficiente para comprarse un coche nuevo."
-  if (total < 15000) return "más que un año de universidad en el extranjero, matrículas incluidas."
-  if (total < 22000) return "suficiente para recorrer el mundo durante un año entero."
-  if (total < 30000) return "suficiente para dar la entrada de un piso."
-  if (total < 40000) return "equivalente a pagarse un máster MBA en una escuela de negocios top."
-  if (total < 50000) return "más que el salario de 2 años de un recién graduado."
-  if (total < 65000) return "suficiente para montar su propio negocio desde cero."
-  if (total < 80000) return "el equivalente a comprar un velero y navegar el Mediterráneo."
+  // Slider range: €50–€500/month → total range: ~€36k–€360k
+  if (total < 55000)  return "el equivalente a un viaje en familia a Disneyland París cada año durante 10 años."
+  if (total < 80000)  return "suficiente para comprarse un coche nuevo de gama alta."
+  if (total < 110000) return "más que pagar 4 años de universidad en el extranjero, matrículas y vida incluidas."
+  if (total < 150000) return "suficiente para recorrer el mundo durante 5 años sin parar."
+  if (total < 200000) return "suficiente para dar la entrada de un piso y quedarse con cambio."
+  if (total < 250000) return "equivalente a pagarse un máster MBA en las mejores escuelas del mundo."
+  if (total < 300000) return "más que el salario de 6 años de un recién graduado."
+  if (total < 340000) return "suficiente para montar su propio negocio desde cero con todo incluido."
   return "suficiente para comprar un piso en muchas ciudades de España."
 }
 
