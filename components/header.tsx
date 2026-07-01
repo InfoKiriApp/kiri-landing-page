@@ -189,7 +189,9 @@ export default function Header() {
 
           {/* Iniciar Sesión */}
           <a
-            href="#"
+            href="https://cuenta.kiriapp.com/login"
+            target="_blank"
+            rel="noopener noreferrer"
             className={`hidden xl:inline-flex text-sm font-medium px-4 py-2 rounded-full transition-all duration-300 ${
               isLight
                 ? "text-foreground/70 hover:text-foreground border border-border hover:border-foreground/30"
@@ -201,7 +203,9 @@ export default function Header() {
 
           {/* Abre tu Cuenta */}
           <a
-            href="#"
+            href="https://cuenta.kiriapp.com/"
+            target="_blank"
+            rel="noopener noreferrer"
             className={`hidden sm:inline-flex text-sm font-semibold px-4 py-2 rounded-full transition-all duration-300 ${
               isLight
                 ? "bg-primary text-primary-foreground hover:bg-accent"
@@ -294,14 +298,18 @@ export default function Header() {
             {/* CTAs */}
             <div className="flex flex-col gap-2 mt-3 pt-3 border-t border-border">
               <a
-                href="#"
+                href="https://cuenta.kiriapp.com/login"
+                target="_blank"
+                rel="noopener noreferrer"
                 onClick={() => setMenuOpen(false)}
                 className="text-sm font-medium py-2.5 px-3 rounded-lg text-foreground hover:bg-muted transition-colors text-center border border-border"
               >
                 Iniciar Sesión
               </a>
               <a
-                href="#"
+                href="https://cuenta.kiriapp.com/"
+                target="_blank"
+                rel="noopener noreferrer"
                 onClick={() => setMenuOpen(false)}
                 className="bg-primary text-primary-foreground text-sm font-semibold px-5 py-2.5 rounded-full text-center hover:bg-accent transition-colors"
               >
