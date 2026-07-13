@@ -15,12 +15,37 @@ import { JWT } from "google-auth-library"
 const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
 function getPrivateKey(): string {
-  const key = process.env.GOOGLE_PRIVATE_KEY
+  let key = process.env.GOOGLE_PRIVATE_KEY
   if (!key) {
     throw new Error("Missing GOOGLE_PRIVATE_KEY environment variable")
   }
-  // Env vars store newlines escaped as literal "\n"; convert them back.
-  return key.replace(/\\n/g, "\n")
+
+  key = key.trim()
+
+  // Some dashboards store the value wrapped in surrounding quotes — strip them.
+  if (
+    (key.startsWith('"') && key.endsWith('"')) ||
+    (key.startsWith("'") && key.endsWith("'"))
+  ) {
+    key = key.slice(1, -1)
+  }
+
+  // If the key is base64-encoded (no PEM header present), decode it.
+  if (!key.includes("BEGIN") && /^[A-Za-z0-9+/=\s]+$/.test(key)) {
+    try {
+      const decoded = Buffer.from(key, "base64").toString("utf8")
+      if (decoded.includes("BEGIN")) {
+        key = decoded
+      }
+    } catch {
+      // fall through and use the raw value
+    }
+  }
+
+  // Env vars often store newlines escaped as literal "\n"; convert them back.
+  key = key.replace(/\\n/g, "\n")
+
+  return key
 }
 
 function getJwtClient(): JWT {
