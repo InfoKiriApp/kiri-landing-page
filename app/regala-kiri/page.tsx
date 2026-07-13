@@ -16,6 +16,17 @@ const occasions = [
   "Otro",
 ]
 
+const relationships = [
+  "Padre/Madre",
+  "Abuelo/Abuela",
+  "Tío/Tía",
+  "Amigo/a de la familia",
+  "Otro",
+]
+
+// Spanish postal codes: 5 digits, province prefix 01–52.
+const SPANISH_POSTAL_REGEX = /^(0[1-9]|[1-4]\d|5[0-2])\d{3}$/
+
 const steps = [
   {
     number: "1",
@@ -45,17 +56,37 @@ const GALLERY_IMAGES = [
 export default function RegalaKiriPage() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [form, setForm] = useState({
-    gifterName: "",
+    gifterFirstName: "",
+    gifterLastName: "",
     gifterEmail: "",
-    childName: "",
-    childAddress: "",
-    childCity: "",
-    childPostal: "",
+    childFirstName: "",
+    childLastName: "",
+    relationship: "",
+    parentFirstName: "",
+    parentLastName: "",
+    parentEmail: "",
+    street: "",
+    number: "",
+    floor: "",
+    postal: "",
+    city: "",
+    country: "España",
     occasion: "",
     message: "",
     privacy: false,
   })
   const [submitted, setSubmitted] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [postalTouched, setPostalTouched] = useState(false)
+
+  const SQUARE_CHECKOUT_URL =
+    "https://checkout.square.site/merchant/ML80VD2C4SMJA/checkout/X2FBTHLVIZFD2NQOA3KACQ2Z"
+
+  // The gifter is the parent → no separate guardian details required.
+  const isParent = form.relationship === "Padre/Madre"
+  const postalValid = SPANISH_POSTAL_REGEX.test(form.postal.trim())
+  const showPostalError = postalTouched && form.postal.trim().length > 0 && !postalValid
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -67,9 +98,43 @@ export default function RegalaKiriPage() {
     }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setSubmitted(true)
+    if (submitting) return
+
+    setError(null)
+
+    // Client-side postal code check before hitting the server.
+    if (!postalValid) {
+      setPostalTouched(true)
+      setError("Introduce un código postal español válido (5 dígitos).")
+      return
+    }
+
+    setSubmitting(true)
+
+    try {
+      const res = await fetch("/api/regala-kiri", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      })
+
+      const data = await res.json().catch(() => ({}))
+
+      if (!res.ok) {
+        setError(data?.error ?? "No se pudo enviar tu solicitud. Inténtalo de nuevo.")
+        setSubmitting(false)
+        return
+      }
+
+      // Only redirect to Square checkout after a successful Google Sheets save.
+      setSubmitted(true)
+      window.location.href = SQUARE_CHECKOUT_URL
+    } catch {
+      setError("Se produjo un error de conexión. Comprueba tu red e inténtalo de nuevo.")
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -193,11 +258,14 @@ export default function RegalaKiriPage() {
                     ¡Gracias por tu regalo!
                   </h3>
                   <p className="text-muted-foreground text-sm leading-relaxed">
-                    Hemos recibido tu solicitud. En breve nos pondremos en contacto contigo para completar el proceso de pago y envío del Welcome Pack.
+                    Hemos guardado tu solicitud correctamente. Te estamos redirigiendo a la página de pago segura para completar tu regalo de €29 con el Welcome Pack incluido.
                   </p>
-                  <Link href="/" className="inline-flex mt-6 text-primary text-sm font-semibold underline underline-offset-4 hover:text-accent transition-colors">
-                    Volver al inicio
-                  </Link>
+                  <a
+                    href={SQUARE_CHECKOUT_URL}
+                    className="inline-flex mt-6 text-primary text-sm font-semibold underline underline-offset-4 hover:text-accent transition-colors"
+                  >
+                    Si no se abre automáticamente, haz clic aquí para pagar
+                  </a>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="flex flex-col gap-5">
@@ -205,15 +273,26 @@ export default function RegalaKiriPage() {
                     <legend className="text-xs uppercase tracking-widest text-primary font-semibold mb-1">
                       Tus datos
                     </legend>
-                    <input
-                      type="text"
-                      name="gifterName"
-                      placeholder="Tu nombre completo"
-                      value={form.gifterName}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
-                    />
+                    <div className="grid grid-cols-2 gap-4">
+                      <input
+                        type="text"
+                        name="gifterFirstName"
+                        placeholder="Nombre"
+                        value={form.gifterFirstName}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+                      />
+                      <input
+                        type="text"
+                        name="gifterLastName"
+                        placeholder="Apellidos"
+                        value={form.gifterLastName}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+                      />
+                    </div>
                     <input
                       type="email"
                       name="gifterEmail"
@@ -229,20 +308,92 @@ export default function RegalaKiriPage() {
                     <legend className="text-xs uppercase tracking-widest text-primary font-semibold mb-1">
                       Datos del niño/a
                     </legend>
-                    <input
-                      type="text"
-                      name="childName"
-                      placeholder="Nombre del niño o niña"
-                      value={form.childName}
+                    <div className="grid grid-cols-2 gap-4">
+                      <input
+                        type="text"
+                        name="childFirstName"
+                        placeholder="Nombre"
+                        value={form.childFirstName}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+                      />
+                      <input
+                        type="text"
+                        name="childLastName"
+                        placeholder="Apellidos"
+                        value={form.childLastName}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+                      />
+                    </div>
+                  </fieldset>
+
+                  <fieldset className="flex flex-col gap-4">
+                    <legend className="text-xs uppercase tracking-widest text-primary font-semibold mb-1">
+                      Tu relación con el niño/a
+                    </legend>
+                    <select
+                      name="relationship"
+                      value={form.relationship}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
-                    />
+                      className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+                    >
+                      <option value="" disabled>¿Quién eres para el niño/a?</option>
+                      {relationships.map((r) => (
+                        <option key={r} value={r}>{r}</option>
+                      ))}
+                    </select>
+
+                    {form.relationship && !isParent && (
+                      <div className="flex flex-col gap-4 rounded-xl bg-muted/60 border border-border p-4">
+                        <p className="text-xs text-muted-foreground leading-relaxed">
+                          Como no eres el padre, madre o tutor, necesitamos sus datos. Le enviaremos el código para crear la cuenta del niño/a.
+                        </p>
+                        <div className="grid grid-cols-2 gap-4">
+                          <input
+                            type="text"
+                            name="parentFirstName"
+                            placeholder="Nombre del padre/madre/tutor"
+                            value={form.parentFirstName}
+                            onChange={handleChange}
+                            required={!isParent}
+                            className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+                          />
+                          <input
+                            type="text"
+                            name="parentLastName"
+                            placeholder="Apellidos"
+                            value={form.parentLastName}
+                            onChange={handleChange}
+                            required={!isParent}
+                            className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+                          />
+                        </div>
+                        <input
+                          type="email"
+                          name="parentEmail"
+                          placeholder="Correo del padre/madre/tutor"
+                          value={form.parentEmail}
+                          onChange={handleChange}
+                          required={!isParent}
+                          className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+                        />
+                      </div>
+                    )}
+                  </fieldset>
+
+                  <fieldset className="flex flex-col gap-4">
+                    <legend className="text-xs uppercase tracking-widest text-primary font-semibold mb-1">
+                      Dirección de envío
+                    </legend>
                     <input
                       type="text"
-                      name="childAddress"
-                      placeholder="Dirección de envío"
-                      value={form.childAddress}
+                      name="street"
+                      placeholder="Calle / vía"
+                      value={form.street}
                       onChange={handleChange}
                       required
                       className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
@@ -250,23 +401,65 @@ export default function RegalaKiriPage() {
                     <div className="grid grid-cols-2 gap-4">
                       <input
                         type="text"
-                        name="childCity"
-                        placeholder="Ciudad"
-                        value={form.childCity}
+                        name="number"
+                        placeholder="Número"
+                        value={form.number}
                         onChange={handleChange}
                         required
                         className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
                       />
                       <input
                         type="text"
-                        name="childPostal"
-                        placeholder="Código postal"
-                        value={form.childPostal}
+                        name="floor"
+                        placeholder="Piso, puerta (opcional)"
+                        value={form.floor}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="flex flex-col gap-1">
+                        <input
+                          type="text"
+                          name="postal"
+                          inputMode="numeric"
+                          placeholder="Código postal"
+                          value={form.postal}
+                          onChange={handleChange}
+                          onBlur={() => setPostalTouched(true)}
+                          required
+                          aria-invalid={showPostalError}
+                          className={`w-full px-4 py-3 rounded-xl border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 ${
+                            showPostalError
+                              ? "border-destructive focus:ring-destructive/40"
+                              : "border-border focus:ring-primary/40"
+                          }`}
+                        />
+                        {showPostalError && (
+                          <span className="text-xs text-destructive">
+                            Código postal no válido
+                          </span>
+                        )}
+                      </div>
+                      <input
+                        type="text"
+                        name="city"
+                        placeholder="Población"
+                        value={form.city}
                         onChange={handleChange}
                         required
                         className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
                       />
                     </div>
+                    <select
+                      name="country"
+                      value={form.country}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+                    >
+                      <option value="España">España</option>
+                    </select>
                   </fieldset>
 
                   <fieldset className="flex flex-col gap-4">
@@ -321,11 +514,21 @@ export default function RegalaKiriPage() {
                     <p className="font-serif text-2xl font-bold text-primary">€29</p>
                   </div>
 
+                  {error && (
+                    <p
+                      role="alert"
+                      className="bg-destructive/10 border border-destructive/30 text-destructive text-sm rounded-xl px-4 py-3"
+                    >
+                      {error}
+                    </p>
+                  )}
+
                   <button
                     type="submit"
-                    className="w-full py-3.5 bg-primary text-primary-foreground font-semibold rounded-full hover:bg-accent transition-colors duration-300 text-sm"
+                    disabled={submitting}
+                    className="w-full py-3.5 bg-primary text-primary-foreground font-semibold rounded-full hover:bg-accent transition-colors duration-300 text-sm disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    Regalar Kiri por €29
+                    {submitting ? "Guardando tu regalo…" : "Regalar Kiri por €29"}
                   </button>
                 </form>
               )}
