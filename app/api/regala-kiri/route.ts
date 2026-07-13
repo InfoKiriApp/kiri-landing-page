@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
-import { appendRow } from "@/lib/google-sheets"
+import { appendSubmission } from "@/lib/google-sheets"
 
 // Never cache this endpoint.
 export const dynamic = "force-dynamic"
@@ -38,19 +38,19 @@ export async function POST(request: NextRequest) {
   const timestamp = new Date().toISOString()
 
   try {
-    // Column order — keep in sync with the Google Sheet header row:
+    // Keep the field order in sync with the Google Sheet header row:
     // Timestamp | Gifter Name | Gifter Email | Child Name | Address | City | Postal | Occasion | Message
-    await appendRow([
+    await appendSubmission({
       timestamp,
-      data.gifterName,
-      data.gifterEmail,
-      data.childName,
-      data.childAddress,
-      data.childCity,
-      data.childPostal,
-      data.occasion,
-      data.message,
-    ])
+      gifterName: data.gifterName,
+      gifterEmail: data.gifterEmail,
+      childName: data.childName,
+      childAddress: data.childAddress,
+      childCity: data.childCity,
+      childPostal: data.childPostal,
+      occasion: data.occasion,
+      message: data.message,
+    })
 
     console.log("[v0] Regala Kiri submission saved to Google Sheets:", {
       gifterEmail: data.gifterEmail,
