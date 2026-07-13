@@ -8,21 +8,13 @@
  * The Apps Script source lives in `docs/google-apps-script.gs` in this repo —
  * paste it into Extensions > Apps Script on your sheet and deploy it as a
  * web app ("Execute as: Me", "Who has access: Anyone").
+ *
+ * The server sends an ordered array of cell values as `{ row: [...] }`, and the
+ * Apps Script appends it verbatim. This keeps the column layout defined in one
+ * place (the API route) without needing to edit the script when fields change.
  */
 
-export type SubmissionPayload = {
-  timestamp: string
-  gifterName: string
-  gifterEmail: string
-  childName: string
-  childAddress: string
-  childCity: string
-  childPostal: string
-  occasion: string
-  message: string
-}
-
-export async function appendSubmission(payload: SubmissionPayload): Promise<void> {
+export async function appendRow(values: (string | number)[]): Promise<void> {
   const webhookUrl = process.env.GOOGLE_SHEETS_WEBHOOK_URL
   if (!webhookUrl) {
     throw new Error("Missing GOOGLE_SHEETS_WEBHOOK_URL environment variable")
@@ -31,7 +23,7 @@ export async function appendSubmission(payload: SubmissionPayload): Promise<void
   const res = await fetch(webhookUrl, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
+    body: JSON.stringify({ row: values }),
     // Apps Script web apps redirect to a script.googleusercontent.com URL; follow it.
     redirect: "follow",
   })

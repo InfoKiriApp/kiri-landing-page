@@ -4,7 +4,10 @@
  * SETUP (one time, ~2 minutes):
  * 1. Open your Google Sheet.
  * 2. Add a header row in row 1 with these columns (order matters):
- *      Timestamp | Gifter Name | Gifter Email | Child Name | Address | City | Postal | Occasion | Message
+ *      Timestamp | Gifter First Name | Gifter Last Name | Gifter Email |
+ *      Child First Name | Child Last Name | Relationship |
+ *      Parent First Name | Parent Last Name | Parent Email |
+ *      Street | Number | Floor | Postal | City | Country | Occasion | Message
  * 3. Go to Extensions > Apps Script.
  * 4. Delete any starter code, paste THIS entire file, and Save.
  * 5. Click Deploy > New deployment.
@@ -26,17 +29,9 @@ function doPost(e) {
 
     var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
 
-    sheet.appendRow([
-      data.timestamp || new Date().toISOString(),
-      data.gifterName || "",
-      data.gifterEmail || "",
-      data.childName || "",
-      data.childAddress || "",
-      data.childCity || "",
-      data.childPostal || "",
-      data.occasion || "",
-      data.message || "",
-    ]);
+    // The server sends an ordered array of cell values in `row`.
+    var row = Array.isArray(data.row) ? data.row : [];
+    sheet.appendRow(row);
 
     return ContentService
       .createTextOutput(JSON.stringify({ result: "success" }))
