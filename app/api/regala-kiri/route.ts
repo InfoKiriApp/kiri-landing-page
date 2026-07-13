@@ -82,30 +82,26 @@ export async function POST(request: NextRequest) {
   const timestamp = new Date().toISOString()
 
   try {
-    // Keep this order in sync with the Google Sheet header row (see docs/google-apps-script.gs):
-    // Timestamp | Gifter First | Gifter Last | Gifter Email | Child First | Child Last |
-    // Relationship | Parent First | Parent Last | Parent Email | Street | Number | Floor |
-    // Postal | City | Country | Occasion | Message
-    await appendRow([
+    await appendRow({
       timestamp,
-      data.gifterFirstName,
-      data.gifterLastName,
-      data.gifterEmail,
-      data.childFirstName,
-      data.childLastName,
-      data.relationship,
-      data.parentFirstName,
-      data.parentLastName,
-      data.parentEmail,
-      data.street,
-      data.number,
-      data.floor,
-      data.postal,
-      data.city,
-      data.country,
-      data.occasion,
-      data.message,
-    ])
+      gifterFirstName: data.gifterFirstName,
+      gifterLastName: data.gifterLastName,
+      gifterEmail: data.gifterEmail,
+      childFirstName: data.childFirstName,
+      childLastName: data.childLastName,
+      relationship: data.relationship,
+      parentFirstName: data.parentFirstName,
+      parentLastName: data.parentLastName,
+      parentEmail: data.parentEmail,
+      street: data.street,
+      number: data.number,
+      floor: data.floor,
+      postal: data.postal,
+      city: data.city,
+      country: data.country,
+      occasion: data.occasion,
+      message: data.message,
+    })
 
     console.log("[v0] Regala Kiri submission saved to Google Sheets:", {
       gifterEmail: data.gifterEmail,

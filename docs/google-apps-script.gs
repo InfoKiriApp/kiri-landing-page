@@ -29,9 +29,28 @@ function doPost(e) {
 
     var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
 
-    // The server sends an ordered array of cell values in `row`.
-    var row = Array.isArray(data.row) ? data.row : [];
-    sheet.appendRow(row);
+    // Build the row from named fields — column order is defined here, not in the server.
+    // Add or reorder fields freely; the server always sends the full named object.
+    sheet.appendRow([
+      data.timestamp            || new Date().toISOString(),
+      data.gifterFirstName      || "",
+      data.gifterLastName       || "",
+      data.gifterEmail          || "",
+      data.childFirstName       || "",
+      data.childLastName        || "",
+      data.relationship         || "",
+      data.parentFirstName      || "",
+      data.parentLastName       || "",
+      data.parentEmail          || "",
+      data.street               || "",
+      data.number               || "",
+      data.floor                || "",
+      data.postal               || "",
+      data.city                 || "",
+      data.country              || "",
+      data.occasion             || "",
+      data.message              || "",
+    ]);
 
     return ContentService
       .createTextOutput(JSON.stringify({ result: "success" }))
