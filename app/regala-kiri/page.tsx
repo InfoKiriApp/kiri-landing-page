@@ -56,6 +56,11 @@ export default function RegalaKiriPage() {
     privacy: false,
   })
   const [submitted, setSubmitted] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const SQUARE_CHECKOUT_URL =
+    "https://checkout.square.site/merchant/ML80VD2C4SMJA/checkout/X2FBTHLVIZFD2NQOA3KACQ2Z"
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -67,9 +72,35 @@ export default function RegalaKiriPage() {
     }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setSubmitted(true)
+    if (submitting) return
+
+    setError(null)
+    setSubmitting(true)
+
+    try {
+      const res = await fetch("/api/regala-kiri", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      })
+
+      const data = await res.json().catch(() => ({}))
+
+      if (!res.ok) {
+        setError(data?.error ?? "No se pudo enviar tu solicitud. Inténtalo de nuevo.")
+        setSubmitting(false)
+        return
+      }
+
+      // Only redirect to Square checkout after a successful Google Sheets save.
+      setSubmitted(true)
+      window.location.href = SQUARE_CHECKOUT_URL
+    } catch {
+      setError("Se produjo un error de conexión. Comprueba tu red e inténtalo de nuevo.")
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -193,11 +224,14 @@ export default function RegalaKiriPage() {
                     ¡Gracias por tu regalo!
                   </h3>
                   <p className="text-muted-foreground text-sm leading-relaxed">
-                    Hemos recibido tu solicitud. En breve nos pondremos en contacto contigo para completar el proceso de pago y envío del Welcome Pack.
+                    Hemos guardado tu solicitud correctamente. Te estamos redirigiendo a la página de pago segura para completar tu regalo de €29 con el Welcome Pack incluido.
                   </p>
-                  <Link href="/" className="inline-flex mt-6 text-primary text-sm font-semibold underline underline-offset-4 hover:text-accent transition-colors">
-                    Volver al inicio
-                  </Link>
+                  <a
+                    href={SQUARE_CHECKOUT_URL}
+                    className="inline-flex mt-6 text-primary text-sm font-semibold underline underline-offset-4 hover:text-accent transition-colors"
+                  >
+                    Si no se abre automáticamente, haz clic aquí para pagar
+                  </a>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="flex flex-col gap-5">
@@ -321,11 +355,21 @@ export default function RegalaKiriPage() {
                     <p className="font-serif text-2xl font-bold text-primary">€29</p>
                   </div>
 
+                  {error && (
+                    <p
+                      role="alert"
+                      className="bg-destructive/10 border border-destructive/30 text-destructive text-sm rounded-xl px-4 py-3"
+                    >
+                      {error}
+                    </p>
+                  )}
+
                   <button
                     type="submit"
-                    className="w-full py-3.5 bg-primary text-primary-foreground font-semibold rounded-full hover:bg-accent transition-colors duration-300 text-sm"
+                    disabled={submitting}
+                    className="w-full py-3.5 bg-primary text-primary-foreground font-semibold rounded-full hover:bg-accent transition-colors duration-300 text-sm disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    Regalar Kiri por €29
+                    {submitting ? "Guardando tu regalo…" : "Regalar Kiri por €29"}
                   </button>
                 </form>
               )}
