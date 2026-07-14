@@ -11,28 +11,49 @@ const mediaItems = [
     source: "TEDxU",
     type: "video",
     label: "Ver video",
-    href: "#",
+    href: "https://www.youtube.com/watch?v=oLpXg5HpUJE",
   },
   {
     title: "Entrevista Kiri en Intereconomía",
     source: "Intereconomía",
     type: "video",
     label: "Ver video",
-    href: "#",
+    href: "https://www.youtube.com/watch?v=QENTNsnWSOg",
   },
   {
     title: "Entrevista First Movers con Kiri",
     source: "Capital Radio",
     type: "audio",
     label: "Escuchar entrevista",
-    href: "#",
+    href: "https://www.youtube.com/watch?v=EN7jZYRfN7s",
   },
   {
     title: "Entrevista Marta Echarri en WorldCa$t con Pedro Buerbaum",
     source: "WorldCa$t",
     type: "audio",
     label: "Escuchar entrevista",
-    href: "#",
+    href: "https://www.youtube.com/watch?v=LV6UMJ0wHEU",
+  },
+  {
+    title: "Entrevista Kiri en podcast de finanzas",
+    source: "YouTube",
+    type: "video",
+    label: "Ver video",
+    href: "https://www.youtube.com/watch?v=qLQB7d26jco&t=1s",
+  },
+  {
+    title: "Kiri en los medios — reportaje especial",
+    source: "YouTube",
+    type: "video",
+    label: "Ver video",
+    href: "https://www.youtube.com/watch?v=7J7THA-ILQQ",
+  },
+  {
+    title: "Entrevista Marta Echarri — educación financiera",
+    source: "YouTube",
+    type: "video",
+    label: "Ver video",
+    href: "https://www.youtube.com/watch?v=c1W7r38oxPg&t=2s",
   },
 ]
 
@@ -95,6 +116,8 @@ export default function Media() {
                 initial={{ opacity: 0, x: 40 }}
                 animate={isInView ? { opacity: 1, x: 0 } : {}}
                 transition={{ duration: 0.55, delay: 0.2 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="group flex items-center gap-5 bg-muted rounded-2xl px-6 py-5 border border-border hover:border-primary/40 hover:bg-primary/5 transition-all duration-300"
               >
                 <div className="flex-shrink-0 w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors duration-300">
