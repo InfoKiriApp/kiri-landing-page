@@ -28,7 +28,10 @@ export async function GET(request: NextRequest) {
     )
   }
 
-  const simplified = results.map(({ body, ...rest }) => rest)
+  const simplified = results.map(({ body, ...rest }) => ({
+    ...rest,
+    coverUrl: rest.coverUrl,
+  }))
 
   return NextResponse.json({
     total: simplified.length,
