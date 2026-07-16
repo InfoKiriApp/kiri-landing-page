@@ -75,7 +75,6 @@ export async function POST(request: NextRequest) {
   const parsed = submissionSchema.safeParse(body)
   if (!parsed.success) {
     const message = parsed.error.issues[0]?.message ?? "Datos del formulario no válidos"
-    console.log("[v0] Regala Kiri validation failed:", parsed.error.flatten().fieldErrors)
     return NextResponse.json({ error: message }, { status: 400 })
   }
 
@@ -108,19 +107,8 @@ export async function POST(request: NextRequest) {
       data.message,
     ])
 
-    console.log("[v0] Regala Kiri submission saved to Google Sheets:", {
-      gifterEmail: data.gifterEmail,
-      relationship: data.relationship,
-      occasion: data.occasion,
-      timestamp,
-    })
-
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.log(
-      "[v0] Regala Kiri Google Sheets error:",
-      error instanceof Error ? error.message : String(error),
-    )
     return NextResponse.json(
       { error: "No se pudo guardar tu solicitud. Inténtalo de nuevo en unos minutos." },
       { status: 502 },
