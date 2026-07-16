@@ -65,29 +65,41 @@ const submissionSchema = z
   })
 
 export async function POST(request: NextRequest) {
+  console.log("[v0] API ROUTE: POST /api/regala-kiri called")
+  
   let body: unknown
   try {
     body = await request.json()
-  } catch {
+    console.log("[v0] API ROUTE: Request body parsed successfully")
+  } catch (err) {
+    console.log("[v0] API ROUTE: Failed to parse JSON body:", err instanceof Error ? err.message : String(err))
     return NextResponse.json({ error: "Cuerpo de la petición no válido" }, { status: 400 })
   }
 
+  console.log("[v0] API ROUTE: Validating with Zod schema")
   const parsed = submissionSchema.safeParse(body)
   if (!parsed.success) {
     const message = parsed.error.issues[0]?.message ?? "Datos del formulario no válidos"
-    console.log("[v0] Regala Kiri validation failed:", parsed.error.flatten().fieldErrors)
+    console.log("[v0] API ROUTE: Validation failed - errors:", JSON.stringify(parsed.error.flatten().fieldErrors))
+    console.log("[v0] API ROUTE: First error message:", message)
     return NextResponse.json({ error: message }, { status: 400 })
   }
 
+  console.log("[v0] API ROUTE: Validation passed")
   const data = parsed.data
   const timestamp = new Date().toISOString()
+
+  console.log("[v0] API ROUTE: Preparing to append row to Google Sheets")
+  console.log("[v0] API ROUTE: Timestamp:", timestamp)
+  console.log("[v0] API ROUTE: Relationship:", data.relationship)
+  console.log("[v0] API ROUTE: Occasion:", data.occasion)
 
   try {
     // Keep this order in sync with the Google Sheet header row (see docs/google-apps-script.gs):
     // Timestamp | Gifter First | Gifter Last | Gifter Email | Child First | Child Last |
     // Relationship | Parent First | Parent Last | Parent Email | Street | Number | Floor |
     // Postal | City | Country | Occasion | Message
-    await appendRow([
+    const rowData = [
       timestamp,
       data.gifterFirstName,
       data.gifterLastName,
@@ -106,9 +118,15 @@ export async function POST(request: NextRequest) {
       data.country,
       data.occasion,
       data.message,
-    ])
+    ]
+    
+    console.log("[v0] API ROUTE: Row data prepared, calling appendRow()")
+    console.log("[v0] API ROUTE: Row data:", rowData)
+    
+    await appendRow(rowData)
 
-    console.log("[v0] Regala Kiri submission saved to Google Sheets:", {
+    console.log("[v0] API ROUTE: Row appended successfully to Google Sheets")
+    console.log("[v0] API ROUTE: Submission saved:", {
       gifterEmail: data.gifterEmail,
       relationship: data.relationship,
       occasion: data.occasion,
@@ -117,10 +135,12 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.log(
-      "[v0] Regala Kiri Google Sheets error:",
-      error instanceof Error ? error.message : String(error),
-    )
+    console.log("[v0] API ROUTE: ERROR caught in try block")
+    console.log("[v0] API ROUTE: Error type:", error instanceof Error ? error.constructor.name : typeof error)
+    console.log("[v0] API ROUTE: Error message:", error instanceof Error ? error.message : String(error))
+    if (error instanceof Error) {
+      console.log("[v0] API ROUTE: Error stack:", error.stack)
+    }
     return NextResponse.json(
       { error: "No se pudo guardar tu solicitud. Inténtalo de nuevo en unos minutos." },
       { status: 502 },

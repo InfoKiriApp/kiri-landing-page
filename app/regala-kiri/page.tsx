@@ -100,30 +100,52 @@ export default function RegalaKiriPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (submitting) return
+    console.log("[v0] FORM SUBMIT: Started")
+    
+    if (submitting) {
+      console.log("[v0] FORM SUBMIT: Already submitting, aborting")
+      return
+    }
 
     setError(null)
     setSubmitting(true)
 
+    console.log("[v0] FORM SUBMIT: Form data being sent:", {
+      ...form,
+      gifterEmail: form.gifterEmail ? form.gifterEmail.substring(0, 5) + "..." : "EMPTY",
+    })
+
     try {
+      console.log("[v0] FORM SUBMIT: Fetching /api/regala-kiri")
       const res = await fetch("/api/regala-kiri", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       })
 
-      const data = await res.json().catch(() => ({}))
+      console.log("[v0] FORM SUBMIT: Response status:", res.status, res.statusText)
+      
+      const data = await res.json().catch((err) => {
+        console.log("[v0] FORM SUBMIT: Failed to parse JSON response:", err.message)
+        return {}
+      })
+
+      console.log("[v0] FORM SUBMIT: Response data:", data)
 
       if (!res.ok) {
-        setError(data?.error ?? "No se pudo guardar tu solicitud. Inténtalo de nuevo en unos minutos.")
+        const errorMsg = data?.error ?? "No se pudo guardar tu solicitud. Inténtalo de nuevo en unos minutos."
+        console.log("[v0] FORM SUBMIT: Setting error:", errorMsg)
+        setError(errorMsg)
         setSubmitting(false)
         return
       }
 
+      console.log("[v0] FORM SUBMIT: Success! Redirecting to checkout")
       // Only redirect to Square checkout after a successful Google Sheets save.
       setSubmitted(true)
       window.location.href = SQUARE_CHECKOUT_URL
     } catch (err) {
+      console.log("[v0] FORM SUBMIT: Caught exception:", err instanceof Error ? err.message : String(err))
       setError("Se produjo un error de conexión. Comprueba tu red e inténtalo de nuevo.")
       setSubmitting(false)
     }
