@@ -114,12 +114,17 @@ export default function RegalaKiriPage() {
       })
 
       console.log("[v0] API response status:", res.status)
-      const data = await res.json().catch(() => ({}))
+      let data: any = {}
+      try {
+        data = await res.json()
+      } catch {
+        console.log("[v0] Could not parse JSON response")
+      }
       console.log("[v0] API response data:", data)
 
       if (!res.ok) {
-        console.log("[v0] Response not ok, showing error")
-        setError(data?.error ?? "No se pudo enviar tu solicitud. Inténtalo de nuevo.")
+        console.log("[v0] Response not ok, status:", res.status, "data:", data)
+        setError(data?.error ?? `Error del servidor (${res.status})`)
         setSubmitting(false)
         return
       }
