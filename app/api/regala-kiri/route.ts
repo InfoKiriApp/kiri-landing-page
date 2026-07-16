@@ -1,6 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
-import { appendRow } from "@/lib/google-sheets"
 
 // Never cache this endpoint.
 export const dynamic = "force-dynamic"
@@ -81,12 +80,28 @@ export async function POST(request: NextRequest) {
   const data = parsed.data
   const timestamp = new Date().toISOString()
 
+  // Send to Google Sheets via webhook
+  const webhookUrl = process.env.GOOGLE_SHEETS_WEBHOOK_URL
+  if (!webhookUrl) {
+    console.error("[v0] GOOGLE_SHEETS_WEBHOOK_URL not configured")
+    return NextResponse.json(
+      { error: "Error de configuración del servidor. Inténtalo de nuevo en unos minutos." },
+      { status: 500 }
+    )
+  }
+
   try {
+    console.log("[v0] Sending Regala Kiri data to Google Sheets webhook:", {
+      url: webhookUrl,
+      timestamp,
+      gifterEmail: data.gifterEmail,
+    })
+
     // Keep this order in sync with the Google Sheet header row (see docs/google-apps-script.gs):
     // Timestamp | Gifter First | Gifter Last | Gifter Email | Child First | Child Last |
     // Relationship | Parent First | Parent Last | Parent Email | Street | Number | Floor |
     // Postal | City | Country | Occasion | Message
-    await appendRow([
+    const rowData = [
       timestamp,
       data.gifterFirstName,
       data.gifterLastName,
@@ -105,13 +120,53 @@ export async function POST(request: NextRequest) {
       data.country,
       data.occasion,
       data.message,
-    ])
+    ]
 
+    const response = await fetch(webhookUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ row: rowData }),
+      redirect: "follow",
+    })
+
+    const responseText = await response.text()
+    console.log("[v0] Google Sheets webhook response status:", response.status)
+    console.log("[v0] Google Sheets webhook response:", responseText.slice(0, 300))
+
+    if (!response.ok) {
+      console.error("[v0] Webhook error:", response.status, responseText.slice(0, 300))
+      return NextResponse.json(
+        { error: "No se pudo guardar tu solicitud. Inténtalo de nuevo en unos minutos." },
+        { status: 502 }
+      )
+    }
+
+    // Try to parse JSON response from Apps Script
+    let result: { result?: string; error?: string } | null = null
+    try {
+      result = JSON.parse(responseText)
+    } catch {
+      console.warn("[v0] Could not parse webhook response as JSON")
+    }
+
+    if (result?.result !== "success") {
+      console.error("[v0] Webhook reported failure:", result?.error ?? responseText.slice(0, 300))
+      return NextResponse.json(
+        { error: "No se pudo guardar tu solicitud. Inténtalo de nuevo en unos minutos." },
+        { status: 502 }
+      )
+    }
+
+    console.log("[v0] Regala Kiri submission saved successfully to Google Sheets")
     return NextResponse.json({ success: true })
   } catch (error) {
+    console.error(
+      "[v0] Regala Kiri Google Sheets error:",
+      error instanceof Error ? error.message : String(error)
+    )
     return NextResponse.json(
       { error: "No se pudo guardar tu solicitud. Inténtalo de nuevo en unos minutos." },
-      { status: 502 },
+      { status: 502 }
     )
   }
 }
