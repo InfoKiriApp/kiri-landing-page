@@ -100,30 +100,55 @@ export default function RegalaKiriPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (submitting) return
+    console.log("[v0] 1. Form submit triggered")
+    
+    if (submitting) {
+      console.log("[v0] 2. Already submitting, returning")
+      return
+    }
 
     setError(null)
     setSubmitting(true)
 
+    console.log("[v0] 3. Current form state:", form)
+
     try {
+      console.log("[v0] 4. Starting fetch to /api/regala-kiri")
+      
+      const requestBody = JSON.stringify(form)
+      console.log("[v0] 5. Request body:", requestBody)
+      
       const res = await fetch("/api/regala-kiri", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: requestBody,
       })
 
-      const data = await res.json().catch(() => ({}))
+      console.log("[v0] 6. Response received with status:", res.status)
+      
+      let data: any = {}
+      try {
+        data = await res.json()
+        console.log("[v0] 7. Response JSON:", data)
+      } catch (parseErr) {
+        console.log("[v0] 7. Could not parse response as JSON")
+      }
 
       if (!res.ok) {
-        setError(data?.error ?? "No se pudo guardar tu solicitud. Inténtalo de nuevo en unos minutos.")
+        console.log("[v0] 8. Response not OK (status", res.status + "), showing error")
+        const errorMessage = data?.error ?? `No se pudo guardar tu solicitud (Error ${res.status}). Inténtalo de nuevo en unos minutos.`
+        console.log("[v0] 9. Error message:", errorMessage)
+        setError(errorMessage)
         setSubmitting(false)
         return
       }
 
+      console.log("[v0] 10. Response OK, redirecting to checkout")
       // Only redirect to Square checkout after a successful Google Sheets save.
       setSubmitted(true)
       window.location.href = SQUARE_CHECKOUT_URL
-    } catch (err) {
+    } catch (err: any) {
+      console.log("[v0] CATCH ERROR:", err?.message || err)
       setError("Se produjo un error de conexión. Comprueba tu red e inténtalo de nuevo.")
       setSubmitting(false)
     }
