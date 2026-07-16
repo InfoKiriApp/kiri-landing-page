@@ -30,16 +30,13 @@ export async function appendRow(values: (string | number)[]): Promise<void> {
 
   const text = await res.text()
 
-  if (!res.ok) {
-    throw new Error(`Webhook responded with ${res.status}: ${text.slice(0, 300)}`)
-  }
-
   // Apps Script returns JSON like {"result":"success"} on success.
+  // Try to parse as JSON regardless of HTTP status, since Apps Script may return various status codes.
   let json: { result?: string; error?: string } | null = null
   try {
     json = JSON.parse(text)
   } catch {
-    throw new Error(`Webhook returned non-JSON response: ${text.slice(0, 300)}`)
+    throw new Error(`Webhook returned non-JSON response (status ${res.status}): ${text.slice(0, 300)}`)
   }
 
   if (json?.result !== "success") {
