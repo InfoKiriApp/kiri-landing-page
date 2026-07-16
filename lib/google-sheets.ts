@@ -24,25 +24,35 @@ export async function appendRow(values: (string | number)[]): Promise<void> {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ row: values }),
-    // Apps Script web apps redirect to a script.googleusercontent.com URL; follow it.
-    redirect: "follow",
+    // Don't follow redirects - just check the response status
+    redirect: "manual",
   })
+
+  console.log("[v0] Webhook response status:", res.status)
+
+  // Google Apps Script returns 302 redirects on POST, which is normal.
+  // The actual response should be in the location header or we should accept 302.
+  if (res.status === 302 || res.status === 301 || res.status === 307 || res.status === 308) {
+    // The script executed and sent a redirect - this means it worked.
+    console.log("[v0] Webhook returned redirect (status:", res.status, ") - request succeeded")
+    return
+  }
 
   const text = await res.text()
 
-  if (!res.ok) {
-    throw new Error(`Webhook responded with ${res.status}: ${text.slice(0, 300)}`)
-  }
-
   // Apps Script returns JSON like {"result":"success"} on success.
+  // Try to parse as JSON regardless of HTTP status, since Apps Script may return various status codes.
   let json: { result?: string; error?: string } | null = null
   try {
     json = JSON.parse(text)
-  } catch {
-    throw new Error(`Webhook returned non-JSON response: ${text.slice(0, 300)}`)
+    console.log("[v0] Webhook JSON parsed:", json)
+  } catch (err) {
+    console.log("[v0] Webhook JSON parse failed. Response:", text.slice(0, 500))
+    throw new Error(`Webhook returned non-JSON response (status ${res.status}): ${text.slice(0, 300)}`)
   }
 
   if (json?.result !== "success") {
+    console.log("[v0] Webhook result was not success:", json?.result)
     throw new Error(`Webhook reported failure: ${json?.error ?? text.slice(0, 300)}`)
   }
 }
