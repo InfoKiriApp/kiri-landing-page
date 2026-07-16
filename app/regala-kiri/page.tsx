@@ -103,14 +103,6 @@ export default function RegalaKiriPage() {
     if (submitting) return
 
     setError(null)
-
-    // Client-side postal code check before hitting the server.
-    if (!postalValid) {
-      setPostalTouched(true)
-      setError("Introduce un código postal español válido (5 dígitos).")
-      return
-    }
-
     setSubmitting(true)
 
     try {
