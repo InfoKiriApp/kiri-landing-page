@@ -125,9 +125,11 @@ export default function RegalaKiriPage() {
       }
 
       // Only redirect to Square checkout after a successful Google Sheets save.
+      console.log("[v0] Form submission successful, redirecting to checkout")
       setSubmitted(true)
       window.location.href = SQUARE_CHECKOUT_URL
-    } catch {
+    } catch (err) {
+      console.error("[v0] Error in form submission:", err)
       setError("Se produjo un error de conexión. Comprueba tu red e inténtalo de nuevo.")
       setSubmitting(false)
     }
