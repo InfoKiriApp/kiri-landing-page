@@ -118,7 +118,7 @@ export default function RegalaKiriPage() {
       console.log("[v0] Step 3: Response data:", data)
 
       if (!res.ok) {
-        console.log("[v0] Step 4: Response not OK, showing error")
+        console.log("[v0] Step 4: Response not OK, status:", res.status, "data:", data)
         setError(data?.error ?? "No se pudo guardar tu solicitud. Inténtalo de nuevo en unos minutos.")
         setSubmitting(false)
         return
