@@ -24,8 +24,8 @@ const relationships = [
   "Otro",
 ]
 
-// Spanish postal codes: 5 digits, province prefix 01–52.
-const SPANISH_POSTAL_REGEX = /^(0[1-9]|[1-4]\d|5[0-2])\d{3}$/
+// Spanish postal codes: 5 digits (00000-52999).
+const SPANISH_POSTAL_REGEX = /^[0-5]\d{4}$/
 
 const steps = [
   {
