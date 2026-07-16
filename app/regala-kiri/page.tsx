@@ -100,52 +100,30 @@ export default function RegalaKiriPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log("[v0] FORM SUBMIT: Started")
-    
-    if (submitting) {
-      console.log("[v0] FORM SUBMIT: Already submitting, aborting")
-      return
-    }
+    if (submitting) return
 
     setError(null)
     setSubmitting(true)
 
-    console.log("[v0] FORM SUBMIT: Form data being sent:", {
-      ...form,
-      gifterEmail: form.gifterEmail ? form.gifterEmail.substring(0, 5) + "..." : "EMPTY",
-    })
-
     try {
-      console.log("[v0] FORM SUBMIT: Fetching /api/regala-kiri")
       const res = await fetch("/api/regala-kiri", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       })
 
-      console.log("[v0] FORM SUBMIT: Response status:", res.status, res.statusText)
-      
-      const data = await res.json().catch((err) => {
-        console.log("[v0] FORM SUBMIT: Failed to parse JSON response:", err.message)
-        return {}
-      })
-
-      console.log("[v0] FORM SUBMIT: Response data:", data)
+      const data = await res.json().catch(() => ({}))
 
       if (!res.ok) {
-        const errorMsg = data?.error ?? "No se pudo guardar tu solicitud. Inténtalo de nuevo en unos minutos."
-        console.log("[v0] FORM SUBMIT: Setting error:", errorMsg)
-        setError(errorMsg)
+        setError(data?.error ?? "No se pudo guardar tu solicitud. Inténtalo de nuevo en unos minutos.")
         setSubmitting(false)
         return
       }
 
-      console.log("[v0] FORM SUBMIT: Success! Redirecting to checkout")
       // Only redirect to Square checkout after a successful Google Sheets save.
       setSubmitted(true)
       window.location.href = SQUARE_CHECKOUT_URL
     } catch (err) {
-      console.log("[v0] FORM SUBMIT: Caught exception:", err instanceof Error ? err.message : String(err))
       setError("Se produjo un error de conexión. Comprueba tu red e inténtalo de nuevo.")
       setSubmitting(false)
     }
@@ -346,7 +324,7 @@ export default function RegalaKiriPage() {
 
                   <fieldset className="flex flex-col gap-4">
                     <legend className="text-xs uppercase tracking-widest text-primary font-semibold mb-1">
-                      Tu relación con el niño/a
+                      Tu relaci��n con el niño/a
                     </legend>
                     <select
                       name="relationship"
