@@ -65,19 +65,26 @@ const submissionSchema = z
   })
 
 export async function POST(request: NextRequest) {
+  console.log("[REGALA-KIRI API] POST request received")
+  
   let body: unknown
   try {
     body = await request.json()
-  } catch {
+    console.log("[REGALA-KIRI API] Request body parsed successfully")
+  } catch (err) {
+    console.log("[REGALA-KIRI API] ERROR: Failed to parse JSON body")
     return NextResponse.json({ error: "Cuerpo de la petición no válido" }, { status: 400 })
   }
 
+  console.log("[REGALA-KIRI API] Validating schema...")
   const parsed = submissionSchema.safeParse(body)
   if (!parsed.success) {
     const message = parsed.error.issues[0]?.message ?? "Datos del formulario no válidos"
+    console.log("[REGALA-KIRI API] Validation failed:", message)
     return NextResponse.json({ error: message }, { status: 400 })
   }
 
+  console.log("[REGALA-KIRI API] Validation passed")
   const data = parsed.data
   const timestamp = new Date().toISOString()
 
@@ -86,6 +93,7 @@ export async function POST(request: NextRequest) {
     // Timestamp | Gifter First | Gifter Last | Gifter Email | Child First | Child Last |
     // Relationship | Parent First | Parent Last | Parent Email | Street | Number | Floor |
     // Postal | City | Country | Occasion | Message
+    console.log("[REGALA-KIRI API] Starting appendRow call...")
     await appendRow([
       timestamp,
       data.gifterFirstName,
@@ -107,8 +115,16 @@ export async function POST(request: NextRequest) {
       data.message,
     ])
 
+    console.log("[REGALA-KIRI API] appendRow completed successfully, returning success response")
     return NextResponse.json({ success: true })
   } catch (error) {
+    console.log("[REGALA-KIRI API] CATCH BLOCK: Exception caught")
+    console.log("[REGALA-KIRI API] Error type:", error instanceof Error ? error.constructor.name : typeof error)
+    console.log("[REGALA-KIRI API] Error message:", error instanceof Error ? error.message : String(error))
+    if (error instanceof Error && error.stack) {
+      console.log("[REGALA-KIRI API] Stack trace:", error.stack)
+    }
+    console.log("[REGALA-KIRI API] Returning 502 error response")
     return NextResponse.json(
       { error: "No se pudo guardar tu solicitud. Inténtalo de nuevo en unos minutos." },
       { status: 502 },

@@ -112,10 +112,21 @@ export default function RegalaKiriPage() {
         body: JSON.stringify(form),
       })
 
-      const data = await res.json().catch(() => ({}))
+      console.log("[REGALA-KIRI FORM] Fetch completed - status:", res.status, "ok:", res.ok, "statusText:", res.statusText)
+
+      let data: any = {}
+      try {
+        data = await res.json()
+        console.log("[REGALA-KIRI FORM] Response JSON:", data)
+      } catch (parseErr) {
+        const respText = await res.text()
+        console.log("[REGALA-KIRI FORM] Failed to parse JSON. Response text:", respText.slice(0, 500))
+      }
 
       if (!res.ok) {
-        setError(data?.error ?? "No se pudo guardar tu solicitud. Inténtalo de nuevo en unos minutos.")
+        const errorMsg = data?.error ?? "No se pudo guardar tu solicitud. Inténtalo de nuevo en unos minutos."
+        console.log("[REGALA-KIRI FORM] Response not OK. Displaying error:", errorMsg)
+        setError(errorMsg)
         setSubmitting(false)
         return
       }
@@ -124,6 +135,7 @@ export default function RegalaKiriPage() {
       setSubmitted(true)
       window.location.href = SQUARE_CHECKOUT_URL
     } catch (err) {
+      console.log("[REGALA-KIRI FORM] Catch block - exception:", err instanceof Error ? err.message : String(err))
       setError("Se produjo un error de conexión. Comprueba tu red e inténtalo de nuevo.")
       setSubmitting(false)
     }
