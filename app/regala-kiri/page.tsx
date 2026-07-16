@@ -103,14 +103,6 @@ export default function RegalaKiriPage() {
     if (submitting) return
 
     setError(null)
-
-    // Client-side postal code check before hitting the server.
-    if (!postalValid) {
-      setPostalTouched(true)
-      setError("Introduce un código postal español válido (5 dígitos).")
-      return
-    }
-
     setSubmitting(true)
 
     try {
@@ -122,20 +114,27 @@ export default function RegalaKiriPage() {
       })
 
       console.log("[v0] API response status:", res.status)
-      const data = await res.json().catch(() => ({}))
+      let data: any = {}
+      try {
+        data = await res.json()
+      } catch {
+        console.log("[v0] Could not parse JSON response")
+      }
       console.log("[v0] API response data:", data)
 
       if (!res.ok) {
-        console.log("[v0] Response not ok, showing error")
-        setError(data?.error ?? "No se pudo enviar tu solicitud. Inténtalo de nuevo.")
+        console.log("[v0] Response not ok, status:", res.status, "data:", data)
+        setError(data?.error ?? `Error del servidor (${res.status})`)
         setSubmitting(false)
         return
       }
 
       // Only redirect to Square checkout after a successful Google Sheets save.
+      console.log("[v0] Form submission successful, redirecting to checkout")
       setSubmitted(true)
       window.location.href = SQUARE_CHECKOUT_URL
-    } catch {
+    } catch (err) {
+      console.error("[v0] Error in form submission:", err)
       setError("Se produjo un error de conexión. Comprueba tu red e inténtalo de nuevo.")
       setSubmitting(false)
     }
