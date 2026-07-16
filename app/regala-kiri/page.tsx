@@ -24,8 +24,8 @@ const relationships = [
   "Otro",
 ]
 
-// Spanish postal codes: 5 digits, province prefix 01–52.
-const SPANISH_POSTAL_REGEX = /^(0[1-9]|[1-4]\d|5[0-2])\d{3}$/
+// Spanish postal codes: 5 digits (00000-52999).
+const SPANISH_POSTAL_REGEX = /^[0-5]\d{4}$/
 
 const steps = [
   {
@@ -103,14 +103,6 @@ export default function RegalaKiriPage() {
     if (submitting) return
 
     setError(null)
-
-    // Client-side postal code check before hitting the server.
-    if (!postalValid) {
-      setPostalTouched(true)
-      setError("Introduce un código postal español válido (5 dígitos).")
-      return
-    }
-
     setSubmitting(true)
 
     try {
@@ -123,7 +115,7 @@ export default function RegalaKiriPage() {
       const data = await res.json().catch(() => ({}))
 
       if (!res.ok) {
-        setError(data?.error ?? "No se pudo enviar tu solicitud. Inténtalo de nuevo.")
+        setError(data?.error ?? "No se pudo guardar tu solicitud. Inténtalo de nuevo en unos minutos.")
         setSubmitting(false)
         return
       }
@@ -131,7 +123,7 @@ export default function RegalaKiriPage() {
       // Only redirect to Square checkout after a successful Google Sheets save.
       setSubmitted(true)
       window.location.href = SQUARE_CHECKOUT_URL
-    } catch {
+    } catch (err) {
       setError("Se produjo un error de conexión. Comprueba tu red e inténtalo de nuevo.")
       setSubmitting(false)
     }
@@ -332,7 +324,7 @@ export default function RegalaKiriPage() {
 
                   <fieldset className="flex flex-col gap-4">
                     <legend className="text-xs uppercase tracking-widest text-primary font-semibold mb-1">
-                      Tu relación con el niño/a
+                      Tu relaci��n con el niño/a
                     </legend>
                     <select
                       name="relationship"

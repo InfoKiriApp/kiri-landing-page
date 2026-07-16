@@ -4,7 +4,8 @@ import { z } from "zod"
 // Never cache this endpoint.
 export const dynamic = "force-dynamic"
 
-const SPANISH_POSTAL_REGEX = /^(0[1-9]|[1-4]\d|5[0-2])\d{3}$/
+// Spanish postal codes: 5 digits (00000-52999)
+const SPANISH_POSTAL_REGEX = /^[0-5]\d{4}$/
 
 const submissionSchema = z
   .object({
@@ -73,7 +74,6 @@ export async function POST(request: NextRequest) {
   const parsed = submissionSchema.safeParse(body)
   if (!parsed.success) {
     const message = parsed.error.issues[0]?.message ?? "Datos del formulario no válidos"
-    console.log("[v0] Regala Kiri validation failed:", parsed.error.flatten().fieldErrors)
     return NextResponse.json({ error: message }, { status: 400 })
   }
 
