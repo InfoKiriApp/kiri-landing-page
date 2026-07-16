@@ -28,13 +28,9 @@ export async function appendRow(values: (string | number)[]): Promise<void> {
     redirect: "manual",
   })
 
-  console.log("[v0] Webhook response status:", res.status)
-
   // Google Apps Script returns 302 redirects on POST, which is normal.
-  // The actual response should be in the location header or we should accept 302.
   if (res.status === 302 || res.status === 301 || res.status === 307 || res.status === 308) {
     // The script executed and sent a redirect - this means it worked.
-    console.log("[v0] Webhook returned redirect (status:", res.status, ") - request succeeded")
     return
   }
 
@@ -45,14 +41,11 @@ export async function appendRow(values: (string | number)[]): Promise<void> {
   let json: { result?: string; error?: string } | null = null
   try {
     json = JSON.parse(text)
-    console.log("[v0] Webhook JSON parsed:", json)
   } catch (err) {
-    console.log("[v0] Webhook JSON parse failed. Response:", text.slice(0, 500))
     throw new Error(`Webhook returned non-JSON response (status ${res.status}): ${text.slice(0, 300)}`)
   }
 
   if (json?.result !== "success") {
-    console.log("[v0] Webhook result was not success:", json?.result)
     throw new Error(`Webhook reported failure: ${json?.error ?? text.slice(0, 300)}`)
   }
 }
