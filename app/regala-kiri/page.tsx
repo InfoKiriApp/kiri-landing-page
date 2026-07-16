@@ -106,19 +106,15 @@ export default function RegalaKiriPage() {
     setSubmitting(true)
 
     try {
-      console.log("[v0] Step 1: Form submit clicked, sending request to /api/regala-kiri")
       const res = await fetch("/api/regala-kiri", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       })
 
-      console.log("[v0] Step 2: Received response with status:", res.status)
       const data = await res.json().catch(() => ({}))
-      console.log("[v0] Step 3: Response data:", data)
 
       if (!res.ok) {
-        console.log("[v0] Step 4: Response not OK, status:", res.status, "data:", data)
         setError(data?.error ?? "No se pudo guardar tu solicitud. Inténtalo de nuevo en unos minutos.")
         setSubmitting(false)
         return
