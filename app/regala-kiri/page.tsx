@@ -114,15 +114,19 @@ export default function RegalaKiriPage() {
     setSubmitting(true)
 
     try {
+      console.log("[v0] Submitting form with data:", form)
       const res = await fetch("/api/regala-kiri", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       })
 
+      console.log("[v0] API response status:", res.status)
       const data = await res.json().catch(() => ({}))
+      console.log("[v0] API response data:", data)
 
       if (!res.ok) {
+        console.log("[v0] Response not ok, showing error")
         setError(data?.error ?? "No se pudo enviar tu solicitud. Inténtalo de nuevo.")
         setSubmitting(false)
         return
