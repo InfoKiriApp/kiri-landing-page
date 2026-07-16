@@ -106,35 +106,24 @@ export default function RegalaKiriPage() {
     setSubmitting(true)
 
     try {
-      console.log("[v0] Submitting form with data:", form)
       const res = await fetch("/api/regala-kiri", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       })
 
-      console.log("[v0] API response status:", res.status)
-      let data: any = {}
-      try {
-        data = await res.json()
-      } catch {
-        console.log("[v0] Could not parse JSON response")
-      }
-      console.log("[v0] API response data:", data)
+      const data = await res.json().catch(() => ({}))
 
       if (!res.ok) {
-        console.log("[v0] Response not ok, status:", res.status, "data:", data)
-        setError(data?.error ?? `Error del servidor (${res.status})`)
+        setError(data?.error ?? "No se pudo guardar tu solicitud. Inténtalo de nuevo en unos minutos.")
         setSubmitting(false)
         return
       }
 
       // Only redirect to Square checkout after a successful Google Sheets save.
-      console.log("[v0] Form submission successful, redirecting to checkout")
       setSubmitted(true)
       window.location.href = SQUARE_CHECKOUT_URL
     } catch (err) {
-      console.error("[v0] Error in form submission:", err)
       setError("Se produjo un error de conexión. Comprueba tu red e inténtalo de nuevo.")
       setSubmitting(false)
     }
