@@ -32,6 +32,8 @@ const submissionSchema = z
     country: z.string().trim().min(1).max(60).default("España"),
     occasion: z.string().trim().min(1, "La ocasión es obligatoria").max(120),
     message: z.string().trim().max(2000).optional().default(""),
+    wantsPersonalizedStory: z.boolean().default(false),
+    childDescription: z.string().trim().max(2000).optional().default(""),
     privacy: z.literal(true, {
       errorMap: () => ({ message: "Debes aceptar la política de privacidad" }),
     }),
@@ -100,7 +102,7 @@ export async function POST(request: NextRequest) {
     // Keep this order in sync with the Google Sheet header row (see docs/google-apps-script.gs):
     // Timestamp | Gifter First | Gifter Last | Gifter Email | Child First | Child Last |
     // Relationship | Parent First | Parent Last | Parent Email | Street | Number | Floor |
-    // Postal | City | Country | Occasion | Message
+    // Postal | City | Country | Occasion | Message | Wants Personalized Story | Child Description
     const rowData = [
       timestamp,
       data.gifterFirstName,
@@ -120,6 +122,8 @@ export async function POST(request: NextRequest) {
       data.country,
       data.occasion,
       data.message,
+      data.wantsPersonalizedStory ? "Sí" : "No",
+      data.childDescription,
     ]
 
     const response = await fetch(webhookUrl, {
