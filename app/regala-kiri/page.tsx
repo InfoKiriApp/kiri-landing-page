@@ -73,6 +73,7 @@ export default function RegalaKiriPage() {
     country: "España",
     occasion: "",
     message: "",
+    childDescription: "",
     privacy: false,
   })
   const [submitted, setSubmitted] = useState(false)
@@ -474,6 +475,14 @@ export default function RegalaKiriPage() {
                       name="message"
                       placeholder="Mensaje personal para el futuro (opcional)"
                       value={form.message}
+                      onChange={handleChange}
+                      rows={4}
+                      className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 resize-none"
+                    />
+                    <textarea
+                      name="childDescription"
+                      placeholder="Descripción del niño/a para personalizar la historia (opcional)"
+                      value={form.childDescription}
                       onChange={handleChange}
                       rows={4}
                       className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 resize-none"
