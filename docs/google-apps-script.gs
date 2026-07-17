@@ -7,7 +7,7 @@
  *      Timestamp | Gifter First Name | Gifter Last Name | Gifter Email |
  *      Child First Name | Child Last Name | Relationship |
  *      Parent First Name | Parent Last Name | Parent Email |
- *      Street | Number | Floor | Postal | City | Country | Occasion | Message | Child Description
+ *      Street | Number | Floor | Postal | City | Country | Occasion | Message | Wants Personalized Story | Child Description
  * 3. Go to Extensions > Apps Script.
  * 4. Delete any starter code, paste THIS entire file, and Save.
  * 5. Click Deploy > New deployment.

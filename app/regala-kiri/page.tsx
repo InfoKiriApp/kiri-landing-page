@@ -73,6 +73,7 @@ export default function RegalaKiriPage() {
     country: "España",
     occasion: "",
     message: "",
+    wantsPersonalizedStory: false,
     childDescription: "",
     privacy: false,
   })
@@ -479,14 +480,30 @@ export default function RegalaKiriPage() {
                       rows={4}
                       className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 resize-none"
                     />
-                    <textarea
-                      name="childDescription"
-                      placeholder="Descripción del niño/a para personalizar la historia (opcional)"
-                      value={form.childDescription}
-                      onChange={handleChange}
-                      rows={4}
-                      className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 resize-none"
-                    />
+
+                    <label className="flex items-start gap-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        name="wantsPersonalizedStory"
+                        checked={form.wantsPersonalizedStory}
+                        onChange={handleChange}
+                        className="mt-1 accent-primary flex-shrink-0"
+                      />
+                      <span className="text-sm text-foreground">
+                        Quiero recibir una mini historia personalizada sobre educación financiera para mi hijo/a
+                      </span>
+                    </label>
+
+                    {form.wantsPersonalizedStory && (
+                      <textarea
+                        name="childDescription"
+                        placeholder="Cuéntanos sobre tu hijo/a: edad, intereses, personalidad, hobbies... esto nos ayudará a personalizar la historia"
+                        value={form.childDescription}
+                        onChange={handleChange}
+                        rows={4}
+                        className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 resize-none"
+                      />
+                    )}
                   </fieldset>
 
                   <label className="flex items-start gap-3 text-sm text-muted-foreground cursor-pointer">
