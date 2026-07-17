@@ -490,7 +490,7 @@ export default function RegalaKiriPage() {
                         className="mt-1 accent-primary flex-shrink-0"
                       />
                       <span className="text-sm text-foreground">
-                        Quiero recibir una mini historia personalizada sobre educación financiera para mi hijo/a
+                        Quiero recibir una mini historia personalizada sobre educación financiera para el niño / la niña
                       </span>
                     </label>
 
