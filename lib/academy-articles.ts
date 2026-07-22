@@ -21,6 +21,7 @@ export type Article = {
   excerpt: string
   readTime: string
   coverUrl: string
+  thumbUrl: string
   body: ArticleSection[]
 }
 
@@ -43,6 +44,7 @@ export const ARTICLES: Article[] = [
       "¿Alguna vez has visto esa mirada de tu peque frente a un juguete nuevo, acompañada de un «¡Lo quiero!»? Una oportunidad de oro para enseñarles a diferenciar lo que necesitamos para vivir de lo que queremos.",
     readTime: "5 min",
     coverUrl: "/images/academy/necesidades-vs-deseos.png",
+    thumbUrl: "/images/academy/thumbs/necesidades-vs-deseos.webp",
     body: [
       {
         type: "paragraph",
@@ -126,6 +128,7 @@ export const ARTICLES: Article[] = [
       "¿Cuál es el mejor momento para empezar a hablar de dinero con tus hijos? La respuesta es más sencilla de lo que imaginas: ahora mismo. Recursos y estrategias adaptados por edades.",
     readTime: "8 min",
     coverUrl: "/images/academy/introduccion-educacion-financiera-en-casa.png",
+    thumbUrl: "/images/academy/thumbs/introduccion-educacion-financiera-en-casa.webp",
     body: [
       {
         type: "paragraph",
@@ -202,6 +205,7 @@ export const ARTICLES: Article[] = [
       "Nuestros hijos son esponjas brillantes que absorben todo lo que ven. La tierra más fértil para que los conceptos financieros crezcan en la mente de tu hijo eres tú.",
     readTime: "6 min",
     coverUrl: "/images/academy/modelado-comportamiento-financiero.png",
+    thumbUrl: "/images/academy/thumbs/modelado-comportamiento-financiero.webp",
     body: [
       {
         type: "paragraph",
@@ -272,6 +276,7 @@ export const ARTICLES: Article[] = [
       "Muchos padres esperan «el momento adecuado» para hablar de finanzas. La neurociencia nos dice que ese momento es mucho antes de lo que creemos.",
     readTime: "5 min",
     coverUrl: "/images/academy/a-que-edad-hablar-de-dinero.png",
+    thumbUrl: "/images/academy/thumbs/a-que-edad-hablar-de-dinero.webp",
     body: [
       {
         type: "paragraph",
@@ -334,6 +339,7 @@ export const ARTICLES: Article[] = [
       "El impulso de gastar y obtener una recompensa inmediata es fuerte en niños y adultos. Descubre cómo convertir el ahorro en un hábito natural y emocionante desde edades tempranas.",
     readTime: "6 min",
     coverUrl: "/images/academy/el-arte-de-ahorrar-la-hucha-magica.png",
+    thumbUrl: "/images/academy/thumbs/el-arte-de-ahorrar-la-hucha-magica.webp",
     body: [
       {
         type: "paragraph",
@@ -407,6 +413,7 @@ export const ARTICLES: Article[] = [
       "Imagina un árbol que no solo crece, sino que produce semillas que se siembran solas, creando nuevos árboles sin que tú hagas nada. Esa es exactamente la magia del interés compuesto.",
     readTime: "7 min",
     coverUrl: "/images/academy/magia-interes-compuesto.png",
+    thumbUrl: "/images/academy/thumbs/magia-interes-compuesto.webp",
     body: [
       {
         type: "paragraph",
@@ -471,6 +478,7 @@ export const ARTICLES: Article[] = [
       "En el mundo de las finanzas, hay una distinción crucial entre lo que pone dinero en tu bolsillo y lo que lo saca. Enseña a tus hijos esta diferencia desde pequeños.",
     readTime: "5 min",
     coverUrl: "/images/academy/diferencia-activos-pasivos.png",
+    thumbUrl: "/images/academy/thumbs/diferencia-activos-pasivos.webp",
     body: [
       {
         type: "paragraph",
@@ -527,6 +535,7 @@ export const ARTICLES: Article[] = [
       "Los fondos indexados son la herramienta de inversión más recomendada por los expertos para el largo plazo. Te explicamos cómo funcionan con palabras que hasta un niño puede entender.",
     readTime: "6 min",
     coverUrl: "/images/academy/fondos-de-inversion-indexados.png",
+    thumbUrl: "/images/academy/thumbs/fondos-de-inversion-indexados.webp",
     body: [
       {
         type: "paragraph",
@@ -587,6 +596,7 @@ export const ARTICLES: Article[] = [
       "¿Tu hijo sueña con el último videojuego, un viaje a Eurodisney o una bicicleta especial? Cuando los niños tienen un objetivo claro, descubren la motivación perfecta para ahorrar con propósito.",
     readTime: "6 min",
     coverUrl: "/images/academy/sembrando-suenos-ahorro-por-objetivos.png",
+    thumbUrl: "/images/academy/thumbs/sembrando-suenos-ahorro-por-objetivos.webp",
     body: [
       {
         type: "paragraph",
@@ -651,6 +661,7 @@ export const ARTICLES: Article[] = [
       "Imagínate una semilla diminuta con un potencial inmenso. Con tiempo y cuidado, esa semilla se convierte en un árbol majestuoso. Lo mismo ocurre con el dinero cuando se planta pronto.",
     readTime: "4 min",
     coverUrl: "/images/academy/metafora-arbol-y-dinero.png",
+    thumbUrl: "/images/academy/thumbs/metafora-arbol-y-dinero.webp",
     body: [
       {
         type: "paragraph",
@@ -711,6 +722,7 @@ export const ARTICLES: Article[] = [
       "Las metas de ahorro no se imponen, se construyen juntos. Una guía práctica para que el proceso sea motivador, realista y educativo a la vez.",
     readTime: "5 min",
     coverUrl: "/images/academy/como-establecer-metas-de-ahorro.png",
+    thumbUrl: "/images/academy/thumbs/como-establecer-metas-de-ahorro.webp",
     body: [
       {
         type: "paragraph",
@@ -777,6 +789,7 @@ export const ARTICLES: Article[] = [
       "La semilla de la generosidad: cuando pensamos en dinero, a veces olvidamos que es también una herramienta para crear impacto positivo en el mundo.",
     readTime: "5 min",
     coverUrl: "/images/academy/ser-generoso-el-dinero-para-ayudar.png",
+    thumbUrl: "/images/academy/thumbs/ser-generoso-el-dinero-para-ayudar.webp",
     body: [
       {
         type: "paragraph",
@@ -827,6 +840,7 @@ export const ARTICLES: Article[] = [
       "Como jardineros de Kiri, es fundamental identificar las malas hierbas que pueden sabotear el crecimiento financiero de nuestros hijos. Conocerlos nos ayuda a garantizar que el jardín florezca.",
     readTime: "7 min",
     coverUrl: "/images/academy/errores-comunes-educacion-financiera-infantil.png",
+    thumbUrl: "/images/academy/thumbs/errores-comunes-educacion-financiera-infantil.webp",
     body: [
       {
         type: "paragraph",
@@ -896,6 +910,7 @@ export const ARTICLES: Article[] = [
       "El ahorro no es una obligación individual: puede ser el proyecto más ilusionante que una familia comparta. Te explicamos cómo construir esa cultura desde cero.",
     readTime: "6 min",
     coverUrl: "/images/academy/cultura-del-ahorro-en-familia.png",
+    thumbUrl: "/images/academy/thumbs/cultura-del-ahorro-en-familia.webp",
     body: [
       {
         type: "paragraph",
@@ -957,6 +972,7 @@ export const ARTICLES: Article[] = [
       "Cuando alguien invierte en un fondo, hay un equipo de profesionales detrás tomando decisiones cada día. Conocer cómo funciona la gestión de activos te da perspectiva sobre lo que ocurre con tu dinero.",
     readTime: "7 min",
     coverUrl: "/images/academy/que-es-la-gestion-de-activos.png",
+    thumbUrl: "/images/academy/thumbs/que-es-la-gestion-de-activos.webp",
     body: [
       {
         type: "paragraph",
@@ -1032,6 +1048,7 @@ export const ARTICLES: Article[] = [
       "La mayoría de la gente conoce la bolsa. Pero existe un mundo paralelo donde se mueve tanto o más dinero: el private equity. Empresas privadas, operaciones millonarias y rentabilidades que los mercados públicos rara vez ofrecen.",
     readTime: "8 min",
     coverUrl: "/images/academy/private-equity-inversion-en-empresas-privadas.png",
+    thumbUrl: "/images/academy/thumbs/private-equity-inversion-en-empresas-privadas.webp",
     body: [
       {
         type: "paragraph",
@@ -1103,6 +1120,7 @@ export const ARTICLES: Article[] = [
       "Las fusiones multimillonarias, las salidas a bolsa de grandes empresas y las emisiones de deuda corporativa tienen un denominador común: un banco de inversión que las estructura. ¿Qué hacen exactamente y por qué importa entenderlos?",
     readTime: "8 min",
     coverUrl: "/images/academy/banca-de-inversion-el-motor-de-las-grandes-operaciones.png",
+    thumbUrl: "/images/academy/thumbs/banca-de-inversion-el-motor-de-las-grandes-operaciones.webp",
     body: [
       {
         type: "paragraph",
@@ -1182,6 +1200,7 @@ export const ARTICLES: Article[] = [
       "Google, Airbnb, Spotify, Cabify. Todas tienen algo en común: en sus primeros años, alguien apostó por ellas cuando eran solo una idea. Eso es el venture capital: capital de riesgo para empresas que aún no existen del todo.",
     readTime: "9 min",
     coverUrl: "/images/academy/venture-capital-apostar-por-el-futuro.png",
+    thumbUrl: "/images/academy/thumbs/venture-capital-apostar-por-el-futuro.webp",
     body: [
       {
         type: "paragraph",

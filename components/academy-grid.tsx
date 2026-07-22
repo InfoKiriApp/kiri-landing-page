@@ -70,10 +70,10 @@ export default function AcademyGrid({ categoryFilter, kiriFilter, ageFilter }: P
                   }}
                   className="bg-card border border-border rounded-2xl overflow-hidden flex flex-col group hover:border-primary/40 hover:shadow-md transition-all duration-300"
                 >
-                  {/* Cover image */}
+                  {/* Cover image — uses 300×300 WebP thumbnail for fast browsing */}
                   <div className="relative h-44 overflow-hidden bg-primary/5">
                     <Image
-                      src={article.coverUrl}
+                      src={article.thumbUrl}
                       alt={article.title}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
