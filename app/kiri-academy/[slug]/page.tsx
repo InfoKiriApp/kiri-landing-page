@@ -147,6 +147,22 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         </div>
       </section>
 
+      {/* Cover image */}
+      <div className="px-6 md:px-12 lg:px-20 -mt-8 relative z-10">
+        <div className="max-w-3xl mx-auto">
+          <div className="relative h-56 md:h-72 rounded-2xl overflow-hidden shadow-xl ring-1 ring-border">
+            <Image
+              src={article.coverUrl}
+              alt={article.title}
+              fill
+              className="object-cover"
+              priority
+              sizes="(max-width: 768px) 100vw, 768px"
+            />
+          </div>
+        </div>
+      </div>
+
       {/* Article body */}
       <article className="px-6 md:px-12 lg:px-20 py-16">
         <div className="max-w-3xl mx-auto">
