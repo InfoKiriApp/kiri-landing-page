@@ -70,14 +70,14 @@ export default function AcademyGrid({ categoryFilter, kiriFilter, ageFilter }: P
                   }}
                   className="bg-card border border-border rounded-2xl overflow-hidden flex flex-col group hover:border-primary/40 hover:shadow-md transition-all duration-300"
                 >
-                  {/* Cover image */}
+                  {/* Cover image — uses 150×150 thumbnail for fast browsing */}
                   <div className="relative h-44 overflow-hidden bg-primary/5">
                     <Image
-                      src={article.coverUrl}
+                      src={article.coverUrl.replace('/images/academy/', '/images/academy/thumbs/')}
                       alt={article.title}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      sizes="150px"
                     />
                     {/* Badges overlay */}
                     <div className="absolute top-3 left-3 right-3 flex items-start justify-between gap-2">
