@@ -326,7 +326,7 @@ export default function RegalaKiriPage() {
 
                   <fieldset className="flex flex-col gap-4">
                     <legend className="text-xs uppercase tracking-widest text-primary font-semibold mb-1">
-                      Tu relaci��n con el niño/a
+                      Tu relación con el niño/a
                     </legend>
                     <select
                       name="relationship"
