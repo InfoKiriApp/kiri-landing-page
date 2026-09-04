@@ -4,7 +4,7 @@ import Header from "@/components/header"
 import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
-import { ChevronRight, ChevronLeft, Sparkles, ArrowUpRight } from "lucide-react"
+import { ChevronRight, ChevronLeft, TreePine, ArrowUpRight } from "lucide-react"
 
 const occasions = [
   "Primera Comunión",
@@ -345,7 +345,7 @@ export default function RegalaKiriPage() {
                       <div className="flex flex-col gap-3 rounded-xl bg-primary/5 border border-primary/20 p-4">
                         <div className="flex items-start gap-3">
                           <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                            <Sparkles className="w-4 h-4 text-primary" />
+                            <TreePine className="w-4 h-4 text-primary" />
                           </div>
                           <div className="flex flex-col gap-1">
                             <p className="text-sm font-semibold text-foreground">
