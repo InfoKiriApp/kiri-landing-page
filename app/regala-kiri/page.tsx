@@ -342,10 +342,10 @@ export default function RegalaKiriPage() {
                     </select>
 
                     {isParent && (
-                      <div className="flex flex-col gap-3 rounded-xl bg-primary/5 border border-primary/20 p-4">
+                      <div className="flex flex-col gap-3 rounded-xl bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border border-primary/25 p-4 shadow-sm animate-in fade-in slide-in-from-top-2 zoom-in-95 duration-500 ease-out">
                         <div className="flex items-start gap-3">
-                          <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                            <TreePine className="w-4 h-4 text-primary" />
+                          <div className="w-10 h-10 rounded-full bg-primary/15 flex items-center justify-center flex-shrink-0 animate-in zoom-in duration-500 delay-100">
+                            <TreePine className="w-5 h-5 text-primary" />
                           </div>
                           <div className="flex flex-col gap-1">
                             <p className="text-sm font-semibold text-foreground">
@@ -360,10 +360,10 @@ export default function RegalaKiriPage() {
                           href="https://cuenta.kiriapp.com/"
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center justify-center gap-1.5 rounded-full bg-primary text-primary-foreground text-sm font-semibold px-5 py-2.5 hover:bg-primary/90 transition-colors self-start"
+                          className="group inline-flex items-center justify-center gap-1.5 rounded-full bg-primary text-primary-foreground text-sm font-semibold px-5 py-2.5 hover:bg-primary/90 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 self-start"
                         >
                           Abre tu cuenta
-                          <ArrowUpRight className="w-4 h-4" />
+                          <ArrowUpRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                         </a>
                         <p className="text-xs text-muted-foreground">
                           ¿Prefieres seguir con Regala Kiri igualmente? Puedes continuar rellenando el formulario.
