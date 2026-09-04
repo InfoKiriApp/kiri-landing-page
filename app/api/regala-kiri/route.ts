@@ -99,37 +99,39 @@ export async function POST(request: NextRequest) {
       gifterEmail: data.gifterEmail,
     })
 
-    // Keep this order in sync with the Google Sheet header row (see docs/google-apps-script.gs):
+    // Keep these field names in sync with the Apps Script doPost handler (see docs/google-apps-script.gs).
+    // The script reads each field by name (data.gifterFirstName, data.timestamp, etc.) and
+    // appends them as a row in the order defined there:
     // Timestamp | Gifter First | Gifter Last | Gifter Email | Child First | Child Last |
     // Relationship | Parent First | Parent Last | Parent Email | Street | Number | Floor |
     // Postal | City | Country | Occasion | Message | Wants Personalized Story | Child Description
-    const rowData = [
+    const payload = {
       timestamp,
-      data.gifterFirstName,
-      data.gifterLastName,
-      data.gifterEmail,
-      data.childFirstName,
-      data.childLastName,
-      data.relationship,
-      data.parentFirstName,
-      data.parentLastName,
-      data.parentEmail,
-      data.street,
-      data.number,
-      data.floor,
-      data.postal,
-      data.city,
-      data.country,
-      data.occasion,
-      data.message,
-      data.wantsPersonalizedStory ? "Sí" : "No",
-      data.childDescription,
-    ]
+      gifterFirstName: data.gifterFirstName,
+      gifterLastName: data.gifterLastName,
+      gifterEmail: data.gifterEmail,
+      childFirstName: data.childFirstName,
+      childLastName: data.childLastName,
+      relationship: data.relationship,
+      parentFirstName: data.parentFirstName,
+      parentLastName: data.parentLastName,
+      parentEmail: data.parentEmail,
+      street: data.street,
+      number: data.number,
+      floor: data.floor,
+      postal: data.postal,
+      city: data.city,
+      country: data.country,
+      occasion: data.occasion,
+      message: data.message,
+      wantsPersonalizedStory: data.wantsPersonalizedStory ? "Sí" : "No",
+      childDescription: data.childDescription,
+    }
 
     const response = await fetch(webhookUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ row: rowData }),
+      body: JSON.stringify(payload),
       redirect: "follow",
     })
 
