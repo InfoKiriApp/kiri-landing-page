@@ -4,7 +4,7 @@ import Header from "@/components/header"
 import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
-import { ChevronRight, ChevronLeft } from "lucide-react"
+import { ChevronRight, ChevronLeft, Sparkles, ArrowUpRight } from "lucide-react"
 
 const occasions = [
   "Primera Comunión",
@@ -340,6 +340,36 @@ export default function RegalaKiriPage() {
                         <option key={r} value={r}>{r}</option>
                       ))}
                     </select>
+
+                    {isParent && (
+                      <div className="flex flex-col gap-3 rounded-xl bg-primary/5 border border-primary/20 p-4">
+                        <div className="flex items-start gap-3">
+                          <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                            <Sparkles className="w-4 h-4 text-primary" />
+                          </div>
+                          <div className="flex flex-col gap-1">
+                            <p className="text-sm font-semibold text-foreground">
+                              Eres el padre/madre: puedes abrir la cuenta directamente
+                            </p>
+                            <p className="text-xs text-muted-foreground leading-relaxed">
+                              Al ser tú quien da de alta a tu hijo/a, no necesitas pasar por el proceso de regalo. Abre su cuenta Kiri en minutos, sin Welcome Pack ni envío.
+                            </p>
+                          </div>
+                        </div>
+                        <a
+                          href="https://cuenta.kiriapp.com/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center justify-center gap-1.5 rounded-full bg-primary text-primary-foreground text-sm font-semibold px-5 py-2.5 hover:bg-primary/90 transition-colors self-start"
+                        >
+                          Abre tu cuenta
+                          <ArrowUpRight className="w-4 h-4" />
+                        </a>
+                        <p className="text-xs text-muted-foreground">
+                          ¿Prefieres seguir con Regala Kiri igualmente? Puedes continuar rellenando el formulario.
+                        </p>
+                      </div>
+                    )}
 
                     {form.relationship && !isParent && (
                       <div className="flex flex-col gap-4 rounded-xl bg-muted/60 border border-border p-4">
