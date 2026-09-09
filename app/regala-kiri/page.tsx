@@ -348,11 +348,8 @@ export default function RegalaKiriPage() {
                             <TreePine className="w-5 h-5 text-primary" />
                           </div>
                           <div className="flex flex-col gap-1">
-                            <p className="text-sm font-semibold text-foreground">
-                              Eres el padre/madre: puedes abrir la cuenta directamente
-                            </p>
-                            <p className="text-xs text-muted-foreground leading-relaxed">
-                              Al ser tú quien da de alta a tu hijo/a, no necesitas pasar por el proceso de regalo. Abre su cuenta Kiri en minutos, sin Welcome Pack ni envío.
+                            <p className="text-sm font-semibold text-foreground leading-relaxed">
+                              Si eres el Papá o la Mamá, por favor dirígete a Abre tu Cuenta. Desde allí, podrás comenzar toda la experiencia de Kiri de forma directa.
                             </p>
                           </div>
                         </div>
@@ -366,7 +363,7 @@ export default function RegalaKiriPage() {
                           <ArrowUpRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                         </a>
                         <p className="text-xs text-muted-foreground">
-                          ¿Prefieres seguir con Regala Kiri igualmente? Puedes continuar rellenando el formulario.
+                          Gracias por confiar en Kiri.
                         </p>
                       </div>
                     )}
