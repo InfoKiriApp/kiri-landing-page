@@ -20,6 +20,15 @@ const FAQS = [
   { id: "un-representante",  label: "¿Puedo añadir un segundo representante?" },
   { id: "necesito-cuenta",   label: "¿Necesito cuenta en MyInvestor?" },
   { id: "condiciones",       label: "¿Qué condiciones tienen las cuentas?" },
+  { id: "codigo-verificacion", label: "No me llega el código de verificación" },
+  { id: "cuentas-no-aparecen", label: "¿Por qué no veo la cuenta de mi hijo/a en mi perfil?" },
+  { id: "cuando-funciona",     label: "¿Cuándo estará disponible Kiri?" },
+  { id: "vincular-cuenta-existente", label: "¿Puedo vincular mi cuenta ya existente de MyInvestor?" },
+  { id: "menor-sin-dni",       label: "¿Puedo abrir la cuenta sin el DNI de mi hijo/a?" },
+  { id: "envio-internacional", label: "¿El Welcome Pack se envía fuera de España?" },
+  { id: "abrir-cuenta-hijos",  label: "¿Cómo abro la cuenta de cada uno de mis hijos?" },
+  { id: "contratar-carteras",  label: "¿Cómo contrato las Carteras Kiri?" },
+  { id: "tutor-principal-secundario", label: "Soy tutor/a y no veo las cuentas de mis hijos" },
 ]
 
 const RESPONSES: Record<string, string> = {
@@ -39,7 +48,7 @@ const RESPONSES: Record<string, string> = {
     "El tutor debe asegurarse de que los impuestos derivados de la cuenta del menor sean correctamente declarados y pagados. En caso de inspección, deberá justificar el origen de los fondos. Gestiona el pago del ISD en nombre del menor, pero no puede disponer de los fondos para beneficio propio.",
 
   "mayoria-edad":
-    "Al cumplir la mayoría de edad, el menor asume el control total de la cuenta y la responsabilidad fiscal sobre los fondos y rendimientos generados. A partir de ese momento, podrá disponer libremente de la inversión acumulada y todos sus rendimientos.",
+    "Al cumplir la mayoría de edad, el titular puede seguir con la cuenta con normalidad. A partir de ese momento tiene el derecho — pero no la obligación — de rescatar la cartera. Al tratarse de fondos traspasables, mientras mantenga la inversión no tributa nada; y si decide vender, solo en ese momento tributará en su IRPF por la venta, habiendo optimizado la fiscalidad durante todos los años previos.",
 
   "documentos":
     "Para abrir una cuenta a un menor necesitas: (1) DNI o NIF del menor — si el menor no tiene DNI (no obligatorio para menores de 14 años), se puede usar el NIF emitido por la Agencia Tributaria; (2) el libro de familia o documento de inscripción del menor en el registro civil; (3) el representante legal debe aportar la misma documentación que si abriera una cuenta para sí mismo.",
@@ -58,6 +67,33 @@ const RESPONSES: Record<string, string> = {
 
   "condiciones":
     "Las cuentas para menores tienen las mismas características que las cuentas para mayores de edad, con dos salvedades: no pueden invertir en planes de pensiones ni solicitar tarjetas de débito o crédito. El resto de productos — fondos, carteras indexadas, acciones y ETFs — están disponibles.",
+
+  "codigo-verificacion":
+    "Recuerda que el proceso de alta comienza en www.kiriapp.com, pero el registro y la verificación se completan en la plataforma de nuestro banco colaborador, MyInvestor. Si no te llega el código de verificación, lo más rápido es que contactes directamente con Atención al Cliente de MyInvestor: 910 005 981. Si sigues teniendo problemas, escríbenos y lo escalamos personalmente.",
+
+  "cuentas-no-aparecen":
+    "Esto suele ocurrir cuando la información que recibimos de MyInvestor asocia la cuenta del menor a un tutor distinto al que ha iniciado sesión en Kiri (por ejemplo, si figura la madre y no el padre, o viceversa). Kiri solo puede mostrar las cuentas al tutor que aparece en la información que recibimos de MyInvestor. Te recomendamos hacer seguimiento directo desde MyInvestor mientras resolvemos la vinculación — su Atención al Cliente es 910 005 981. Escríbenos y lo revisamos con nuestro equipo técnico y con MyInvestor.",
+
+  "cuando-funciona":
+    "¡Kiri ya está disponible! Puedes darte de alta y comenzar la experiencia en https://cuenta.kiriapp.com/",
+
+  "vincular-cuenta-existente":
+    "Sí, si ya tienes una cuenta abierta en MyInvestor puedes vincularla a Kiri. Escríbenos confirmando que deseas realizar la vinculación y comenzamos el trámite para que puedas disfrutar de todas las ventajas de Kiri con tu usuario actual.",
+
+  "menor-sin-dni":
+    "El DNI o NIF del menor es un dato imprescindible por motivos legales y para garantizar la futura disposición de los fondos. No es posible completar el alta únicamente con el libro de familia. Si el menor no tiene DNI (no es obligatorio antes de los 14 años), se puede usar el NIF emitido por la Agencia Tributaria.",
+
+  "envio-internacional":
+    "Por el momento, el Kiri Welcome Pack solo se envía dentro de España. Si el destinatario está fuera de España, te recomendamos indicar tu propia dirección postal al rellenar el formulario de 'Regala Kiri' para recibirlo tú y poder entregarlo en persona.",
+
+  "abrir-cuenta-hijos":
+    "Una vez abierta tu cuenta, ve a Explorar → Cuentas y Tarjetas → Cuenta Junior para abrir la cuenta de cada uno de tus hijos. El proceso puede tardar hasta 20 días. Después, escríbenos para que podamos vincular todas las cuentas a la Familia Kiri.",
+
+  "contratar-carteras":
+    "Una vez tengas abierta la Cuenta Junior de cada hijo/a y nos hayas avisado, ve a Explorar → Contratar Carteras → rellena el Test de Idoneidad y selecciona la Cartera Kiri Ambiciosa, Equilibrada o Prudente, según el riesgo deseado.",
+
+  "tutor-principal-secundario":
+    "Cuando hay dos tutores legales, la cuenta del menor se vincula en Kiri únicamente al tutor que MyInvestor nos indica como asociado en sus sincronizaciones de datos — que no siempre coincide con el tutor principal. Estamos trabajando junto con MyInvestor para que la información de ambos tutores se gestione correctamente. Si te encuentras en esta situación, escríbenos para revisarlo con nuestro equipo técnico y con MyInvestor.",
 }
 
 // ─── Keyword matcher for free-text input ─────────────────────────────────────
@@ -75,6 +111,15 @@ const KEYWORD_MAP: { keys: string[]; id: string }[] = [
   { keys: ["representante", "segundo", "añadir", "anadir"],                           id: "un-representante" },
   { keys: ["necesito cuenta", "myinvestor", "cliente", "propia"],                     id: "necesito-cuenta" },
   { keys: ["condicion", "condición", "condiciones", "restriccion", "restricción"],    id: "condiciones" },
+  { keys: ["codigo", "código", "verificacion", "verificación", "sms", "no me llega"], id: "codigo-verificacion" },
+  { keys: ["no veo", "no aparece", "no aparecen", "no me aparece", "no se muestra"],  id: "cuentas-no-aparecen" },
+  { keys: ["cuando", "cuándo", "disponible", "lanzamiento", "empezar a funcionar"],   id: "cuando-funciona" },
+  { keys: ["vincular", "vinculacion", "vinculación", "cuenta existente", "ya tengo cuenta"], id: "vincular-cuenta-existente" },
+  { keys: ["sin dni", "no tiene dni", "no dispone de dni", "libro de familia"],       id: "menor-sin-dni" },
+  { keys: ["internacional", "extranjero", "fuera de espana", "fuera de españa", "envio", "envío"], id: "envio-internacional" },
+  { keys: ["abrir la cuenta de", "cuenta junior", "abrir cuenta hijo", "abrir cuenta hija"], id: "abrir-cuenta-hijos" },
+  { keys: ["contratar cartera", "test de idoneidad", "cartera ambiciosa", "cartera equilibrada", "cartera prudente"], id: "contratar-carteras" },
+  { keys: ["tutor principal", "tutor secundario", "segundo tutor", "segunda tutora"], id: "tutor-principal-secundario" },
 ]
 
 const FALLBACK =
@@ -103,6 +148,15 @@ const FOLLOW_UPS: Record<string, string[]> = {
   "un-representante":  ["documentos", "necesito-cuenta", "cancelar-cuenta"],
   "necesito-cuenta":   ["documentos", "condiciones", "productos"],
   "condiciones":       ["productos", "necesito-cuenta", "mayoria-edad"],
+  "codigo-verificacion":      ["cuentas-no-aparecen", "vincular-cuenta-existente", "necesito-cuenta"],
+  "cuentas-no-aparecen":      ["tutor-principal-secundario", "codigo-verificacion", "un-representante"],
+  "cuando-funciona":          ["documentos", "necesito-cuenta", "abrir-cuenta-hijos"],
+  "vincular-cuenta-existente":["necesito-cuenta", "codigo-verificacion", "abrir-cuenta-hijos"],
+  "menor-sin-dni":            ["documentos", "necesito-cuenta", "abrir-cuenta-hijos"],
+  "envio-internacional":      ["documentos", "cuando-funciona", "condiciones"],
+  "abrir-cuenta-hijos":       ["contratar-carteras", "documentos", "tutor-principal-secundario"],
+  "contratar-carteras":       ["productos", "abrir-cuenta-hijos", "condiciones"],
+  "tutor-principal-secundario":["cuentas-no-aparecen", "un-representante", "codigo-verificacion"],
 }
 
 // ─── Types ────────────────────────────────────────────────────────────────────
