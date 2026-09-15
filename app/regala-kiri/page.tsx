@@ -263,6 +263,10 @@ export default function RegalaKiriPage() {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+                  <p className="text-xs text-muted-foreground -mb-1">
+                    Los campos marcados con <span className="text-primary font-semibold">*</span> son obligatorios.
+                  </p>
+
                   <fieldset className="flex flex-col gap-4">
                     <legend className="text-xs uppercase tracking-widest text-primary font-semibold mb-1">
                       Tus datos
@@ -271,7 +275,7 @@ export default function RegalaKiriPage() {
                       <input
                         type="text"
                         name="gifterFirstName"
-                        placeholder="Nombre"
+                        placeholder="Nombre *"
                         value={form.gifterFirstName}
                         onChange={handleChange}
                         required
@@ -280,7 +284,7 @@ export default function RegalaKiriPage() {
                       <input
                         type="text"
                         name="gifterLastName"
-                        placeholder="Apellidos"
+                        placeholder="Apellidos *"
                         value={form.gifterLastName}
                         onChange={handleChange}
                         required
@@ -290,7 +294,7 @@ export default function RegalaKiriPage() {
                     <input
                       type="email"
                       name="gifterEmail"
-                      placeholder="Tu correo electrónico"
+                      placeholder="Tu correo electrónico *"
                       value={form.gifterEmail}
                       onChange={handleChange}
                       required
@@ -306,7 +310,7 @@ export default function RegalaKiriPage() {
                       <input
                         type="text"
                         name="childFirstName"
-                        placeholder="Nombre"
+                        placeholder="Nombre *"
                         value={form.childFirstName}
                         onChange={handleChange}
                         required
@@ -315,7 +319,7 @@ export default function RegalaKiriPage() {
                       <input
                         type="text"
                         name="childLastName"
-                        placeholder="Apellidos"
+                        placeholder="Apellidos *"
                         value={form.childLastName}
                         onChange={handleChange}
                         required
@@ -335,7 +339,7 @@ export default function RegalaKiriPage() {
                       required
                       className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
                     >
-                      <option value="" disabled>¿Quién eres para el niño/a?</option>
+                      <option value="" disabled>¿Quién eres para el niño/a? *</option>
                       {relationships.map((r) => (
                         <option key={r} value={r}>{r}</option>
                       ))}
@@ -377,7 +381,7 @@ export default function RegalaKiriPage() {
                           <input
                             type="text"
                             name="parentFirstName"
-                            placeholder="Nombre del padre/madre/tutor"
+                            placeholder="Nombre del padre/madre/tutor *"
                             value={form.parentFirstName}
                             onChange={handleChange}
                             required={!isParent}
@@ -386,7 +390,7 @@ export default function RegalaKiriPage() {
                           <input
                             type="text"
                             name="parentLastName"
-                            placeholder="Apellidos"
+                            placeholder="Apellidos *"
                             value={form.parentLastName}
                             onChange={handleChange}
                             required={!isParent}
@@ -396,7 +400,7 @@ export default function RegalaKiriPage() {
                         <input
                           type="email"
                           name="parentEmail"
-                          placeholder="Correo del padre/madre/tutor"
+                          placeholder="Correo del padre/madre/tutor *"
                           value={form.parentEmail}
                           onChange={handleChange}
                           required={!isParent}
@@ -413,7 +417,7 @@ export default function RegalaKiriPage() {
                     <input
                       type="text"
                       name="street"
-                      placeholder="Calle / vía"
+                      placeholder="Calle / vía *"
                       value={form.street}
                       onChange={handleChange}
                       required
@@ -423,7 +427,7 @@ export default function RegalaKiriPage() {
                       <input
                         type="text"
                         name="number"
-                        placeholder="Número"
+                        placeholder="Número *"
                         value={form.number}
                         onChange={handleChange}
                         required
@@ -444,7 +448,7 @@ export default function RegalaKiriPage() {
                           type="text"
                           name="postal"
                           inputMode="numeric"
-                          placeholder="Código postal"
+                          placeholder="Código postal *"
                           value={form.postal}
                           onChange={handleChange}
                           onBlur={() => setPostalTouched(true)}
@@ -465,7 +469,7 @@ export default function RegalaKiriPage() {
                       <input
                         type="text"
                         name="city"
-                        placeholder="Población"
+                        placeholder="Población *"
                         value={form.city}
                         onChange={handleChange}
                         required
@@ -494,7 +498,7 @@ export default function RegalaKiriPage() {
                       required
                       className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
                     >
-                      <option value="" disabled>Ocasión del regalo</option>
+                      <option value="" disabled>Ocasión del regalo *</option>
                       {occasions.map((o) => (
                         <option key={o} value={o}>{o}</option>
                       ))}
@@ -546,7 +550,8 @@ export default function RegalaKiriPage() {
                       Acepto compartir mis datos y la{" "}
                       <Link href="#" className="text-primary underline underline-offset-4 hover:text-accent">
                         política de privacidad
-                      </Link>
+                      </Link>{" "}
+                      <span className="text-primary font-semibold">*</span>
                     </span>
                   </label>
 
