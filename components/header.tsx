@@ -154,7 +154,7 @@ export default function Header() {
 
         {/* Desktop nav */}
         <nav
-          className="hidden lg:flex items-center gap-5"
+          className="hidden lg:flex items-center gap-3 xl:gap-5"
           aria-label="Navegación principal"
         >
           {/* Dropdown groups */}
@@ -192,7 +192,7 @@ export default function Header() {
             href="https://cuenta.kiriapp.com/login"
             target="_blank"
             rel="noopener noreferrer"
-            className={`hidden xl:inline-flex text-sm font-medium px-4 py-2 rounded-full transition-all duration-300 ${
+            className={`hidden lg:inline-flex text-sm font-medium px-3 xl:px-4 py-2 rounded-full whitespace-nowrap transition-all duration-300 ${
               isLight
                 ? "text-foreground/70 hover:text-foreground border border-border hover:border-foreground/30"
                 : "text-white/80 hover:text-white border border-white/30 hover:border-white/60"
@@ -201,25 +201,11 @@ export default function Header() {
             Iniciar Sesión
           </a>
 
-          {/* Abre tu Cuenta */}
-          <a
-            href="https://cuenta.kiriapp.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`hidden sm:inline-flex text-sm font-semibold px-4 py-2 rounded-full transition-all duration-300 ${
-              isLight
-                ? "bg-primary text-primary-foreground hover:bg-accent"
-                : "bg-white text-primary hover:bg-white/90"
-            }`}
-          >
-            Abre tu Cuenta
-          </a>
-
           {/* Regala Kiri — pink bow ribbon positioned at top-right corner */}
           <div className="relative hidden sm:block">
             <Link
               href="/regala-kiri"
-              className="inline-flex text-sm font-semibold px-5 py-2 rounded-full transition-all duration-300 bg-[hsl(330,80%,62%)] text-white hover:bg-[hsl(330,80%,55%)]"
+              className="inline-flex text-sm font-semibold px-4 xl:px-5 py-2 rounded-full whitespace-nowrap transition-all duration-300 bg-[hsl(330,80%,62%)] text-white hover:bg-[hsl(330,80%,55%)]"
               aria-label="Regala Kiri"
             >
               Regala Kiri
@@ -305,15 +291,6 @@ export default function Header() {
                 className="text-sm font-medium py-2.5 px-3 rounded-lg text-foreground hover:bg-muted transition-colors text-center border border-border"
               >
                 Iniciar Sesión
-              </a>
-              <a
-                href="https://cuenta.kiriapp.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setMenuOpen(false)}
-                className="bg-primary text-primary-foreground text-sm font-semibold px-5 py-2.5 rounded-full text-center hover:bg-accent transition-colors"
-              >
-                Abre tu Cuenta
               </a>
               <Link
                 href="/regala-kiri"
