@@ -4,7 +4,7 @@ import type { NextRequest } from "next/server"
 // Orígenes autorizados para acceder a la API.
 // Agrega aquí nuevos dominios cuando sea necesario.
 const allowedOrigins = [
-  "https://cuenta.kiriapp.com",
+  "https://indexa.kiriapp.com",
   "https://www.kiriapp.com",
   "https://kiriapp.com",
 ]

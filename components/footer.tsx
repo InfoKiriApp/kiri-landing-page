@@ -10,21 +10,22 @@ export default function Footer() {
   const miInView = useInView(miRef, { once: true, amount: 0.2 })
   return (
     <>
-      {/* MyInvestor Info */}
+      {/* Indexa Capital Info */}
       <section className="bg-background px-8 md:px-12 lg:px-20 py-16 md:py-20 border-t border-border">
         <div ref={miRef} className="max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={miInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5 }}
-            className="mb-8"
+            className="mb-8 flex flex-col gap-2"
           >
+            <span className="text-xs uppercase tracking-widest text-muted-foreground">En colaboración con</span>
             <Image
-              src="/images/agente-de-my-investor.png"
-              alt="Agente de MyInvestor"
+              src="/images/indexa-capital.webp"
+              alt="Indexa Capital"
               width={240}
-              height={60}
-              className="h-10 w-auto object-contain"
+              height={45}
+              className="h-8 w-auto object-contain object-left brightness-0 dark:invert"
             />
           </motion.div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -34,10 +35,10 @@ export default function Footer() {
               transition={{ duration: 0.55, delay: 0.1 }}
             >
               <h4 className="font-semibold text-foreground mb-3 text-sm uppercase tracking-widest text-primary">
-                Sobre MyInvestor
+                Sobre Indexa Capital
               </h4>
               <p className="text-muted-foreground leading-relaxed text-sm md:text-base">
-                MyInvestor es un banco experto en inversión. Está respaldado por el Grupo Andbank, El Corte Inglés Seguros, AXA España y varios &ldquo;family office&rdquo;.
+                Indexa Capital es un gestor automatizado independiente, especializado en carteras de fondos indexados de bajo coste para invertir a largo plazo.
               </p>
             </motion.div>
             <motion.div
@@ -49,7 +50,7 @@ export default function Footer() {
                 Seguridad y Regulación
               </h4>
               <p className="text-muted-foreground leading-relaxed text-sm md:text-base">
-                MyInvestor Banco S.A. es una entidad de crédito supervisada por el Banco de España y la CNMV. Tus ahorros con nosotros están garantizados por el Fondo de Garantía de Depósitos Español.
+                Indexa Capital A.V., S.A. es una agencia de valores autorizada y supervisada por la CNMV con el n.º 257. Las inversiones de sus clientes están cubiertas por el Fondo de Garantía de Inversiones (FOGAIN).
               </p>
             </motion.div>
           </div>
@@ -144,14 +145,14 @@ export default function Footer() {
                   />
                   <div className="w-px h-20 sm:h-24 lg:h-32 bg-white/20" />
                   <Image
-                    src="/images/agente-de-my-investor.png"
-                    alt="Agente de MyInvestor"
+                    src="/images/indexa-capital.webp"
+                    alt="Indexa Capital"
                     width={320}
-                    height={80}
-                    className="brightness-0 invert h-12 sm:h-16 lg:h-20 w-auto object-contain"
+                    height={60}
+                    className="brightness-0 invert h-6 sm:h-8 lg:h-10 w-auto object-contain"
                   />
                 </div>
-                <p className="text-purple-400 text-xs sm:text-sm">© {new Date().getFullYear()} Kiri. Agente Financiero de MyInvestor.</p>
+                <p className="text-purple-400 text-xs sm:text-sm">© {new Date().getFullYear()} Kiri. En colaboración con Indexa Capital.</p>
               </div>
             </div>
           </div>

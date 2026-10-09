@@ -11,20 +11,20 @@ const slides = [
     number: "01",
     title: "Abre una cuenta Kiri",
     description:
-      "Abre una cuenta de ahorro e inversión para tus seres queridos de 0 a 18 años en nuestro banco colaborador MyInvestor.",
+      "Abre una cuenta de ahorro e inversión para tus seres queridos de 0 a 18 años con nuestro colaborador Indexa Capital.",
     extra:
       "Rellenando tus datos como tutor (Papá o Mamá), comienza la experiencia Kiri de tus niños en esta misma página.",
-    cta: { label: "Abre tu cuenta", href: "https://myinvestor.es" },
+    cta: { label: "Abre tu cuenta", href: "https://indexa.kiriapp.com" },
     image: "/images/comofunciona1.svg",
   },
   {
     icon: Gift,
     number: "02",
-    title: "Abre su cuenta Kiri con nuestro banco colaborador",
+    title: "Abre su cuenta Kiri con nuestro colaborador",
     bullets: [
-      "Abre su cuenta Kiri con nuestro banco colaborador",
-      "Kiri es Agente Financiero del banco MyInvestor",
-      "Tus ahorros con nosotros están garantizados por el Fondo de Garantías de Depósitos español",
+      "Abre su cuenta Kiri con nuestro colaborador Indexa Capital",
+      "Indexa Capital es una agencia de valores supervisada por la CNMV",
+      "Las inversiones están cubiertas por el Fondo de Garantía de Inversiones (FOGAIN)",
       "Vamos a necesitar tus datos, como tutor (Papá o Mamá) y los del niño",
       "Una vez abierta la cuenta, tú y todos los familiares del niño podrán contribuir a su cuenta Kiri",
     ],

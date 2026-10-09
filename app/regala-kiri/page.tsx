@@ -283,7 +283,7 @@ export default function RegalaKiriPage() {
                         Si eres el Papá o la Mamá, por favor dirígete a Abre tu Cuenta. Desde allí, podrás comenzar toda la experiencia de Kiri de forma directa.
                       </p>
                       <a
-                        href="https://cuenta.kiriapp.com/"
+                        href="https://indexa.kiriapp.com/"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="group inline-flex items-center justify-center gap-1.5 rounded-full bg-primary text-primary-foreground text-sm font-semibold px-6 py-3 hover:bg-primary/90 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
@@ -683,7 +683,7 @@ export default function RegalaKiriPage() {
                 className="w-full h-auto rounded-3xl object-cover"
               />
               <p className="text-xs text-muted-foreground leading-relaxed mt-6 text-center">
-                Kiri es agente bancario de MyInvestor Banco S.A., supervisado por el Banco de España y la CNMV. Tus ahorros están garantizados por el Fondo de Garantía de Depósitos Español.
+                Kiri trabaja en colaboración con Indexa Capital A.V., S.A., agencia de valores supervisada por la CNMV con el n.º 257. Las inversiones están cubiertas por el Fondo de Garantía de Inversiones (FOGAIN).
               </p>
             </div>
           </div>

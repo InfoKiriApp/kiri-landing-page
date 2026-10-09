@@ -9,7 +9,7 @@ const cards = [
     image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/caja%20fuerte.png-KWkI1I5hyeqCj0c8MYzLpCBkYKF3eS.jpeg",
     title: "Abre una cuenta Kiri",
     description:
-      "Abre una cuenta de ahorro e inversión para tus seres queridos de 0 a 18 años en nuestro banco colaborador MyInvestor.",
+      "Abre una cuenta de ahorro e inversión para tus seres queridos de 0 a 18 años con nuestro colaborador Indexa Capital.",
   },
   {
     image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/birthdaycake-n6oxf54DqmB0hQYExRSiNKWbYP40xw.png",

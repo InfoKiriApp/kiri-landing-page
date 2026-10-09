@@ -131,7 +131,7 @@ export default function Header() {
     >
       <div className="flex justify-between items-center max-w-7xl mx-auto gap-4">
 
-        {/* Logo + MyInvestor */}
+        {/* Logo + Indexa Capital */}
         <Link href="/" className="flex items-center gap-3 flex-shrink-0">
           <Image
             src="/images/kiri-logo.svg"
@@ -141,13 +141,17 @@ export default function Header() {
             className={isLight ? "" : "brightness-0 invert"}
             priority
           />
+          <span
+            aria-hidden="true"
+            className={`hidden md:block w-px h-6 ${isLight ? "bg-foreground/20" : "bg-white/30"}`}
+          />
           <Image
-            src="/images/agente-de-my-investor.png"
-            alt="Agente de MyInvestor"
-            width={180}
-            height={45}
-            className={`h-7 sm:h-8 w-auto object-contain hidden md:block ${
-              isLight ? "opacity-60" : "brightness-0 invert opacity-70"
+            src="/images/indexa-capital.webp"
+            alt="En colaboración con Indexa Capital"
+            width={160}
+            height={30}
+            className={`h-5 w-auto object-contain hidden md:block ${
+              isLight ? "brightness-0 opacity-60" : "brightness-0 invert opacity-80"
             }`}
           />
         </Link>
@@ -189,7 +193,7 @@ export default function Header() {
 
           {/* Iniciar Sesión */}
           <a
-            href="https://cuenta.kiriapp.com/login"
+            href="https://indexa.kiriapp.com/login"
             target="_blank"
             rel="noopener noreferrer"
             className={`hidden lg:inline-flex text-sm font-medium px-3 xl:px-4 py-2 rounded-full whitespace-nowrap transition-all duration-300 ${
@@ -284,7 +288,7 @@ export default function Header() {
             {/* CTAs */}
             <div className="flex flex-col gap-2 mt-3 pt-3 border-t border-border">
               <a
-                href="https://cuenta.kiriapp.com/login"
+                href="https://indexa.kiriapp.com/login"
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setMenuOpen(false)}

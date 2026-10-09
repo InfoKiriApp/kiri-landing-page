@@ -302,7 +302,7 @@ export default function Calculator() {
             {/* CTA */}
             <div className="px-8 pb-6 flex flex-col gap-3">
               <a
-                href="https://myinvestor.es"
+                href="https://indexa.kiriapp.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block w-full text-center bg-primary text-primary-foreground font-semibold text-base py-4 rounded-2xl hover:bg-accent transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
@@ -317,7 +317,7 @@ export default function Calculator() {
                 Cálculo orientativo. La rentabilidad pasada no garantiza resultados futuros. Inversión sujeta a riesgo.
               </p>
               <p className="text-[10px] text-muted-foreground leading-relaxed">
-                Fuente: MyInvestor, a 31 de Mayo de 2026. Datos de Cartera Kiri Ambiciosa utilizando rentabilidad anualizada desde 1 de Enero de 2022.
+                Fuente: Kiri, a 31 de Mayo de 2026. Datos de Cartera Kiri Ambiciosa utilizando rentabilidad anualizada desde 1 de Enero de 2022.
               </p>
               <p className="text-[10px] text-muted-foreground leading-relaxed">
                 De forma ilustrativa, utilizamos datos de rentabilidad histórica de la Cartera Kiri Ambiciosa, desde enero 2022 hasta 31 de mayo de 2026.

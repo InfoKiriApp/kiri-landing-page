@@ -18,12 +18,12 @@ const FAQS = [
   { id: "productos",         label: "¿En qué productos pueden invertir?" },
   { id: "cancelar-cuenta",   label: "¿Puedo recuperar el dinero si cancelo?" },
   { id: "un-representante",  label: "¿Puedo añadir un segundo representante?" },
-  { id: "necesito-cuenta",   label: "¿Necesito cuenta en MyInvestor?" },
+  { id: "necesito-cuenta",   label: "¿Necesito cuenta en Indexa Capital?" },
   { id: "condiciones",       label: "¿Qué condiciones tienen las cuentas?" },
   { id: "codigo-verificacion", label: "No me llega el código de verificación" },
   { id: "cuentas-no-aparecen", label: "¿Por qué no veo la cuenta de mi hijo/a en mi perfil?" },
   { id: "cuando-funciona",     label: "¿Cuándo estará disponible Kiri?" },
-  { id: "vincular-cuenta-existente", label: "¿Puedo vincular mi cuenta ya existente de MyInvestor?" },
+  { id: "vincular-cuenta-existente", label: "¿Puedo vincular mi cuenta ya existente de Indexa Capital?" },
   { id: "menor-sin-dni",       label: "¿Puedo abrir la cuenta sin el DNI de mi hijo/a?" },
   { id: "envio-internacional", label: "¿El Welcome Pack se envía fuera de España?" },
   { id: "abrir-cuenta-hijos",  label: "¿Cómo abro la cuenta de cada uno de mis hijos?" },
@@ -54,7 +54,7 @@ const RESPONSES: Record<string, string> = {
     "Para abrir una cuenta a un menor necesitas: (1) DNI o NIF del menor — si el menor no tiene DNI (no obligatorio para menores de 14 años), se puede usar el NIF emitido por la Agencia Tributaria; (2) el libro de familia o documento de inscripción del menor en el registro civil; (3) el representante legal debe aportar la misma documentación que si abriera una cuenta para sí mismo.",
 
   "productos":
-    "Los menores pueden invertir en fondos de inversión, fondos indexados, carteras de fondos indexados de gestión discrecional (Clásica, Pop, Indie, Rock y Heavy Metal), acciones y ETFs. La cuenta MyInvestor Junior permite invertir en fondos de inversión y fondos indexados. Las únicas restricciones respecto a cuentas de adultos son que los menores no pueden contratar planes de pensiones ni solicitar tarjetas de débito o crédito.",
+    "Con Kiri, los menores invierten en carteras de fondos indexados de bajo coste gestionadas por Indexa Capital: la Cartera Kiri Ambiciosa, Equilibrada o Prudente, según el nivel de riesgo que elijas.",
 
   "cancelar-cuenta":
     "Tras la cancelación de la cuenta de un menor, la disposición de valores — como fondos de inversión y carteras de gestión discrecional — debe hacerse en favor del menor titular. Aunque los padres tengan la representación legal, las posiciones en valores no pueden transferirse a la cuenta de los padres, sino a una nueva cuenta a nombre del menor. Si en la cuenta solo hay efectivo, los padres podrán disponer libremente de él.",
@@ -63,22 +63,22 @@ const RESPONSES: Record<string, string> = {
     "No es posible añadir un segundo representante legal una vez abierta la cuenta. Si quieres que la cuenta tenga dos representantes legales, tendrás que cancelar la cuenta existente e iniciar de nuevo el proceso añadiendo la información de los dos representantes desde el principio.",
 
   "necesito-cuenta":
-    "No. No es necesario ser cliente de MyInvestor para abrir una cuenta a un menor. Puedes abrir una cuenta para tu hijo sin tener cuenta propia. Al iniciar el proceso en la web o app, te preguntarán si deseas abrir una cuenta de un titular, de dos titulares o para un menor.",
+    "No. No es necesario tener una cuenta propia en Indexa Capital para abrir una cuenta a un menor. Empieza el proceso en https://indexa.kiriapp.com/ y te guiaremos paso a paso.",
 
   "condiciones":
-    "Las cuentas para menores tienen las mismas características que las cuentas para mayores de edad, con dos salvedades: no pueden invertir en planes de pensiones ni solicitar tarjetas de débito o crédito. El resto de productos — fondos, carteras indexadas, acciones y ETFs — están disponibles.",
+    "La cuenta del menor invierte en carteras de fondos indexados de bajo coste gestionadas por Indexa Capital. Al ser una cuenta a nombre del menor, el dinero es suyo y, al cumplir los 18 años, podrá disponer de la inversión y sus rendimientos.",
 
   "codigo-verificacion":
-    "Recuerda que el proceso de alta comienza en www.kiriapp.com, pero el registro y la verificación se completan en la plataforma de nuestro banco colaborador, MyInvestor. Si no te llega el código de verificación, lo más rápido es que contactes directamente con Atención al Cliente de MyInvestor: 910 005 981. Si sigues teniendo problemas, escríbenos y lo escalamos personalmente.",
+    "Recuerda que el proceso de alta comienza en www.kiriapp.com, pero el registro y la verificación se completan en la plataforma de nuestro colaborador, Indexa Capital. Si no te llega el código de verificación, revisa tu carpeta de spam y contacta con la Atención al Cliente de Indexa Capital. Si sigues teniendo problemas, escríbenos y lo escalamos personalmente.",
 
   "cuentas-no-aparecen":
-    "Esto suele ocurrir cuando la información que recibimos de MyInvestor asocia la cuenta del menor a un tutor distinto al que ha iniciado sesión en Kiri (por ejemplo, si figura la madre y no el padre, o viceversa). Kiri solo puede mostrar las cuentas al tutor que aparece en la información que recibimos de MyInvestor. Te recomendamos hacer seguimiento directo desde MyInvestor mientras resolvemos la vinculación — su Atención al Cliente es 910 005 981. Escríbenos y lo revisamos con nuestro equipo técnico y con MyInvestor.",
+    "Esto suele ocurrir cuando la información que recibimos de Indexa Capital asocia la cuenta del menor a un tutor distinto al que ha iniciado sesión en Kiri (por ejemplo, si figura la madre y no el padre, o viceversa). Kiri solo puede mostrar las cuentas al tutor que aparece en esa información. Mientras resolvemos la vinculación, puedes hacer seguimiento directamente desde Indexa Capital. Escríbenos y lo revisamos con nuestro equipo técnico y con Indexa Capital.",
 
   "cuando-funciona":
-    "¡Kiri ya está disponible! Puedes darte de alta y comenzar la experiencia en https://cuenta.kiriapp.com/",
+    "¡Kiri ya está disponible! Puedes darte de alta y comenzar la experiencia en https://indexa.kiriapp.com/",
 
   "vincular-cuenta-existente":
-    "Sí, si ya tienes una cuenta abierta en MyInvestor puedes vincularla a Kiri. Escríbenos confirmando que deseas realizar la vinculación y comenzamos el trámite para que puedas disfrutar de todas las ventajas de Kiri con tu usuario actual.",
+    "Sí, si ya tienes una cuenta abierta en Indexa Capital puedes vincularla a Kiri. Escríbenos confirmando que deseas realizar la vinculación y comenzamos el trámite para que puedas disfrutar de todas las ventajas de Kiri con tu usuario actual.",
 
   "menor-sin-dni":
     "El DNI o NIF del menor es un dato imprescindible por motivos legales y para garantizar la futura disposición de los fondos. No es posible completar el alta únicamente con el libro de familia. Si el menor no tiene DNI (no es obligatorio antes de los 14 años), se puede usar el NIF emitido por la Agencia Tributaria.",
@@ -87,13 +87,13 @@ const RESPONSES: Record<string, string> = {
     "Por el momento, el Kiri Welcome Pack solo se envía dentro de España. Si el destinatario está fuera de España, te recomendamos indicar tu propia dirección postal al rellenar el formulario de 'Regala Kiri' para recibirlo tú y poder entregarlo en persona.",
 
   "abrir-cuenta-hijos":
-    "Una vez abierta tu cuenta, ve a Explorar → Cuentas y Tarjetas → Cuenta Junior para abrir la cuenta de cada uno de tus hijos. El proceso puede tardar hasta 20 días. Después, escríbenos para que podamos vincular todas las cuentas a la Familia Kiri.",
+    "Empieza en https://indexa.kiriapp.com/ y sigue el proceso de alta para cada uno de tus hijos. Después, escríbenos para que podamos vincular todas las cuentas a la Familia Kiri.",
 
   "contratar-carteras":
-    "Una vez tengas abierta la Cuenta Junior de cada hijo/a y nos hayas avisado, ve a Explorar → Contratar Carteras → rellena el Test de Idoneidad y selecciona la Cartera Kiri Ambiciosa, Equilibrada o Prudente, según el riesgo deseado.",
+    "Durante el alta en Indexa Capital rellenarás un test de perfil inversor y podrás elegir la Cartera Kiri Ambiciosa, Equilibrada o Prudente, según el riesgo deseado. Si tienes dudas, escríbenos y te ayudamos.",
 
   "tutor-principal-secundario":
-    "Cuando hay dos tutores legales, la cuenta del menor se vincula en Kiri únicamente al tutor que MyInvestor nos indica como asociado en sus sincronizaciones de datos — que no siempre coincide con el tutor principal. Estamos trabajando junto con MyInvestor para que la información de ambos tutores se gestione correctamente. Si te encuentras en esta situación, escríbenos para revisarlo con nuestro equipo técnico y con MyInvestor.",
+    "Cuando hay dos tutores legales, la cuenta del menor se vincula en Kiri únicamente al tutor que Indexa Capital nos indica como asociado en sus sincronizaciones de datos — que no siempre coincide con el tutor principal. Si te encuentras en esta situación, escríbenos para revisarlo con nuestro equipo técnico y con Indexa Capital.",
 }
 
 // ─── Keyword matcher for free-text input ─────────────────────────────────────
@@ -109,7 +109,7 @@ const KEYWORD_MAP: { keys: string[]; id: string }[] = [
   { keys: ["producto", "invertir", "fondos", "etf", "acciones", "cartera"],           id: "productos" },
   { keys: ["cancelar", "cancel", "recuperar", "dinero invertido"],                    id: "cancelar-cuenta" },
   { keys: ["representante", "segundo", "añadir", "anadir"],                           id: "un-representante" },
-  { keys: ["necesito cuenta", "myinvestor", "cliente", "propia"],                     id: "necesito-cuenta" },
+  { keys: ["necesito cuenta", "indexa", "cliente", "propia"],                         id: "necesito-cuenta" },
   { keys: ["condicion", "condición", "condiciones", "restriccion", "restricción"],    id: "condiciones" },
   { keys: ["codigo", "código", "verificacion", "verificación", "sms", "no me llega"], id: "codigo-verificacion" },
   { keys: ["no veo", "no aparece", "no aparecen", "no me aparece", "no se muestra"],  id: "cuentas-no-aparecen" },

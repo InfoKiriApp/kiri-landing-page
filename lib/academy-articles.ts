@@ -570,7 +570,7 @@ export const ARTICLES: Article[] = [
       {
         type: "callout",
         content:
-          "La Cartera Kiri Ambiciosa, gestionada por MyInvestor, utiliza fondos indexados globales para maximizar el crecimiento a largo plazo con un coste mínimo. Su rentabilidad anualizada desde 2022 ha sido del 11,56%.",
+          "La Cartera Kiri Ambiciosa, gestionada por Indexa Capital, utiliza fondos indexados globales para maximizar el crecimiento a largo plazo con un coste mínimo. Su rentabilidad anualizada desde 2022 ha sido del 11,56%.",
       },
       {
         type: "heading",
@@ -1031,7 +1031,7 @@ export const ARTICLES: Article[] = [
       {
         type: "paragraph",
         content:
-          "Kiri actúa a través de MyInvestor, que ofrece acceso a fondos indexados de bajo coste. Cuando los padres ahorran para sus hijos a través de Kiri, su dinero se invierte de forma eficiente, minimizando comisiones y maximizando el efecto del interés compuesto a lo largo de los años. Entender gestión de activos ayuda a valorar por qué la elección del vehículo de inversión importa tanto como la cantidad que se ahorra.",
+          "Kiri trabaja con Indexa Capital, que ofrece acceso a fondos indexados de bajo coste. Cuando los padres ahorran para sus hijos a través de Kiri, su dinero se invierte de forma eficiente, minimizando comisiones y maximizando el efecto del interés compuesto a lo largo de los años. Entender gestión de activos ayuda a valorar por qué la elección del vehículo de inversión importa tanto como la cantidad que se ahorra.",
       },
     ],
   },
