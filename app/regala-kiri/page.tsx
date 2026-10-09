@@ -1,6 +1,7 @@
 "use client"
 
 import Header from "@/components/header"
+import Footer from "@/components/footer"
 import Image from "next/image"
 import Link from "next/link"
 import { useRef, useState } from "react"
@@ -688,6 +689,7 @@ export default function RegalaKiriPage() {
           </div>
         </section>
       </main>
+      <Footer />
     </>
   )
 }
