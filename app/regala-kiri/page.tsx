@@ -3,8 +3,8 @@
 import Header from "@/components/header"
 import Image from "next/image"
 import Link from "next/link"
-import { useState } from "react"
-import { ChevronRight, ChevronLeft, TreePine, ArrowUpRight } from "lucide-react"
+import { useRef, useState } from "react"
+import { ChevronRight, ChevronLeft, ArrowUpRight, Check } from "lucide-react"
 
 const occasions = [
   "Primera Comunión",
@@ -27,6 +27,9 @@ const relationships = [
 // Spanish postal codes: 5 digits (00000-52999).
 const SPANISH_POSTAL_REGEX = /^[0-5]\d{4}$/
 
+const FORM_STEPS = ["Tus datos", "El niño/a", "Envío", "El regalo"] as const
+const LAST_STEP = FORM_STEPS.length - 1
+
 const steps = [
   {
     number: "1",
@@ -48,13 +51,15 @@ const steps = [
   },
 ]
 
-const GALLERY_IMAGES = [
-  { src: "/images/regalo-comunion.png", alt: "Abuelos entregando un regalo Kiri en una Primera Comunión" },
-  { src: "/images/ninos-arbol-kiri.png", alt: "Niños cuidando su árbol Kiri" },
-]
+const inputClass =
+  "w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+
+const legendClass = "text-xs uppercase tracking-widest text-primary font-semibold mb-1"
 
 export default function RegalaKiriPage() {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const formTopRef = useRef<HTMLDivElement>(null)
+  const formRef = useRef<HTMLFormElement>(null)
+  const [step, setStep] = useState(0)
   const [form, setForm] = useState({
     gifterFirstName: "",
     gifterLastName: "",
@@ -85,8 +90,9 @@ export default function RegalaKiriPage() {
   const SQUARE_CHECKOUT_URL =
     "https://checkout.square.site/merchant/ML80VD2C4SMJA/checkout/X2FBTHLVIZFD2NQOA3KACQ2Z"
 
-  // The gifter is the parent → no separate guardian details required.
+  // The gifter is the parent → they go straight to account opening, no gift form.
   const isParent = form.relationship === "Padre/Madre"
+  const showGiftForm = form.relationship !== "" && !isParent
   const postalValid = SPANISH_POSTAL_REGEX.test(form.postal.trim())
   const showPostalError = postalTouched && form.postal.trim().length > 0 && !postalValid
 
@@ -100,9 +106,33 @@ export default function RegalaKiriPage() {
     }))
   }
 
+  const scrollToFormTop = () => {
+    formTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+  }
+
+  const goToStep = (target: number) => {
+    setStep(target)
+    scrollToFormTop()
+  }
+
+  const goNext = () => {
+    // Only the current step's fields are mounted, so this validates just this page.
+    if (!formRef.current?.reportValidity()) return
+    if (step === 2 && !postalValid) {
+      setPostalTouched(true)
+      return
+    }
+    goToStep(Math.min(step + 1, LAST_STEP))
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (submitting) return
+
+    if (step < LAST_STEP) {
+      goNext()
+      return
+    }
 
     setError(null)
     setSubmitting(true)
@@ -135,102 +165,48 @@ export default function RegalaKiriPage() {
     <>
       <Header />
       <main className="min-h-screen bg-background">
-        {/* Hero */}
-        <section className="bg-primary pt-32 pb-20 px-4 md:px-8 text-center">
-          <div className="max-w-3xl mx-auto">
-            <p className="text-sm uppercase tracking-[0.2em] text-purple-200 font-semibold mb-4">
-              Regala Kiri
-            </p>
-            <h1 className="font-serif text-3xl md:text-5xl font-bold text-white text-balance leading-tight mb-6">
-              Su primera Comunión,<br className="hidden md:block" /> su primera Inversión.
+        {/* How it works */}
+        <section className="bg-muted pt-32 pb-20 px-4 md:px-8">
+          <div className="max-w-5xl mx-auto">
+            <h1 className="font-serif text-3xl md:text-4xl font-bold text-foreground text-center text-balance mb-14">
+              ¿Cómo funciona el regalo?
             </h1>
-            <p className="text-purple-200 text-base md:text-lg leading-relaxed mb-8 text-balance">
-              La cuenta de inversión para niños que les asegura un futuro mejor.
-            </p>
-            <p className="text-purple-300 text-sm leading-relaxed max-w-2xl mx-auto">
-              Kiri es agente bancario de MyInvestor Banco S.A. Los ahorros de nuestros clientes están garantizados por el Fondo de Garantía de Depósito español. MyInvestor es un banco experto en inversión, respaldado por el Grupo Andbank, El Corte Inglés Seguros, AXA España y varios family offices españoles. MyInvestor Banco S.A. es una entidad supervisada por el Banco de España y la CNMV.
-            </p>
-          </div>
-        </section>
-
-        {/* Gallery Slideshow */}
-        <section className="bg-background py-14 px-4 md:px-8">
-          <div className="max-w-3xl mx-auto">
-            <div className="relative group">
-              {/* Main image */}
-              <div className="relative w-full overflow-hidden rounded-3xl">
-                <Image
-                  src={GALLERY_IMAGES[currentImageIndex].src}
-                  alt={GALLERY_IMAGES[currentImageIndex].alt}
-                  width={800}
-                  height={500}
-                  className="w-full h-96 md:h-[500px] object-cover transition-opacity duration-300"
-                  priority
-                />
-              </div>
-
-              {/* Navigation buttons */}
-              <button
-                onClick={() => setCurrentImageIndex((prev) => (prev - 1 + GALLERY_IMAGES.length) % GALLERY_IMAGES.length)}
-                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-primary p-2.5 rounded-full transition-all duration-300 opacity-0 group-hover:opacity-100 backdrop-blur-sm"
-                aria-label="Previous image"
-              >
-                <ChevronLeft className="w-6 h-6" />
-              </button>
-              <button
-                onClick={() => setCurrentImageIndex((prev) => (prev + 1) % GALLERY_IMAGES.length)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-primary p-2.5 rounded-full transition-all duration-300 opacity-0 group-hover:opacity-100 backdrop-blur-sm"
-                aria-label="Next image"
-              >
-                <ChevronRight className="w-6 h-6" />
-              </button>
-
-              {/* Dots indicator */}
-              <div className="flex justify-center gap-2 mt-4">
-                {GALLERY_IMAGES.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentImageIndex(index)}
-                    className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                      index === currentImageIndex ? "bg-primary w-7" : "bg-primary/30 hover:bg-primary/50"
-                    }`}
-                    aria-label={`Go to image ${index + 1}`}
-                  />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+              <div className="flex flex-col gap-0">
+                {steps.map((step, i) => (
+                  <div key={step.number} className="flex gap-6 items-start">
+                    {/* Step line */}
+                    <div className="flex flex-col items-center flex-shrink-0">
+                      <div className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold text-sm flex-shrink-0">
+                        {step.number}
+                      </div>
+                      {i < steps.length - 1 && (
+                        <div className="w-px flex-1 bg-border mt-2 mb-0" style={{ minHeight: "2.5rem" }} />
+                      )}
+                    </div>
+                    {/* Content */}
+                    <div className={`pb-10 ${i === steps.length - 1 ? "pb-0" : ""}`}>
+                      <h2 className="font-serif text-lg md:text-xl font-bold text-foreground mb-2 leading-snug">
+                        {step.title}
+                      </h2>
+                      <p className="text-muted-foreground leading-relaxed text-sm md:text-base">
+                        {step.description}
+                      </p>
+                    </div>
+                  </div>
                 ))}
               </div>
-            </div>
-          </div>
-        </section>
 
-        {/* How it works */}
-        <section className="bg-muted py-20 px-4 md:px-8">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="font-serif text-2xl md:text-3xl font-bold text-foreground text-center mb-14">
-              ¿Cómo funciona el regalo?
-            </h2>
-            <div className="flex flex-col gap-0">
-              {steps.map((step, i) => (
-                <div key={step.number} className="flex gap-6 items-start">
-                  {/* Step line */}
-                  <div className="flex flex-col items-center flex-shrink-0">
-                    <div className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold text-sm flex-shrink-0">
-                      {step.number}
-                    </div>
-                    {i < steps.length - 1 && (
-                      <div className="w-px flex-1 bg-border mt-2 mb-0" style={{ minHeight: "2.5rem" }} />
-                    )}
-                  </div>
-                  {/* Content */}
-                  <div className={`pb-10 ${i === steps.length - 1 ? "pb-0" : ""}`}>
-                    <h3 className="font-serif text-lg md:text-xl font-bold text-foreground mb-2 leading-snug">
-                      {step.title}
-                    </h3>
-                    <p className="text-muted-foreground leading-relaxed text-sm md:text-base">
-                      {step.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
+              <div className="order-first lg:order-last">
+                <Image
+                  src="/images/regala-kiri-tarjeta.png"
+                  alt="Tarjeta regalo Kiri abierta con un mensaje de felicitación y su sobre morado"
+                  width={1200}
+                  height={900}
+                  priority
+                  className="w-full h-auto rounded-3xl object-cover shadow-lg"
+                />
+              </div>
             </div>
           </div>
         </section>
@@ -239,10 +215,11 @@ export default function RegalaKiriPage() {
         <section className="bg-background py-20 px-4 md:px-8">
           <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             {/* Form */}
-            <div>
+            <div ref={formTopRef} className="scroll-mt-28">
               <h2 className="font-serif text-2xl md:text-3xl font-bold text-foreground mb-8">
                 Completa tu regalo
               </h2>
+
               {submitted ? (
                 <div className="bg-primary/8 border border-primary/20 rounded-2xl p-8 text-center">
                   <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
@@ -262,325 +239,436 @@ export default function RegalaKiriPage() {
                   </a>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-                  <p className="text-xs text-muted-foreground -mb-1">
-                    Los campos marcados con <span className="text-primary font-semibold">*</span> son obligatorios.
-                  </p>
-
-                  <fieldset className="flex flex-col gap-4">
-                    <legend className="text-xs uppercase tracking-widest text-primary font-semibold mb-1">
-                      Tus datos
-                    </legend>
-                    <div className="grid grid-cols-2 gap-4">
-                      <input
-                        type="text"
-                        name="gifterFirstName"
-                        placeholder="Nombre *"
-                        value={form.gifterFirstName}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
-                      />
-                      <input
-                        type="text"
-                        name="gifterLastName"
-                        placeholder="Apellidos *"
-                        value={form.gifterLastName}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
-                      />
-                    </div>
-                    <input
-                      type="email"
-                      name="gifterEmail"
-                      placeholder="Tu correo electrónico *"
-                      value={form.gifterEmail}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
-                    />
-                  </fieldset>
-
-                  <fieldset className="flex flex-col gap-4">
-                    <legend className="text-xs uppercase tracking-widest text-primary font-semibold mb-1">
-                      Datos del niño/a
-                    </legend>
-                    <div className="grid grid-cols-2 gap-4">
-                      <input
-                        type="text"
-                        name="childFirstName"
-                        placeholder="Nombre *"
-                        value={form.childFirstName}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
-                      />
-                      <input
-                        type="text"
-                        name="childLastName"
-                        placeholder="Apellidos *"
-                        value={form.childLastName}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
-                      />
-                    </div>
-                  </fieldset>
-
-                  <fieldset className="flex flex-col gap-4">
-                    <legend className="text-xs uppercase tracking-widest text-primary font-semibold mb-1">
-                      Tu relación con el niño/a
-                    </legend>
+                <div className="flex flex-col gap-6">
+                  {/* First question: relationship */}
+                  <div className="rounded-2xl border-2 border-primary bg-primary/5 p-5 md:p-6 shadow-sm ring-4 ring-primary/10">
+                    <label
+                      htmlFor="relationship"
+                      className="block font-serif text-lg md:text-xl font-bold text-foreground leading-snug mb-1"
+                    >
+                      ¿Quién eres para el niño/a? <span className="text-primary">*</span>
+                    </label>
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                      Empecemos por aquí: según tu respuesta te llevaremos por el camino más corto.
+                    </p>
                     <select
+                      id="relationship"
                       name="relationship"
                       value={form.relationship}
                       onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+                      className="w-full px-4 py-3.5 rounded-xl border border-primary/40 bg-white text-foreground text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/50"
                     >
-                      <option value="" disabled>¿Quién eres para el niño/a? *</option>
+                      <option value="" disabled>Selecciona tu relación</option>
                       {relationships.map((r) => (
                         <option key={r} value={r}>{r}</option>
                       ))}
                     </select>
-
-                    {isParent && (
-                      <div className="flex flex-col gap-3 rounded-xl bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border border-primary/25 p-4 shadow-sm animate-in fade-in slide-in-from-top-2 zoom-in-95 duration-500 ease-out">
-                        <div className="flex items-start gap-3">
-                          <div className="w-10 h-10 rounded-full bg-primary/15 flex items-center justify-center flex-shrink-0 animate-in zoom-in duration-500 delay-100">
-                            <TreePine className="w-5 h-5 text-primary" />
-                          </div>
-                          <div className="flex flex-col gap-1">
-                            <p className="text-sm font-semibold text-foreground leading-relaxed">
-                              Si eres el Papá o la Mamá, por favor dirígete a Abre tu Cuenta. Desde allí, podrás comenzar toda la experiencia de Kiri de forma directa.
-                            </p>
-                          </div>
-                        </div>
-                        <a
-                          href="https://cuenta.kiriapp.com/"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="group inline-flex items-center justify-center gap-1.5 rounded-full bg-primary text-primary-foreground text-sm font-semibold px-5 py-2.5 hover:bg-primary/90 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 self-start"
-                        >
-                          Abre tu cuenta
-                          <ArrowUpRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                        </a>
-                        <p className="text-xs text-muted-foreground">
-                          Gracias por confiar en Kiri.
-                        </p>
-                      </div>
-                    )}
-
-                    {form.relationship && !isParent && (
-                      <div className="flex flex-col gap-4 rounded-xl bg-muted/60 border border-border p-4">
-                        <p className="text-xs text-muted-foreground leading-relaxed">
-                          Como no eres el padre, madre o tutor, necesitamos sus datos. Le enviaremos el código para crear la cuenta del niño/a.
-                        </p>
-                        <div className="grid grid-cols-2 gap-4">
-                          <input
-                            type="text"
-                            name="parentFirstName"
-                            placeholder="Nombre del padre/madre/tutor *"
-                            value={form.parentFirstName}
-                            onChange={handleChange}
-                            required={!isParent}
-                            className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
-                          />
-                          <input
-                            type="text"
-                            name="parentLastName"
-                            placeholder="Apellidos *"
-                            value={form.parentLastName}
-                            onChange={handleChange}
-                            required={!isParent}
-                            className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
-                          />
-                        </div>
-                        <input
-                          type="email"
-                          name="parentEmail"
-                          placeholder="Correo del padre/madre/tutor *"
-                          value={form.parentEmail}
-                          onChange={handleChange}
-                          required={!isParent}
-                          className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
-                        />
-                      </div>
-                    )}
-                  </fieldset>
-
-                  <fieldset className="flex flex-col gap-4">
-                    <legend className="text-xs uppercase tracking-widest text-primary font-semibold mb-1">
-                      Dirección de envío
-                    </legend>
-                    <input
-                      type="text"
-                      name="street"
-                      placeholder="Calle / vía *"
-                      value={form.street}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
-                    />
-                    <div className="grid grid-cols-2 gap-4">
-                      <input
-                        type="text"
-                        name="number"
-                        placeholder="Número *"
-                        value={form.number}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
-                      />
-                      <input
-                        type="text"
-                        name="floor"
-                        placeholder="Piso, puerta (opcional)"
-                        value={form.floor}
-                        onChange={handleChange}
-                        className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
-                      />
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="flex flex-col gap-1">
-                        <input
-                          type="text"
-                          name="postal"
-                          inputMode="numeric"
-                          placeholder="Código postal *"
-                          value={form.postal}
-                          onChange={handleChange}
-                          onBlur={() => setPostalTouched(true)}
-                          required
-                          aria-invalid={showPostalError}
-                          className={`w-full px-4 py-3 rounded-xl border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 ${
-                            showPostalError
-                              ? "border-destructive focus:ring-destructive/40"
-                              : "border-border focus:ring-primary/40"
-                          }`}
-                        />
-                        {showPostalError && (
-                          <span className="text-xs text-destructive">
-                            Código postal no válido
-                          </span>
-                        )}
-                      </div>
-                      <input
-                        type="text"
-                        name="city"
-                        placeholder="Población *"
-                        value={form.city}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
-                      />
-                    </div>
-                    <select
-                      name="country"
-                      value={form.country}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
-                    >
-                      <option value="España">España</option>
-                    </select>
-                  </fieldset>
-
-                  <fieldset className="flex flex-col gap-4">
-                    <legend className="text-xs uppercase tracking-widest text-primary font-semibold mb-1">
-                      El regalo
-                    </legend>
-                    <select
-                      name="occasion"
-                      value={form.occasion}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
-                    >
-                      <option value="" disabled>Ocasión del regalo *</option>
-                      {occasions.map((o) => (
-                        <option key={o} value={o}>{o}</option>
-                      ))}
-                    </select>
-                    <textarea
-                      name="message"
-                      placeholder="Mensaje personal para el futuro (opcional)"
-                      value={form.message}
-                      onChange={handleChange}
-                      rows={4}
-                      className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 resize-none"
-                    />
-
-                    <label className="flex items-start gap-3 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        name="wantsPersonalizedStory"
-                        checked={form.wantsPersonalizedStory}
-                        onChange={handleChange}
-                        className="mt-1 accent-primary flex-shrink-0"
-                      />
-                      <span className="text-sm text-foreground">
-                        Quiero recibir una mini historia personalizada sobre educación financiera para el niño / la niña
-                      </span>
-                    </label>
-
-                    {form.wantsPersonalizedStory && (
-                      <textarea
-                        name="childDescription"
-                        placeholder="Cuéntanos sobre tu hijo/a: edad, intereses, personalidad, hobbies... esto nos ayudará a personalizar la historia"
-                        value={form.childDescription}
-                        onChange={handleChange}
-                        rows={4}
-                        className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 resize-none"
-                      />
-                    )}
-                  </fieldset>
-
-                  <label className="flex items-start gap-3 text-sm text-muted-foreground cursor-pointer">
-                    <input
-                      type="checkbox"
-                      name="privacy"
-                      checked={form.privacy}
-                      onChange={handleChange}
-                      required
-                      className="mt-0.5 accent-primary"
-                    />
-                    <span>
-                      Acepto compartir mis datos y la{" "}
-                      <Link href="#" className="text-primary underline underline-offset-4 hover:text-accent">
-                        política de privacidad
-                      </Link>{" "}
-                      <span className="text-primary font-semibold">*</span>
-                    </span>
-                  </label>
-
-                  {/* Price callout */}
-                  <div className="bg-primary/8 border border-primary/20 rounded-2xl px-5 py-4 flex items-center justify-between">
-                    <div>
-                      <p className="font-semibold text-foreground text-sm">Pago único</p>
-                      <p className="text-xs text-muted-foreground mt-0.5">Welcome Pack incluido</p>
-                    </div>
-                    <p className="font-serif text-2xl font-bold text-primary">€29</p>
                   </div>
 
-                  {error && (
-                    <p
-                      role="alert"
-                      className="bg-destructive/10 border border-destructive/30 text-destructive text-sm rounded-xl px-4 py-3"
+                  {/* Parent: only the open-account pop-up */}
+                  {isParent && (
+                    <div
+                      role="status"
+                      className="flex flex-col items-center text-center gap-4 rounded-2xl bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border border-primary/25 p-6 md:p-8 shadow-sm animate-in fade-in slide-in-from-top-2 zoom-in-95 duration-500 ease-out"
                     >
-                      {error}
-                    </p>
+                      <Image
+                        src="/images/piggy.png"
+                        alt="Cerdito hucha de Kiri rodeado de monedas"
+                        width={140}
+                        height={168}
+                        className="w-28 md:w-32 h-auto animate-in zoom-in-50 duration-500 delay-100"
+                      />
+                      <p className="text-sm md:text-base font-semibold text-foreground leading-relaxed text-balance">
+                        Si eres el Papá o la Mamá, por favor dirígete a Abre tu Cuenta. Desde allí, podrás comenzar toda la experiencia de Kiri de forma directa.
+                      </p>
+                      <a
+                        href="https://cuenta.kiriapp.com/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group inline-flex items-center justify-center gap-1.5 rounded-full bg-primary text-primary-foreground text-sm font-semibold px-6 py-3 hover:bg-primary/90 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
+                      >
+                        Abre tu cuenta
+                        <ArrowUpRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                      </a>
+                      <p className="text-xs text-muted-foreground">Gracias por confiar en Kiri.</p>
+                    </div>
                   )}
 
-                  <button
-                    type="submit"
-                    disabled={submitting}
-                    className="w-full py-3.5 bg-primary text-primary-foreground font-semibold rounded-full hover:bg-accent transition-colors duration-300 text-sm disabled:opacity-60 disabled:cursor-not-allowed"
-                  >
-                    {submitting ? "Guardando tu regalo…" : "Regalar Kiri por €29"}
-                  </button>
-                </form>
+                  {/* Everyone else: multi-page gift form */}
+                  {showGiftForm && (
+                    <form
+                      ref={formRef}
+                      onSubmit={handleSubmit}
+                      className="flex flex-col gap-6 animate-in fade-in slide-in-from-top-2 duration-500"
+                    >
+                      {/* Progress */}
+                      <div>
+                        <div className="flex items-center justify-between mb-3">
+                          <p className="text-sm font-semibold text-foreground">
+                            Paso {step + 1} de {FORM_STEPS.length}
+                            <span className="text-muted-foreground font-normal"> · {FORM_STEPS[step]}</span>
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            <span className="text-primary font-semibold">*</span> obligatorio
+                          </p>
+                        </div>
+                        <ol className="flex items-center gap-2" aria-label="Progreso del formulario">
+                          {FORM_STEPS.map((label, i) => {
+                            const done = i < step
+                            const current = i === step
+                            return (
+                              <li key={label} className="flex-1">
+                                <button
+                                  type="button"
+                                  disabled={!done}
+                                  onClick={() => goToStep(i)}
+                                  aria-current={current ? "step" : undefined}
+                                  aria-label={`${label}${done ? " (completado, volver)" : ""}`}
+                                  className={`block h-2 w-full rounded-full transition-colors duration-300 ${
+                                    done
+                                      ? "bg-primary cursor-pointer hover:bg-accent"
+                                      : current
+                                        ? "bg-primary/60"
+                                        : "bg-border"
+                                  } disabled:cursor-default`}
+                                />
+                              </li>
+                            )
+                          })}
+                        </ol>
+                      </div>
+
+                      <div key={step} className="animate-in fade-in slide-in-from-right-4 duration-300">
+                        {step === 0 && (
+                          <fieldset className="flex flex-col gap-4">
+                            <legend className={legendClass}>Tus datos</legend>
+                            <div className="grid grid-cols-2 gap-4">
+                              <input
+                                type="text"
+                                name="gifterFirstName"
+                                placeholder="Nombre *"
+                                aria-label="Tu nombre"
+                                autoComplete="given-name"
+                                value={form.gifterFirstName}
+                                onChange={handleChange}
+                                required
+                                className={inputClass}
+                              />
+                              <input
+                                type="text"
+                                name="gifterLastName"
+                                placeholder="Apellidos *"
+                                aria-label="Tus apellidos"
+                                autoComplete="family-name"
+                                value={form.gifterLastName}
+                                onChange={handleChange}
+                                required
+                                className={inputClass}
+                              />
+                            </div>
+                            <input
+                              type="email"
+                              name="gifterEmail"
+                              placeholder="Tu correo electrónico *"
+                              aria-label="Tu correo electrónico"
+                              autoComplete="email"
+                              value={form.gifterEmail}
+                              onChange={handleChange}
+                              required
+                              className={inputClass}
+                            />
+                          </fieldset>
+                        )}
+
+                        {step === 1 && (
+                          <div className="flex flex-col gap-6">
+                            <fieldset className="flex flex-col gap-4">
+                              <legend className={legendClass}>Datos del niño/a</legend>
+                              <div className="grid grid-cols-2 gap-4">
+                                <input
+                                  type="text"
+                                  name="childFirstName"
+                                  placeholder="Nombre *"
+                                  aria-label="Nombre del niño/a"
+                                  value={form.childFirstName}
+                                  onChange={handleChange}
+                                  required
+                                  className={inputClass}
+                                />
+                                <input
+                                  type="text"
+                                  name="childLastName"
+                                  placeholder="Apellidos *"
+                                  aria-label="Apellidos del niño/a"
+                                  value={form.childLastName}
+                                  onChange={handleChange}
+                                  required
+                                  className={inputClass}
+                                />
+                              </div>
+                            </fieldset>
+
+                            <fieldset className="flex flex-col gap-4 rounded-xl bg-muted/60 border border-border p-4">
+                              <legend className={`${legendClass} px-1`}>Padre, madre o tutor</legend>
+                              <p className="text-xs text-muted-foreground leading-relaxed">
+                                Necesitamos sus datos para enviarle el código con el que podrá crear la cuenta del niño/a.
+                              </p>
+                              <div className="grid grid-cols-2 gap-4">
+                                <input
+                                  type="text"
+                                  name="parentFirstName"
+                                  placeholder="Nombre del padre/madre/tutor *"
+                                  aria-label="Nombre del padre, madre o tutor"
+                                  value={form.parentFirstName}
+                                  onChange={handleChange}
+                                  required
+                                  className={inputClass}
+                                />
+                                <input
+                                  type="text"
+                                  name="parentLastName"
+                                  placeholder="Apellidos *"
+                                  aria-label="Apellidos del padre, madre o tutor"
+                                  value={form.parentLastName}
+                                  onChange={handleChange}
+                                  required
+                                  className={inputClass}
+                                />
+                              </div>
+                              <input
+                                type="email"
+                                name="parentEmail"
+                                placeholder="Correo del padre/madre/tutor *"
+                                aria-label="Correo del padre, madre o tutor"
+                                value={form.parentEmail}
+                                onChange={handleChange}
+                                required
+                                className={inputClass}
+                              />
+                            </fieldset>
+                          </div>
+                        )}
+
+                        {step === 2 && (
+                          <fieldset className="flex flex-col gap-4">
+                            <legend className={legendClass}>Dirección de envío del niño/a</legend>
+                            <input
+                              type="text"
+                              name="street"
+                              placeholder="Calle / vía *"
+                              aria-label="Calle o vía"
+                              autoComplete="address-line1"
+                              value={form.street}
+                              onChange={handleChange}
+                              required
+                              className={inputClass}
+                            />
+                            <div className="grid grid-cols-2 gap-4">
+                              <input
+                                type="text"
+                                name="number"
+                                placeholder="Número *"
+                                aria-label="Número"
+                                value={form.number}
+                                onChange={handleChange}
+                                required
+                                className={inputClass}
+                              />
+                              <input
+                                type="text"
+                                name="floor"
+                                placeholder="Piso, puerta (opcional)"
+                                aria-label="Piso y puerta (opcional)"
+                                autoComplete="address-line2"
+                                value={form.floor}
+                                onChange={handleChange}
+                                className={inputClass}
+                              />
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                              <div className="flex flex-col gap-1">
+                                <input
+                                  type="text"
+                                  name="postal"
+                                  inputMode="numeric"
+                                  placeholder="Código postal *"
+                                  aria-label="Código postal"
+                                  autoComplete="postal-code"
+                                  value={form.postal}
+                                  onChange={handleChange}
+                                  onBlur={() => setPostalTouched(true)}
+                                  required
+                                  aria-invalid={showPostalError}
+                                  className={`w-full px-4 py-3 rounded-xl border bg-white text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 ${
+                                    showPostalError
+                                      ? "border-destructive focus:ring-destructive/40"
+                                      : "border-border focus:ring-primary/40"
+                                  }`}
+                                />
+                                {showPostalError && (
+                                  <span className="text-xs text-destructive">
+                                    Código postal no válido
+                                  </span>
+                                )}
+                              </div>
+                              <input
+                                type="text"
+                                name="city"
+                                placeholder="Población *"
+                                aria-label="Población"
+                                autoComplete="address-level2"
+                                value={form.city}
+                                onChange={handleChange}
+                                required
+                                className={inputClass}
+                              />
+                            </div>
+                            <select
+                              name="country"
+                              aria-label="País"
+                              value={form.country}
+                              onChange={handleChange}
+                              required
+                              className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+                            >
+                              <option value="España">España</option>
+                            </select>
+                          </fieldset>
+                        )}
+
+                        {step === 3 && (
+                          <div className="flex flex-col gap-6">
+                            <fieldset className="flex flex-col gap-4">
+                              <legend className={legendClass}>El regalo</legend>
+                              <select
+                                name="occasion"
+                                aria-label="Ocasión del regalo"
+                                value={form.occasion}
+                                onChange={handleChange}
+                                required
+                                className="w-full px-4 py-3 rounded-xl border border-border bg-white text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+                              >
+                                <option value="" disabled>Ocasión del regalo *</option>
+                                {occasions.map((o) => (
+                                  <option key={o} value={o}>{o}</option>
+                                ))}
+                              </select>
+                              <textarea
+                                name="message"
+                                placeholder="Mensaje personal para el futuro (opcional)"
+                                aria-label="Mensaje personal para el futuro (opcional)"
+                                value={form.message}
+                                onChange={handleChange}
+                                rows={4}
+                                className={`${inputClass} resize-none`}
+                              />
+
+                              <label className="flex items-start gap-3 cursor-pointer">
+                                <input
+                                  type="checkbox"
+                                  name="wantsPersonalizedStory"
+                                  checked={form.wantsPersonalizedStory}
+                                  onChange={handleChange}
+                                  className="mt-1 accent-primary flex-shrink-0"
+                                />
+                                <span className="text-sm text-foreground">
+                                  Quiero recibir una mini historia personalizada sobre educación financiera para el niño / la niña
+                                </span>
+                              </label>
+
+                              {form.wantsPersonalizedStory && (
+                                <textarea
+                                  name="childDescription"
+                                  placeholder="Cuéntanos sobre tu hijo/a: edad, intereses, personalidad, hobbies... esto nos ayudará a personalizar la historia"
+                                  aria-label="Descripción del niño/a para personalizar la historia"
+                                  value={form.childDescription}
+                                  onChange={handleChange}
+                                  rows={4}
+                                  className={`${inputClass} resize-none`}
+                                />
+                              )}
+                            </fieldset>
+
+                            <label className="flex items-start gap-3 text-sm text-muted-foreground cursor-pointer">
+                              <input
+                                type="checkbox"
+                                name="privacy"
+                                checked={form.privacy}
+                                onChange={handleChange}
+                                required
+                                className="mt-0.5 accent-primary"
+                              />
+                              <span>
+                                Acepto compartir mis datos y la{" "}
+                                <Link href="#" className="text-primary underline underline-offset-4 hover:text-accent">
+                                  política de privacidad
+                                </Link>{" "}
+                                <span className="text-primary font-semibold">*</span>
+                              </span>
+                            </label>
+
+                            {/* Price callout */}
+                            <div className="bg-primary/8 border border-primary/20 rounded-2xl px-5 py-4 flex items-center justify-between">
+                              <div>
+                                <p className="font-semibold text-foreground text-sm">Pago único</p>
+                                <p className="text-xs text-muted-foreground mt-0.5">Welcome Pack incluido</p>
+                              </div>
+                              <p className="font-serif text-2xl font-bold text-primary">€29</p>
+                            </div>
+
+                            {error && (
+                              <p
+                                role="alert"
+                                className="bg-destructive/10 border border-destructive/30 text-destructive text-sm rounded-xl px-4 py-3"
+                              >
+                                {error}
+                              </p>
+                            )}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Navigation */}
+                      <div className="flex items-center gap-3">
+                        {step > 0 && (
+                          <button
+                            type="button"
+                            onClick={() => goToStep(step - 1)}
+                            className="inline-flex items-center justify-center gap-1 px-5 py-3.5 rounded-full border border-border text-sm font-semibold text-foreground hover:bg-muted transition-colors"
+                          >
+                            <ChevronLeft className="w-4 h-4" />
+                            Atrás
+                          </button>
+                        )}
+                        {step < LAST_STEP ? (
+                          <button
+                            type="button"
+                            onClick={goNext}
+                            className="flex-1 inline-flex items-center justify-center gap-1 py-3.5 bg-primary text-primary-foreground font-semibold rounded-full hover:bg-accent transition-colors duration-300 text-sm"
+                          >
+                            Siguiente
+                            <ChevronRight className="w-4 h-4" />
+                          </button>
+                        ) : (
+                          <button
+                            type="submit"
+                            disabled={submitting}
+                            className="flex-1 inline-flex items-center justify-center gap-2 py-3.5 bg-primary text-primary-foreground font-semibold rounded-full hover:bg-accent transition-colors duration-300 text-sm disabled:opacity-60 disabled:cursor-not-allowed"
+                          >
+                            {submitting ? (
+                              "Guardando tu regalo…"
+                            ) : (
+                              <>
+                                <Check className="w-4 h-4" />
+                                Regalar Kiri por €29
+                              </>
+                            )}
+                          </button>
+                        )}
+                      </div>
+                    </form>
+                  )}
+                </div>
               )}
             </div>
 
