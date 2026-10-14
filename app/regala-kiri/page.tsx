@@ -5,7 +5,7 @@ import Footer from "@/components/footer"
 import Image from "next/image"
 import Link from "next/link"
 import { useRef, useState } from "react"
-import { ChevronRight, ChevronLeft, ArrowUpRight, Check } from "lucide-react"
+import { ChevronRight, ChevronLeft, ArrowUpRight, Check, ImagePlus, X } from "lucide-react"
 
 const occasions = [
   "Primera Comunión",
@@ -27,6 +27,45 @@ const relationships = [
 
 // Spanish postal codes: 5 digits (00000-52999).
 const SPANISH_POSTAL_REGEX = /^[0-5]\d{4}$/
+
+const MIN_CHILD_AGE = 0
+const MAX_CHILD_AGE = 17
+
+const messageExamples = [
+  "Cuando abras esto, quiero que sepas lo orgulloso/a que estoy de ti. Que el ahorro de hoy te ayude a cumplir tus sueños.",
+  "Feliz Comunión. Que este regalo crezca contigo, igual que tú. Te quiero mucho.",
+  "El día que seas mayor, recuerda que alguien creyó en ti desde pequeño/a. Usa este regalo para hacer algo grande.",
+]
+
+const MAX_PHOTO_INPUT_BYTES = 10 * 1024 * 1024
+const PHOTO_MAX_SIDE = 1024
+
+// Shrinks the photo in the browser so the upload stays small and fast.
+function resizeImageToDataUrl(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const objectUrl = URL.createObjectURL(file)
+    const img = new window.Image()
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl)
+      const scale = Math.min(1, PHOTO_MAX_SIDE / Math.max(img.width, img.height))
+      const canvas = document.createElement("canvas")
+      canvas.width = Math.round(img.width * scale)
+      canvas.height = Math.round(img.height * scale)
+      const ctx = canvas.getContext("2d")
+      if (!ctx) {
+        reject(new Error("canvas-unavailable"))
+        return
+      }
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+      resolve(canvas.toDataURL("image/jpeg", 0.82))
+    }
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl)
+      reject(new Error("image-unreadable"))
+    }
+    img.src = objectUrl
+  })
+}
 
 const FORM_STEPS = ["Tus datos", "El niño/a", "Envío", "El regalo"] as const
 const LAST_STEP = FORM_STEPS.length - 1
@@ -67,6 +106,7 @@ export default function RegalaKiriPage() {
     gifterEmail: "",
     childFirstName: "",
     childLastName: "",
+    childAge: "",
     relationship: "",
     parentFirstName: "",
     parentLastName: "",
@@ -78,11 +118,12 @@ export default function RegalaKiriPage() {
     city: "",
     country: "España",
     occasion: "",
+    occasionOther: "",
     message: "",
-    wantsPersonalizedStory: false,
-    childDescription: "",
     privacy: false,
   })
+  const [photo, setPhoto] = useState<{ dataUrl: string; name: string } | null>(null)
+  const [photoError, setPhotoError] = useState<string | null>(null)
   const [submitted, setSubmitted] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -105,6 +146,33 @@ export default function RegalaKiriPage() {
       ...prev,
       [name]: type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
     }))
+  }
+
+  const handlePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    e.target.value = ""
+    if (!file) return
+
+    setPhotoError(null)
+    if (!file.type.startsWith("image/")) {
+      setPhotoError("El archivo debe ser una imagen (JPG o PNG).")
+      return
+    }
+    if (file.size > MAX_PHOTO_INPUT_BYTES) {
+      setPhotoError("La foto es demasiado grande. El máximo es 10 MB.")
+      return
+    }
+
+    try {
+      const dataUrl = await resizeImageToDataUrl(file)
+      setPhoto({ dataUrl, name: file.name })
+    } catch {
+      setPhotoError("No hemos podido leer la foto. Prueba con un archivo JPG o PNG.")
+    }
+  }
+
+  const insertExample = (text: string) => {
+    setForm((prev) => ({ ...prev, message: text }))
   }
 
   const scrollToFormTop = () => {
@@ -142,7 +210,13 @@ export default function RegalaKiriPage() {
       const res = await fetch("/api/regala-kiri", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          ...form,
+          childAge: String(Number(form.childAge)),
+          occasionOther: form.occasion === "Otro" ? form.occasionOther : "",
+          childPhoto: photo?.dataUrl ?? "",
+          childPhotoName: photo?.name ?? "",
+        }),
       })
 
       const data = await res.json().catch(() => ({}))
@@ -407,6 +481,28 @@ export default function RegalaKiriPage() {
                                   className={inputClass}
                                 />
                               </div>
+                              <div className="relative">
+                                <input
+                                  type="number"
+                                  name="childAge"
+                                  inputMode="numeric"
+                                  min={MIN_CHILD_AGE}
+                                  max={MAX_CHILD_AGE}
+                                  step={1}
+                                  placeholder={`Edad del niño/a (${MIN_CHILD_AGE} a ${MAX_CHILD_AGE}) *`}
+                                  aria-label={`Edad del niño/a, de ${MIN_CHILD_AGE} a ${MAX_CHILD_AGE} años`}
+                                  value={form.childAge}
+                                  onChange={handleChange}
+                                  required
+                                  className={`${inputClass} pr-16 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none`}
+                                />
+                                <span
+                                  aria-hidden="true"
+                                  className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-sm text-muted-foreground"
+                                >
+                                  años
+                                </span>
+                              </div>
                             </fieldset>
 
                             <fieldset className="flex flex-col gap-4 rounded-xl bg-muted/60 border border-border p-4">
@@ -554,40 +650,96 @@ export default function RegalaKiriPage() {
                                   <option key={o} value={o}>{o}</option>
                                 ))}
                               </select>
-                              <textarea
-                                name="message"
-                                placeholder="Mensaje personal para el futuro (opcional)"
-                                aria-label="Mensaje personal para el futuro (opcional)"
-                                value={form.message}
-                                onChange={handleChange}
-                                rows={4}
-                                className={`${inputClass} resize-none`}
-                              />
-
-                              <label className="flex items-start gap-3 cursor-pointer">
+                              {form.occasion === "Otro" && (
                                 <input
-                                  type="checkbox"
-                                  name="wantsPersonalizedStory"
-                                  checked={form.wantsPersonalizedStory}
+                                  type="text"
+                                  name="occasionOther"
+                                  placeholder="¿Qué ocasión es? *"
+                                  aria-label="Indica cuál es la ocasión"
+                                  maxLength={120}
+                                  value={form.occasionOther}
                                   onChange={handleChange}
-                                  className="mt-1 accent-primary flex-shrink-0"
-                                />
-                                <span className="text-sm text-foreground">
-                                  Quiero recibir una mini historia personalizada sobre educación financiera para el niño / la niña
-                                </span>
-                              </label>
-
-                              {form.wantsPersonalizedStory && (
-                                <textarea
-                                  name="childDescription"
-                                  placeholder="Cuéntanos sobre tu hijo/a: edad, intereses, personalidad, hobbies... esto nos ayudará a personalizar la historia"
-                                  aria-label="Descripción del niño/a para personalizar la historia"
-                                  value={form.childDescription}
-                                  onChange={handleChange}
-                                  rows={4}
-                                  className={`${inputClass} resize-none`}
+                                  required
+                                  autoFocus
+                                  className={`${inputClass} animate-in fade-in slide-in-from-top-2 duration-300`}
                                 />
                               )}
+
+                              <div className="flex flex-col gap-3">
+                                <label htmlFor="message" className="text-sm font-semibold text-foreground">
+                                  Mensaje personal para el futuro{" "}
+                                  <span className="text-muted-foreground font-normal">(opcional)</span>
+                                </label>
+                                <p className="text-xs text-muted-foreground leading-relaxed -mt-1">
+                                  Lo guardaremos para que lo lea cuando sea mayor. Toca un ejemplo para usarlo como punto de partida.
+                                </p>
+                                <ul className="flex flex-col gap-2" aria-label="Ejemplos de mensajes">
+                                  {messageExamples.map((example) => (
+                                    <li key={example}>
+                                      <button
+                                        type="button"
+                                        onClick={() => insertExample(example)}
+                                        className="w-full text-left text-xs leading-relaxed text-foreground rounded-xl border border-dashed border-primary/40 bg-primary/5 px-3 py-2 hover:bg-primary/10 hover:border-primary transition-colors"
+                                      >
+                                        &ldquo;{example}&rdquo;
+                                      </button>
+                                    </li>
+                                  ))}
+                                </ul>
+                                <textarea
+                                  id="message"
+                                  name="message"
+                                  placeholder="Escribe aquí tu mensaje para cuando crezca…"
+                                  value={form.message}
+                                  onChange={handleChange}
+                                  maxLength={2000}
+                                  rows={5}
+                                  className={`${inputClass} resize-none`}
+                                />
+                              </div>
+
+                              <div className="flex flex-col gap-3">
+                                <p className="text-sm font-semibold text-foreground">
+                                  Foto del niño/a{" "}
+                                  <span className="text-muted-foreground font-normal">(opcional)</span>
+                                </p>
+                                {photo ? (
+                                  <div className="flex items-center gap-4 rounded-xl border border-border bg-white p-3">
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    <img
+                                      src={photo.dataUrl || "/placeholder.svg"}
+                                      alt="Vista previa de la foto del niño/a"
+                                      className="h-20 w-20 rounded-lg object-cover flex-shrink-0"
+                                    />
+                                    <p className="flex-1 min-w-0 truncate text-sm text-foreground">{photo.name}</p>
+                                    <button
+                                      type="button"
+                                      onClick={() => setPhoto(null)}
+                                      aria-label="Quitar la foto"
+                                      className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+                                    >
+                                      <X className="h-4 w-4" />
+                                    </button>
+                                  </div>
+                                ) : (
+                                  <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border bg-white px-4 py-6 text-center hover:border-primary/50 hover:bg-primary/5 transition-colors focus-within:ring-2 focus-within:ring-primary/40">
+                                    <ImagePlus className="h-6 w-6 text-primary" aria-hidden="true" />
+                                    <span className="text-sm font-medium text-foreground">Subir una foto</span>
+                                    <span className="text-xs text-muted-foreground">JPG o PNG, hasta 10 MB</span>
+                                    <input
+                                      type="file"
+                                      accept="image/*"
+                                      onChange={handlePhotoChange}
+                                      className="sr-only"
+                                    />
+                                  </label>
+                                )}
+                                {photoError && (
+                                  <p role="alert" className="text-xs text-destructive">
+                                    {photoError}
+                                  </p>
+                                )}
+                              </div>
                             </fieldset>
 
                             <label className="flex items-start gap-3 text-sm text-muted-foreground cursor-pointer">
