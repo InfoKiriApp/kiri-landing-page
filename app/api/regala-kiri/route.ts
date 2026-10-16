@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
+import { checkBirthDate, formatDisplayDate, getTodayInSpain, parseIsoDate } from "@/lib/birth-date"
 
 // Never cache this endpoint.
 export const dynamic = "force-dynamic"
@@ -14,10 +15,14 @@ const submissionSchema = z
     gifterEmail: z.string().trim().email("Correo electrónico no válido").max(200),
     childFirstName: z.string().trim().min(1, "El nombre del niño/a es obligatorio").max(120),
     childLastName: z.string().trim().min(1, "Los apellidos del niño/a son obligatorios").max(120),
-    childAge: z
+    childBirthDate: z
       .string()
       .trim()
-      .regex(/^(?:1[0-7]|[0-9])$/, "La edad del niño/a debe estar entre 0 y 17 años"),
+      .refine((value) => parseIsoDate(value) !== null, "La fecha de nacimiento no es válida")
+      .refine(
+        (value) => checkBirthDate(parseIsoDate(value), getTodayInSpain()) === "ok",
+        "El niño/a debe haber nacido en los últimos 18 años y la fecha no puede ser futura",
+      ),
     relationship: z.string().trim().min(1, "Indica tu relación con el niño/a").max(60),
     parentFirstName: z.string().trim().max(120).optional().default(""),
     parentLastName: z.string().trim().max(120).optional().default(""),
@@ -125,7 +130,7 @@ export async function POST(request: NextRequest) {
     // Keep these field names in sync with the Apps Script doPost handler (see docs/google-apps-script.gs).
     // The script reads each field by name (data.gifterFirstName, data.timestamp, etc.) and
     // appends them as a row in the order defined there:
-    // Timestamp | Gifter First | Gifter Last | Gifter Email | Child First | Child Last | Child Age |
+    // Timestamp | Gifter First | Gifter Last | Gifter Email | Child First | Child Last | Child Birth Date |
     // Relationship | Parent First | Parent Last | Parent Email | Street | Number | Floor |
     // Postal | City | Country | Occasion | Message | Child Photo
     const payload = {
@@ -135,7 +140,7 @@ export async function POST(request: NextRequest) {
       gifterEmail: data.gifterEmail,
       childFirstName: data.childFirstName,
       childLastName: data.childLastName,
-      childAge: data.childAge,
+      childBirthDate: formatDisplayDate(parseIsoDate(data.childBirthDate)!),
       relationship: data.relationship,
       parentFirstName: data.parentFirstName,
       parentLastName: data.parentLastName,

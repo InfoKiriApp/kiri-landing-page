@@ -2,6 +2,7 @@
 
 import Header from "@/components/header"
 import Footer from "@/components/footer"
+import BirthDatePicker from "@/components/birth-date-picker"
 import Image from "next/image"
 import Link from "next/link"
 import { useRef, useState } from "react"
@@ -27,9 +28,6 @@ const relationships = [
 
 // Spanish postal codes: 5 digits (00000-52999).
 const SPANISH_POSTAL_REGEX = /^[0-5]\d{4}$/
-
-const MIN_CHILD_AGE = 0
-const MAX_CHILD_AGE = 17
 
 const messageExamples = [
   "Cuando abras esto, quiero que sepas lo orgulloso/a que estoy de ti. Que el ahorro de hoy te ayude a cumplir tus sueños.",
@@ -106,7 +104,7 @@ export default function RegalaKiriPage() {
     gifterEmail: "",
     childFirstName: "",
     childLastName: "",
-    childAge: "",
+    childBirthDate: "",
     relationship: "",
     parentFirstName: "",
     parentLastName: "",
@@ -212,7 +210,6 @@ export default function RegalaKiriPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...form,
-          childAge: String(Number(form.childAge)),
           occasionOther: form.occasion === "Otro" ? form.occasionOther : "",
           childPhoto: photo?.dataUrl ?? "",
           childPhotoName: photo?.name ?? "",
@@ -481,28 +478,12 @@ export default function RegalaKiriPage() {
                                   className={inputClass}
                                 />
                               </div>
-                              <div className="relative">
-                                <input
-                                  type="number"
-                                  name="childAge"
-                                  inputMode="numeric"
-                                  min={MIN_CHILD_AGE}
-                                  max={MAX_CHILD_AGE}
-                                  step={1}
-                                  placeholder={`Edad del niño/a (${MIN_CHILD_AGE} a ${MAX_CHILD_AGE}) *`}
-                                  aria-label={`Edad del niño/a, de ${MIN_CHILD_AGE} a ${MAX_CHILD_AGE} años`}
-                                  value={form.childAge}
-                                  onChange={handleChange}
-                                  required
-                                  className={`${inputClass} pr-16 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none`}
-                                />
-                                <span
-                                  aria-hidden="true"
-                                  className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-sm text-muted-foreground"
-                                >
-                                  años
-                                </span>
-                              </div>
+                              <BirthDatePicker
+                                value={form.childBirthDate}
+                                onChange={(childBirthDate) =>
+                                  setForm((prev) => ({ ...prev, childBirthDate }))
+                                }
+                              />
                             </fieldset>
 
                             <fieldset className="flex flex-col gap-4 rounded-xl bg-muted/60 border border-border p-4">

@@ -5,7 +5,7 @@
  * 1. Open your Google Sheet.
  * 2. Add a header row in row 1 with these columns (order matters):
  *      Timestamp | Gifter First Name | Gifter Last Name | Gifter Email |
- *      Child First Name | Child Last Name | Child Age | Relationship |
+ *      Child First Name | Child Last Name | Child Birth Date | Relationship |
  *      Parent First Name | Parent Last Name | Parent Email |
  *      Street | Number | Floor | Postal | City | Country | Occasion | Message | Child Photo
  * 3. Go to Extensions > Apps Script.
@@ -66,7 +66,7 @@ function doPost(e) {
       data.gifterEmail,
       data.childFirstName,
       data.childLastName,
-      data.childAge,
+      data.childBirthDate,
       data.relationship,
       data.parentFirstName,
       data.parentLastName,
