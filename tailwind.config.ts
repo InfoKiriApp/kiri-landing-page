@@ -13,6 +13,15 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        kiri: {
+          purple: '#7F47B2',
+          lilac: '#DBCDEF',
+          magenta: '#BA2FA4',
+          blush: '#FAD3F1',
+          blue: '#495CC0',
+          red: '#DF2940',
+          ink: '#282828',
+        },
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {

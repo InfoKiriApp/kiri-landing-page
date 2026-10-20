@@ -105,7 +105,8 @@ export default function Header() {
     pathname === "/kiri-academy" ||
     pathname.startsWith("/kiri-academy/") ||
     pathname === "/kiri-en-los-medios" ||
-    pathname === "/regala-kiri"
+    pathname === "/regala-kiri" ||
+    pathname === "/trabaja-con-nosotros"
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
@@ -190,6 +191,17 @@ export default function Header() {
 
         {/* CTA buttons + mobile toggle */}
         <div className="flex items-center gap-2 flex-shrink-0">
+
+          <Link
+            href="/trabaja-con-nosotros"
+            className={`hidden xl:inline-flex text-sm font-medium px-1 whitespace-nowrap transition-colors duration-300 ${
+              isLight
+                ? "text-foreground/60 hover:text-foreground"
+                : "text-white/70 hover:text-white"
+            }`}
+          >
+            Únete
+          </Link>
 
           {/* Iniciar Sesión */}
           <a
@@ -283,6 +295,13 @@ export default function Header() {
                   {link.label}
                 </Link>
               ))}
+              <Link
+                href="/trabaja-con-nosotros"
+                onClick={() => setMenuOpen(false)}
+                className="block text-sm font-medium py-2.5 px-3 rounded-lg text-foreground hover:bg-muted transition-colors"
+              >
+                Únete al equipo
+              </Link>
             </div>
 
             {/* CTAs */}

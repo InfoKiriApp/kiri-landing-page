@@ -109,6 +109,12 @@ export default function Footer() {
                   >
                     Kiri en los Medios
                   </Link>
+                  <Link
+                    href="/trabaja-con-nosotros"
+                    className="text-purple-100 hover:text-white transition-colors duration-300 text-sm sm:text-base"
+                  >
+                    Trabaja con nosotros
+                  </Link>
                 </div>
                 <div className="flex flex-col gap-1 sm:gap-2">
                   <h3 className="mb-1 sm:mb-2 uppercase text-purple-400 text-xs sm:text-sm tracking-widest font-semibold">
