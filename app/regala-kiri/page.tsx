@@ -733,10 +733,25 @@ export default function RegalaKiriPage() {
                                 className="mt-0.5 accent-primary"
                               />
                               <span>
-                                Acepto compartir mis datos y la{" "}
-                                <Link href="#" className="text-primary underline underline-offset-4 hover:text-accent">
-                                  política de privacidad
+                                Acepto las{" "}
+                                <Link
+                                  href="/condiciones-regala-kiri"
+                                  target="_blank"
+                                  className="text-primary underline underline-offset-4 hover:text-accent"
+                                >
+                                  condiciones de Regala Kiri
+                                  <span className="sr-only"> (se abre en una pestaña nueva)</span>
                                 </Link>{" "}
+                                y la{" "}
+                                <Link
+                                  href="/politica-de-privacidad"
+                                  target="_blank"
+                                  className="text-primary underline underline-offset-4 hover:text-accent"
+                                >
+                                  política de privacidad
+                                  <span className="sr-only"> (se abre en una pestaña nueva)</span>
+                                </Link>
+                                , y confirmo que la familia del niño/a está de acuerdo con el regalo{" "}
                                 <span className="text-primary font-semibold">*</span>
                               </span>
                             </label>

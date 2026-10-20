@@ -365,7 +365,7 @@ export function StepSend({
           <span className="text-sm leading-relaxed text-kiri-ink">
             Acepto que Kiri trate mis datos para este proceso de selección. Consulta la{" "}
             <Link
-              href="/privacidad"
+              href="/privacidad-candidatos"
               target="_blank"
               className="font-semibold text-kiri-purple underline underline-offset-4 hover:text-kiri-magenta"
             >

@@ -7,6 +7,15 @@ import { useState, useEffect, useRef } from "react"
 import { Menu, X, ChevronDown } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
+const LEGAL_PATHS = [
+  "/politica-de-privacidad",
+  "/privacidad-menores-y-familias",
+  "/terminos-y-condiciones",
+  "/politica-de-cookies",
+  "/condiciones-regala-kiri",
+  "/privacidad-candidatos",
+]
+
 // Groups that get a dropdown
 const NAV_GROUPS = [
   {
@@ -106,7 +115,8 @@ export default function Header() {
     pathname.startsWith("/kiri-academy/") ||
     pathname === "/kiri-en-los-medios" ||
     pathname === "/regala-kiri" ||
-    pathname === "/trabaja-con-nosotros"
+    pathname === "/trabaja-con-nosotros" ||
+    LEGAL_PATHS.includes(pathname)
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 

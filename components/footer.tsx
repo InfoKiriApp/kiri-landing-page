@@ -4,6 +4,15 @@ import Link from "next/link"
 import Image from "next/image"
 import { useRef } from "react"
 import { motion, useInView } from "framer-motion"
+import CookieSettingsButton from "@/components/cookie-settings-button"
+
+const LEGAL_FOOTER_LINKS = [
+  { href: "/politica-de-privacidad", label: "Privacidad" },
+  { href: "/privacidad-menores-y-familias", label: "Menores y familias" },
+  { href: "/terminos-y-condiciones", label: "Términos" },
+  { href: "/politica-de-cookies", label: "Cookies" },
+  { href: "/condiciones-regala-kiri", label: "Condiciones Regala Kiri" },
+]
 
 export default function Footer() {
   const miRef = useRef<HTMLDivElement>(null)
@@ -120,18 +129,16 @@ export default function Footer() {
                   <h3 className="mb-1 sm:mb-2 uppercase text-purple-400 text-xs sm:text-sm tracking-widest font-semibold">
                     Legal
                   </h3>
-                  <Link
-                    href="#"
-                    className="text-purple-100 hover:text-white transition-colors duration-300 text-sm sm:text-base"
-                  >
-                    Privacidad
-                  </Link>
-                  <Link
-                    href="#"
-                    className="text-purple-100 hover:text-white transition-colors duration-300 text-sm sm:text-base"
-                  >
-                    Términos
-                  </Link>
+                  {LEGAL_FOOTER_LINKS.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className="text-purple-100 hover:text-white transition-colors duration-300 text-sm sm:text-base"
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                  <CookieSettingsButton className="text-left text-purple-100 hover:text-white transition-colors duration-300 text-sm sm:text-base" />
                   <a
                     href="mailto:info@kiriapp.com"
                     className="text-purple-100 hover:text-white transition-colors duration-300 text-sm sm:text-base"

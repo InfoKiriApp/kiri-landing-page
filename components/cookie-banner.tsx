@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { X, Cookie, ChevronDown, ChevronUp } from "lucide-react"
+import { OPEN_COOKIE_PREFERENCES_EVENT } from "@/components/cookie-settings-button"
 
 type CookiePreferences = {
   necessary: boolean
@@ -28,6 +29,21 @@ export default function CookieBanner() {
       const t = setTimeout(() => setVisible(true), 800)
       return () => clearTimeout(t)
     }
+  }, [])
+
+  useEffect(() => {
+    const open = () => {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY)
+        if (saved) setPreferences({ ...JSON.parse(saved), necessary: true })
+      } catch {
+        localStorage.removeItem(STORAGE_KEY)
+      }
+      setExpanded(true)
+      setVisible(true)
+    }
+    window.addEventListener(OPEN_COOKIE_PREFERENCES_EVENT, open)
+    return () => window.removeEventListener(OPEN_COOKIE_PREFERENCES_EVENT, open)
   }, [])
 
   const save = (prefs: CookiePreferences) => {
