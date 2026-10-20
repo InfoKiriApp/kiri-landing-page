@@ -1,7 +1,7 @@
 import Image from "next/image"
-import { ArrowDown, ArrowUpRight } from "lucide-react"
+import { ArrowDown, ArrowRight } from "lucide-react"
 import FadeIn from "./fade-in"
-import { applyUrlFor } from "@/lib/careers"
+import { ApplyButton } from "./application/provider"
 
 export default function CareersHero() {
   return (
@@ -27,16 +27,10 @@ export default function CareersHero() {
               Ver puestos
               <ArrowDown className="w-4 h-4" aria-hidden="true" />
             </a>
-            <a
-              href={applyUrlFor()}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border border-kiri-purple/30 px-6 py-3 text-sm font-semibold text-kiri-purple transition-colors hover:bg-kiri-lilac/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kiri-purple focus-visible:ring-offset-2"
-            >
+            <ApplyButton className="inline-flex items-center gap-2 rounded-full border border-kiri-purple/30 px-6 py-3 text-sm font-semibold text-kiri-purple transition-colors hover:bg-kiri-lilac/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kiri-purple focus-visible:ring-offset-2">
               Aplicar ahora
-              <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
-              <span className="sr-only">(se abre en una pestaña nueva)</span>
-            </a>
+              <ArrowRight className="w-4 h-4" aria-hidden="true" />
+            </ApplyButton>
           </div>
         </FadeIn>
 

@@ -2,9 +2,10 @@
 
 import { useState } from "react"
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
-import { ArrowUpRight, ChevronDown } from "lucide-react"
+import { ArrowRight, ChevronDown } from "lucide-react"
 import FadeIn from "./fade-in"
-import { JOBS, applyUrlFor, type Job, type JobArea } from "@/lib/careers"
+import { ApplyButton } from "./application/provider"
+import { JOBS, type Job, type JobArea } from "@/lib/careers"
 
 type Filter = "todos" | JobArea
 
@@ -99,16 +100,13 @@ function JobCard({
                   <p className="text-sm leading-relaxed text-kiri-ink/80">{job.bonus}</p>
                 </div>
               )}
-              <a
-                href={applyUrlFor(job.area)}
-                target="_blank"
-                rel="noopener noreferrer"
+              <ApplyButton
+                area={job.area}
                 className="inline-flex items-center gap-2 self-start rounded-full bg-kiri-purple px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-kiri-purple focus-visible:ring-offset-2"
               >
                 Aplicar a este puesto
-                <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-                <span className="sr-only">(se abre en una pestaña nueva)</span>
-              </a>
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </ApplyButton>
             </div>
           </motion.div>
         )}

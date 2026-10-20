@@ -1,16 +1,4 @@
-export const APPLY_URL =
-  "https://docs.google.com/forms/d/e/1FAIpQLSfGYTMAkCtKwA-XGXtqX_rDASvQRB29TGupqTcKbw20cz418A/viewform"
-
 export type JobArea = "tech" | "operaciones" | "marketing"
-
-export function applyUrlFor(area?: JobArea) {
-  const params = new URLSearchParams({
-    utm_source: "kiriapp",
-    utm_medium: "trabaja-con-nosotros",
-  })
-  if (area) params.set("utm_content", area)
-  return `${APPLY_URL}?${params.toString()}`
-}
 
 export const FOUNDER_LINKS = {
   linkedin: "https://www.linkedin.com/in/marta-echarri/",

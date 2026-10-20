@@ -1,14 +1,7 @@
-import {
-  ArrowUpRight,
-  CalendarDays,
-  Clock,
-  GraduationCap,
-  Hourglass,
-  MapPin,
-  Wallet,
-} from "lucide-react"
+import { ArrowRight, ArrowUpRight } from "lucide-react"
 import FadeIn from "./fade-in"
-import { applyUrlFor, FOUNDER_LINKS } from "@/lib/careers"
+import { ApplyButton } from "./application/provider"
+import { FOUNDER_LINKS } from "@/lib/careers"
 
 const PREP_LINKS = [
   {
@@ -35,15 +28,6 @@ const STEPS = [
   { title: "Revisamos tu candidatura", text: "Leemos cada solicitud con calma." },
   { title: "Entrevista con Marta", text: "Una conversación para conocernos." },
   { title: "Bienvenida", text: "Tu primera semana con onboarding, accesos y tu primera Kiri Weekly." },
-]
-
-const LOGISTICS = [
-  { icon: MapPin, text: "Híbrido en Madrid, mayoritariamente en remoto" },
-  { icon: Hourglass, text: "Duración: [X meses]" },
-  { icon: CalendarDays, text: "Incorporación: [fecha]" },
-  { icon: Clock, text: "Dedicación: [horas/semana]" },
-  { icon: Wallet, text: "[Ayuda al estudio / remuneración]" },
-  { icon: GraduationCap, text: "Prácticas con convenio universitario" },
 ]
 
 export function Prepare() {
@@ -141,30 +125,6 @@ export function Process() {
   )
 }
 
-export function Logistics() {
-  return (
-    <section className="px-6 pb-20">
-      <div className="mx-auto max-w-6xl">
-        <FadeIn>
-          <div className="flex flex-col gap-6 rounded-3xl border border-kiri-lilac p-7 md:p-10">
-            <h2 className="font-serif text-2xl font-bold text-kiri-ink md:text-3xl">Logística</h2>
-            <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {LOGISTICS.map((item) => (
-                <li key={item.text} className="flex items-center gap-3 text-sm text-kiri-ink/80">
-                  <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-kiri-lilac/50 text-kiri-purple">
-                    <item.icon className="h-4 w-4" strokeWidth={1.75} aria-hidden="true" />
-                  </span>
-                  {item.text}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </FadeIn>
-      </div>
-    </section>
-  )
-}
-
 export function FinalCta() {
   return (
     <section className="px-6 pb-24">
@@ -176,16 +136,10 @@ export function FinalCta() {
           <p className="max-w-xl text-lg leading-relaxed text-white/90 text-pretty">
             Raíces fuertes, crecimiento compartido e impacto duradero.
           </p>
-          <a
-            href={applyUrlFor()}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-kiri-purple shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-kiri-purple"
-          >
+          <ApplyButton className="inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-kiri-purple shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-kiri-purple">
             Aplicar ahora
-            <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-            <span className="sr-only">(se abre en una pestaña nueva)</span>
-          </a>
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </ApplyButton>
         </div>
       </FadeIn>
     </section>

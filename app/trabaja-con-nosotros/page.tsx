@@ -4,7 +4,8 @@ import Footer from "@/components/footer"
 import CareersHero from "@/components/careers/careers-hero"
 import { WhyKiri, Founder, Values } from "@/components/careers/careers-culture"
 import OpenRoles from "@/components/careers/open-roles"
-import { Prepare, Process, Logistics, FinalCta } from "@/components/careers/careers-process"
+import ApplicationProvider from "@/components/careers/application/provider"
+import { Prepare, Process, FinalCta } from "@/components/careers/careers-process"
 
 const DESCRIPTION =
   "Prácticas en Kiri, la cuenta de inversión para niños. Tech, Operaciones y Marketing en Madrid/remoto, trabajando con Marta Echarri, ex CEO de N26 España."
@@ -23,20 +24,21 @@ export const metadata: Metadata = {
 
 export default function TrabajaConNosotrosPage() {
   return (
-    <div className="min-h-screen bg-white text-kiri-ink">
-      <Header />
-      <main>
-        <CareersHero />
-        <WhyKiri />
-        <Founder />
-        <Values />
-        <OpenRoles />
-        <Prepare />
-        <Process />
-        <Logistics />
-        <FinalCta />
-      </main>
-      <Footer />
-    </div>
+    <ApplicationProvider>
+      <div className="min-h-screen bg-white text-kiri-ink">
+        <Header />
+        <main>
+          <CareersHero />
+          <WhyKiri />
+          <Founder />
+          <Values />
+          <OpenRoles />
+          <Prepare />
+          <Process />
+          <FinalCta />
+        </main>
+        <Footer />
+      </div>
+    </ApplicationProvider>
   )
 }
