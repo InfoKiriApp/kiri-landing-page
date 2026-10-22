@@ -12,7 +12,9 @@ import { INVEST_GUIDE } from "@/lib/guides/invest-for-kids"
 import { KIRI_ORGANIZATION, absoluteUrl, breadcrumbJsonLd } from "@/lib/site"
 
 export function generateStaticParams() {
-  return getAllSlugs().map((slug) => ({ slug }))
+  return getAllSlugs()
+    .filter((slug) => slug !== "fondos-de-inversion-indexados")
+    .map((slug) => ({ slug }))
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {

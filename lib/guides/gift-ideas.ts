@@ -1,21 +1,20 @@
 import type { GuideFaq, GuideSource } from "@/lib/guides/invest-for-kids"
 import { INVEST_GUIDE } from "@/lib/guides/invest-for-kids"
 
-// TODO(producto): validar cada valor con Kiri antes de mostrarlo en la web.
-// Mientras sean null, la página remite a las condiciones vigentes de Regala Kiri.
+import { INDEXA, INDEXA_CONSULTED, formatPercent } from "@/lib/indexa"
+
+// Datos de Indexa Capital tomados de lib/indexa.ts (consultados en INDEXA_CONSULTED).
+// Los que siguen en null dependen de Kiri y la página remite a las condiciones de Regala Kiri.
 export const productFacts = {
-  // TODO: proveedor financiero que abre y custodia la cuenta.
-  provider: null,
-  // TODO: precio del regalo o de la apertura.
+  provider: INDEXA.name,
+  consulted: INDEXA_CONSULTED,
+  // TODO(producto): precio del regalo Regala Kiri.
   setupPrice: null,
-  // TODO: contenido exacto del Welcome Pack.
+  // TODO(producto): contenido exacto del Welcome Pack.
   welcomePack: null,
-  // TODO: comisiones del producto.
-  fees: null,
-  // TODO: documentación que debe aportar el representante legal.
-  legalDocuments: null,
-  // TODO: qué ocurre con la cuenta cuando el menor cumple 18 años.
-  adulthoodProcess: null,
+  fees: `Coste total medio publicado del ${formatPercent(INDEXA.fees.averageTotal)} anual`,
+  legalDocuments: INDEXA.documents,
+  adulthoodProcess: INDEXA.adulthood,
 } as const
 
 export const GIFT_GUIDE = {

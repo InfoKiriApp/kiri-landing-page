@@ -527,12 +527,12 @@ export const ARTICLES: Article[] = [
   {
     slug: "fondos-de-inversion-indexados",
     icon: "TrendingUp",
-    category: "Inversión",
+    category: "Guía para familias",
     kiriCategory: "tronco",
     ageRange: "15-18" as AgeRange,
-    title: "¿Qué es un Fondo de Inversión Indexado y por qué es ideal para niños?",
+    title: "¿Cómo funciona una cartera de fondos indexados para un menor?",
     excerpt:
-      "Los fondos indexados son la herramienta de inversión más recomendada por los expertos para el largo plazo. Te explicamos cómo funcionan con palabras que hasta un niño puede entender.",
+      "Qué es una cartera de fondos indexados, por qué no garantiza rentabilidad y qué costes tiene. Una guía para familias que invierten a largo plazo para un menor.",
     readTime: "6 min",
     coverUrl: "/images/academy/fondos-de-inversion-indexados.png",
     thumbUrl: "/images/academy/thumbs/fondos-de-inversion-indexados.webp",

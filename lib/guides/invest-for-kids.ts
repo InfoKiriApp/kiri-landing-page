@@ -1,3 +1,14 @@
+import {
+  INDEXA,
+  INDEXA_CONSULTED,
+  INDEXA_LINKS,
+  INDEXA_SOURCES,
+  INDEXA_STEPS,
+  TAX_NOTE,
+  formatEuros,
+  formatPercent,
+} from "@/lib/indexa"
+
 export type GuideOption = {
   name: string
   fit: string
@@ -62,14 +73,45 @@ export const TOC = [
   { id: "plazo", label: "Primero decide para qué y cuándo necesitará el dinero" },
   { id: "alternativas", label: "Estas son las alternativas que conviene comparar" },
   { id: "titularidad", label: "La titularidad cambia quién controla el dinero" },
+  { id: "mayoria-de-edad", label: "Al cumplir 18 años, el menor pasa a operar su cuenta" },
   { id: "familiares", label: "Las aportaciones de familiares" },
-  { id: "documentacion", label: "La documentación depende de la entidad" },
+  { id: "documentacion", label: "La documentación identifica al menor y a su representante" },
+  { id: "como-funciona", label: "Así se abre una cartera para un menor en Indexa Capital" },
   { id: "fiscalidad", label: "La fiscalidad no se puede resumir en una sola regla" },
   { id: "riesgos", label: "El riesgo tiene dos partes: mercado y entidad" },
   { id: "proceso", label: "Un proceso razonable para empezar" },
   { id: "preguntas", label: "Preguntas frecuentes" },
   { id: "fuentes", label: "Fuentes" },
 ] as const
+
+export type GuideSectionId = (typeof TOC)[number]["id"]
+
+export function tocLabel(id: GuideSectionId) {
+  return TOC.find((item) => item.id === id)?.label ?? ""
+}
+
+// Datos de producto confirmados con las fuentes públicas de Indexa Capital (ver lib/indexa.ts).
+export const productFacts = {
+  provider: INDEXA.name,
+  minimumInitial: formatEuros(INDEXA.minimums.initial),
+  minimumInitialExistingClient: formatEuros(INDEXA.minimums.initialExistingClient),
+  totalAverageCost: formatPercent(INDEXA.fees.averageTotal),
+  legalDocuments: INDEXA.documents,
+  adulthoodProcess: INDEXA.adulthood,
+  consulted: INDEXA_CONSULTED,
+} as const
+
+export const ADULTHOOD = {
+  text: INDEXA.adulthood,
+  link: { href: INDEXA_LINKS.adulthood, label: "Qué ocurre al cumplir 18 años, según Indexa Capital" },
+}
+
+export const HOW_IT_WORKS = {
+  intro:
+    "Kiri trabaja con Indexa Capital como proveedor de la cartera de fondos indexados. Estos son los pasos que publica Indexa Capital para abrir una cuenta a un menor:",
+  steps: INDEXA_STEPS,
+  link: { href: INDEXA_LINKS.minorAccount, label: "Cómo abrir una cuenta para un menor en Indexa Capital" },
+}
 
 export const HORIZON = {
   paragraphs: [
@@ -168,7 +210,7 @@ export const OPTION_DETAILS: GuideSubsection[] = [
     ],
     link: {
       href: "/kiri-academy/fondos-de-inversion-indexados",
-      label: "Qué es un fondo indexado y por qué se usa para el largo plazo",
+      label: "Cómo funciona una cartera de fondos indexados para un menor, con sus riesgos y costes",
     },
   },
   {
@@ -231,21 +273,14 @@ export const FAMILY_CONTRIBUTIONS = {
   ],
 }
 
-export const DOCUMENTS = [
-  "Documento de identidad o NIF del menor.",
-  "Documento de identidad del padre, madre o tutor.",
-  "Libro de familia, certificado de nacimiento o inscripción registral.",
-  "Acreditación de la representación legal, si corresponde.",
-  "Datos de contacto del representante.",
-  "Cuenta bancaria desde la que se harán las aportaciones.",
-  "Información económica o cuestionarios de conocimiento y experiencia, si el producto lo requiere.",
-]
+export const DOCUMENTS = INDEXA.documents
 
-export const DOCUMENTS_NOTE =
-  "Cada entidad fija su lista exacta. Pídela antes de empezar para no detener el proceso a mitad."
+export const DOCUMENTS_INTRO = "Para abrir una cartera de fondos a un menor, Indexa Capital pide:"
+
+export const DOCUMENTS_NOTE = INDEXA.documentsNote
 
 export const TAX = {
-  warning: "La fiscalidad depende del titular, el producto, la operación y la situación de cada contribuyente.",
+  warning: TAX_NOTE,
   intro:
     "No existe una regla única para todos los casos. Estas ideas generales ayudan a saber qué preguntar a una asesoría fiscal:",
   points: [
@@ -307,24 +342,34 @@ export const FAQS: GuideFaq[] = [
       "No hay una respuesta única. A nombre del menor, el dinero es suyo y lo administran sus representantes legales hasta los 18 años. A nombre de un adulto, el dinero es del adulto y conserva el control. Es una decisión con efectos legales y fiscales, así que conviene tomarla antes de la primera aportación.",
   },
   {
-    question: "¿Pueden aportar los abuelos u otros familiares?",
+    question: "¿Quién es el titular de la cuenta de inversión de un menor?",
     answer:
-      "Depende del producto. Algunos permiten aportaciones de terceros identificados y otros solo del titular o sus representantes. Las aportaciones de familiares pueden considerarse donaciones, por lo que las relevantes conviene revisarlas con una asesoría fiscal.",
+      "En la cartera de fondos para menores de Indexa Capital, el menor es el único titular de la cuenta. No se pueden añadir cotitulares ni autorizados: son sus representantes legales quienes operan en su nombre.",
+  },
+  {
+    question: "¿Quién puede abrir y gestionar la cuenta?",
+    answer:
+      "El padre, la madre u otro representante legal. Completa el perfil inversor, aporta la documentación, firma el contrato y opera la cuenta hasta que el menor cumple 18 años.",
+  },
+  {
+    question: "¿Qué documentación hace falta para abrir la cuenta?",
+    answer:
+      "Indexa Capital pide el documento de identidad del representante, el documento de identidad o NIF del menor y el certificado de nacimiento, libro de familia o inscripción en el Registro Civil, además de la firma del contrato. Los requisitos pueden variar, así que conviene comprobarlos antes del alta.",
+  },
+  {
+    question: "¿Las aportaciones de familiares cambian la titularidad?",
+    answer:
+      "No. Aunque aporten abuelos u otros familiares, la cuenta sigue siendo del menor. Esas aportaciones pueden considerarse donaciones, así que las relevantes conviene revisarlas con una asesoría fiscal.",
   },
   {
     question: "¿Qué pasa cuando el menor cumple 18 años?",
     answer:
-      "Si la inversión está a su nombre, pasa a decidir por sí mismo sobre ese dinero, también si quiere retirarlo. Si está a nombre de un adulto, no cambia nada de forma automática. Cada entidad tiene su propio procedimiento, así que pregúntalo al contratar.",
-  },
-  {
-    question: "¿Los fondos indexados garantizan ganar dinero?",
-    answer:
-      "No. Un fondo indexado sigue a un índice y, si el índice baja, el fondo baja con él. Puede ofrecer diversificación y costes más bajos, pero ninguna inversión con riesgo de mercado garantiza rentabilidad.",
+      "El representante legal deja de tener permisos para operar y el titular recibe acceso a su cuenta. Puede mantener o retirar el acceso de lectura del antiguo representante. La inversión no se convierte automáticamente en efectivo: sigue sujeta al valor de mercado.",
   },
   {
     question: "¿Cuánto dinero hay que aportar cada mes?",
     answer:
-      "No hay una cifra correcta. Lo importante es elegir una cantidad que la familia pueda mantener en el tiempo sin tocar el dinero que necesita para el día a día. Algunos productos exigen un mínimo, que conviene consultar en sus condiciones.",
+      "No hay una cifra correcta ni un mínimo para las aportaciones posteriores en Indexa Capital. Lo importante es elegir una cantidad que la familia pueda mantener en el tiempo sin tocar el dinero que necesita para el día a día.",
   },
   {
     question: "¿Esta guía sustituye el asesoramiento financiero o fiscal?",
@@ -334,6 +379,7 @@ export const FAQS: GuideFaq[] = [
 ]
 
 export const SOURCES: GuideSource[] = [
+  ...INDEXA_SOURCES,
   { publisher: "CNMV", label: "Fondos de inversión", href: "https://www.cnmv.es/portal/inversor/fondos-inversion?lang=es" },
   { publisher: "CNMV", label: "Guía sobre fondos de inversión (PDF)", href: "https://www.cnmv.es/DocPortal/Publicaciones/Guias/guia_FI.pdf" },
   {

@@ -221,7 +221,7 @@ export default function Calculator() {
                 <strong className="text-foreground">11,56% anual</strong>
               </p>
               <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4 mt-4">
-                Al cabo de 18 años tendrás
+                Resultado ilustrativo a 18 años
               </p>
               <div className="flex items-start justify-center gap-1 leading-none">
                 <span className="font-serif text-4xl font-bold text-primary mt-2">€</span>
@@ -235,11 +235,17 @@ export default function Calculator() {
               </p>
               <p className="text-sm text-muted-foreground mt-4 leading-relaxed max-w-xs mx-auto">
                 Por la magia del interés compuesto, si inviertes{" "}
-                <strong className="text-foreground">{monthly} €</strong> de forma mensual desde que el niño nace, hasta que cumple los 18 años, su árbol Kiri le dará{" "}
+                <strong className="text-foreground">{monthly} €</strong> de forma mensual desde que el niño nace,                 hasta que cumple los 18 años, con esa rentabilidad su árbol Kiri podría llegar a{" "}
                 <strong className="text-primary">{formatEur(total)} €</strong>.
               </p>
               <p className="text-xs text-primary/70 font-medium mt-2 italic">
                 Es {equivalence}
+              </p>
+              <p
+                role="note"
+                className="mt-5 rounded-2xl border border-accent/40 bg-accent/10 px-4 py-3 text-left text-xs leading-relaxed text-foreground"
+              >
+                Este cálculo es ilustrativo y utiliza hipótesis modificables. No es una previsión ni una promesa de rentabilidad. El resultado real puede ser inferior a las aportaciones y también puede producirse una pérdida de capital.
               </p>
             </div>
 
@@ -291,7 +297,7 @@ export default function Calculator() {
               </div>
               <div className="bg-muted rounded-2xl p-5 text-center">
                 <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground mb-2 leading-tight">
-                  Rentabilidad generada
+                  Rentabilidad hipotética
                 </p>
                 <p className="font-serif text-xl md:text-2xl font-bold text-green-600 tabular-nums">
                   +{formatEur(animReturns)} €

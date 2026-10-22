@@ -23,10 +23,15 @@ import {
   proseText,
 } from "@/components/guide/guide-blocks"
 import { getArticleBySlug } from "@/lib/academy-articles"
+import IndexaLink from "@/components/indexa/indexa-link"
 import {
+  ADULTHOOD,
   DIVERSIFICATION_NOTE,
   DOCUMENTS,
+  DOCUMENTS_INTRO,
   DOCUMENTS_NOTE,
+  HOW_IT_WORKS,
+  tocLabel,
   ENTITY_RISKS,
   FAMILY_CONTRIBUTIONS,
   FAQS,
@@ -178,7 +183,7 @@ export default function InvestForKidsGuidePage() {
               <GuideTocMobile items={TOC} />
             </div>
 
-            <GuideSection id="plazo" title={TOC[0].label}>
+            <GuideSection id="plazo" title={tocLabel("plazo")}>
               {HORIZON.paragraphs.map((paragraph) => (
                 <p key={paragraph} className={proseText}>
                   {paragraph}
@@ -195,7 +200,7 @@ export default function InvestForKidsGuidePage() {
               </div>
             </GuideSection>
 
-            <GuideSection id="alternativas" title={TOC[1].label}>
+            <GuideSection id="alternativas" title={tocLabel("alternativas")}>
               <p className={proseText}>
                 Ninguna opción es la mejor para todas las familias. Esta comparativa resume qué revisar en cada una, sin
                 cifras de rentabilidad ni de comisiones, que cambian según la entidad y el momento.
@@ -209,12 +214,19 @@ export default function InvestForKidsGuidePage() {
               </div>
             </GuideSection>
 
-            <GuideSection id="titularidad" title={TOC[2].label}>
+            <GuideSection id="titularidad" title={tocLabel("titularidad")}>
               <Callout>{OWNERSHIP_WARNING}</Callout>
               <OwnershipComparison rows={OWNERSHIP_ROWS} />
             </GuideSection>
 
-            <GuideSection id="familiares" title={TOC[3].label}>
+            <GuideSection id="mayoria-de-edad" title={tocLabel("mayoria-de-edad")}>
+              <p className={proseText}>{ADULTHOOD.text}</p>
+              <p className={proseText}>
+                <IndexaLink href={ADULTHOOD.link.href}>{ADULTHOOD.link.label}</IndexaLink>
+              </p>
+            </GuideSection>
+
+            <GuideSection id="familiares" title={tocLabel("familiares")}>
               {FAMILY_CONTRIBUTIONS.paragraphs.map((paragraph) => (
                 <p key={paragraph} className={proseText}>
                   {paragraph}
@@ -233,30 +245,49 @@ export default function InvestForKidsGuidePage() {
               </p>
             </GuideSection>
 
-            <GuideSection id="documentacion" title={TOC[4].label}>
-              <p className={proseText}>{DOCUMENTS_NOTE}</p>
-              <DocumentsChecklist items={DOCUMENTS} />
+            <GuideSection id="documentacion" title={tocLabel("documentacion")}>
+              <p className={proseText}>{DOCUMENTS_INTRO}</p>
+              <DocumentsChecklist items={[...DOCUMENTS]} />
+              <Callout>{DOCUMENTS_NOTE}</Callout>
             </GuideSection>
 
-            <GuideSection id="fiscalidad" title={TOC[5].label}>
+            <GuideSection id="como-funciona" title={tocLabel("como-funciona")}>
+              <p className={proseText}>{HOW_IT_WORKS.intro}</p>
+              <StepsTimeline steps={HOW_IT_WORKS.steps} />
+              <p className={proseText}>
+                <IndexaLink href={HOW_IT_WORKS.link.href}>{HOW_IT_WORKS.link.label}</IndexaLink>
+              </p>
+              <p className={proseText}>
+                Los riesgos y costes de la cartera se explican en{" "}
+                <Link
+                  href="/kiri-academy/fondos-de-inversion-indexados"
+                  className="rounded-sm font-semibold text-primary underline underline-offset-4 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                >
+                  cómo funciona una cartera de fondos indexados para un menor
+                </Link>
+                .
+              </p>
+            </GuideSection>
+
+            <GuideSection id="fiscalidad" title={tocLabel("fiscalidad")}>
               <Callout tone="warning">{TAX.warning}</Callout>
               <p className={proseText}>{TAX.intro}</p>
               <BulletList items={TAX.points} />
             </GuideSection>
 
-            <GuideSection id="riesgos" title={TOC[6].label}>
+            <GuideSection id="riesgos" title={tocLabel("riesgos")}>
               <RiskGroup title="Riesgos de mercado" items={MARKET_RISKS} kind="market" />
               <RiskGroup title="Riesgo de la entidad y coberturas" items={ENTITY_RISKS} kind="entity" />
               <Callout>{DIVERSIFICATION_NOTE}</Callout>
             </GuideSection>
 
-            <GuideSection id="proceso" title={TOC[7].label}>
+            <GuideSection id="proceso" title={tocLabel("proceso")}>
               <StepsTimeline steps={STEPS} />
             </GuideSection>
 
             <KiriBridge text={KIRI_BLOCK} />
 
-            <GuideSection id="preguntas" title={TOC[8].label}>
+            <GuideSection id="preguntas" title={tocLabel("preguntas")}>
               <FaqList faqs={FAQS} />
             </GuideSection>
 
@@ -282,7 +313,7 @@ export default function InvestForKidsGuidePage() {
               </section>
             )}
 
-            <GuideSection id="fuentes" title={TOC[9].label}>
+            <GuideSection id="fuentes" title={tocLabel("fuentes")}>
               <SourcesList sources={SOURCES} />
             </GuideSection>
           </article>
