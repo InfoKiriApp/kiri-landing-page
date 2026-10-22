@@ -61,7 +61,7 @@ export default function Promo() {
           transition={{ duration: 0.55, delay: 0.22 }}
           className="inline-block px-7 py-3 bg-white text-primary rounded-full text-sm font-semibold hover:bg-purple-100 transition-colors duration-300"
         >
-          Abre tu Cuenta Ahora
+          Regala Kiri
         </motion.a>
       </div>
     </div>

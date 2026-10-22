@@ -70,7 +70,7 @@ export default function Hero() {
                 href="/regala-kiri"
                 className="px-7 py-3 bg-white text-primary font-semibold text-sm rounded-full hover:bg-purple-100 transition-colors duration-300 text-center"
               >
-                Abre tu Cuenta Ahora
+                Regala Kiri
               </a>
               <a
                 href="#sobre"

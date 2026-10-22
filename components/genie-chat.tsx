@@ -123,7 +123,7 @@ const KEYWORD_MAP: { keys: string[]; id: string }[] = [
 ]
 
 const FALLBACK =
-  "¡Gracias por tu pregunta! Nuestro equipo de soporte estará encantado de ayudarte. Puedes escribirnos a hola@kiriapp.com o consultar más información en kiriapp.com. ¿Hay algo más en lo que pueda ayudarte?"
+  "¡Gracias por tu pregunta! Nuestro equipo de soporte estará encantado de ayudarte. Puedes escribirnos a info@kiriapp.com o consultar más información en kiriapp.com. ¿Hay algo más en lo que pueda ayudarte?"
 
 function matchResponse(text: string): string {
   const lower = text.toLowerCase()
