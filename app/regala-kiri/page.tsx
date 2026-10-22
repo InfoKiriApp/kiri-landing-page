@@ -267,6 +267,15 @@ export default function RegalaKiriPage() {
                     </div>
                   </div>
                 ))}
+                <p className="mt-8 text-sm leading-relaxed text-muted-foreground">
+                  ¿Dudas entre regalar dinero, ahorro o inversión?{" "}
+                  <Link
+                    href="/kiri-academy/regalos-financieros-para-ninos"
+                    className="font-semibold text-primary underline underline-offset-4 hover:text-accent"
+                  >
+                    Lee la guía de regalos financieros para niños
+                  </Link>
+                </p>
               </div>
 
               <div className="order-first lg:order-last">

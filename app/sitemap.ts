@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next"
 import { getAllSlugs } from "@/lib/academy-articles"
 import { getAllGameSlugs } from "@/lib/academy-games"
+import { GIFT_GUIDE } from "@/lib/guides/gift-ideas"
 import { INVEST_GUIDE } from "@/lib/guides/invest-for-kids"
 import { LEGAL_UPDATED } from "@/lib/legal/shared"
 import { absoluteUrl } from "@/lib/site"
@@ -24,6 +25,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: INVEST_GUIDE.reviewed.iso,
       changeFrequency: "monthly",
       priority: 0.9,
+    },
+    {
+      url: absoluteUrl(GIFT_GUIDE.href),
+      lastModified: GIFT_GUIDE.reviewed.iso,
+      changeFrequency: "monthly",
+      priority: 0.8,
     },
     { url: absoluteUrl("/kiri-academy/juegos"), changeFrequency: "monthly", priority: 0.7 },
     { url: absoluteUrl("/kiri-en-los-medios"), changeFrequency: "monthly", priority: 0.5 },

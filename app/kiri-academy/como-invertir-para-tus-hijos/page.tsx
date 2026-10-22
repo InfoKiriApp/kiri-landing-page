@@ -221,6 +221,16 @@ export default function InvestForKidsGuidePage() {
                 </p>
               ))}
               <BulletList items={FAMILY_CONTRIBUTIONS.bullets} />
+              <p className={proseText}>
+                Si la aportación es un regalo puntual:{" "}
+                <Link
+                  href="/kiri-academy/regalos-financieros-para-ninos"
+                  className="font-semibold text-primary underline underline-offset-4 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-sm"
+                >
+                  cómo elegir entre regalar dinero, ahorro o inversión
+                </Link>
+                .
+              </p>
             </GuideSection>
 
             <GuideSection id="documentacion" title={TOC[4].label}>

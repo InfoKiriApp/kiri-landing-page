@@ -17,6 +17,17 @@ Contenido editable: `lib/guides/invest-for-kids.ts`
 - [ ] Autoría: hoy firma "Equipo de Kiri Academy". Decidir si firma una persona y quién revisa (cargo y cualificación).
 - [ ] Revisión legal o de compliance del texto (comunicaciones comerciales CNMV, titularidad y fiscalidad).
 
+## Guía "Regalos financieros para niños"
+
+Página: `/kiri-academy/regalos-financieros-para-ninos`
+Contenido editable: `lib/guides/gift-ideas.ts` (incluye `productFacts`, todo en `null`)
+
+- [ ] Qué pasa con la cuenta después del pedido de Regala Kiri (paso 3 de "Cómo funciona Regala Kiri").
+- [ ] Si se pueden hacer aportaciones periódicas (FAQ "¿Puedo aportar todos los meses?").
+- [ ] Proveedor, precio, comisiones, Welcome Pack, documentación y proceso a los 18 años (`productFacts`).
+- [ ] Autoría y revisión, igual que en la guía de inversión.
+- [ ] Revisión legal o de compliance del texto.
+
 ## Al actualizar la guía
 
 Cambiar `reviewed` en `lib/guides/invest-for-kids.ts`. Esa fecha alimenta la página, el JSON-LD y el sitemap.
