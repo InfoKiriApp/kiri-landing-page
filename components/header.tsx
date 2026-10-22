@@ -154,14 +154,14 @@ export default function Header() {
           />
           <span
             aria-hidden="true"
-            className={`hidden 2xl:block w-px h-6 ${isLight ? "bg-foreground/20" : "bg-white/30"}`}
+            className={`hidden md:block w-px h-6 ${isLight ? "bg-foreground/20" : "bg-white/30"}`}
           />
           <Image
             src="/images/indexa-capital.webp"
             alt="En colaboración con Indexa Capital"
             width={160}
             height={30}
-            className={`h-5 w-auto object-contain hidden 2xl:block ${
+            className={`h-4 xl:h-[18px] 2xl:h-5 w-auto object-contain hidden md:block ${
               isLight ? "brightness-0 opacity-60" : "brightness-0 invert opacity-80"
             }`}
           />
@@ -169,7 +169,7 @@ export default function Header() {
 
         {/* Desktop nav */}
         <nav
-          className="hidden xl:flex items-center gap-5"
+          className="hidden xl:flex items-center gap-3 2xl:gap-5"
           aria-label="Navegación principal"
         >
           {/* Dropdown groups */}
@@ -223,7 +223,7 @@ export default function Header() {
             href="https://indexa.kiriapp.com/login"
             target="_blank"
             rel="noopener noreferrer"
-            className={`hidden xl:inline-flex text-sm font-medium px-4 py-2 rounded-full whitespace-nowrap transition-all duration-300 ${
+            className={`hidden xl:inline-flex text-sm font-medium px-3 2xl:px-4 py-2 rounded-full whitespace-nowrap transition-all duration-300 ${
               isLight
                 ? "text-foreground/70 hover:text-foreground border border-border hover:border-foreground/30"
                 : "text-white/80 hover:text-white border border-white/30 hover:border-white/60"
@@ -248,7 +248,7 @@ export default function Header() {
           <div className="relative hidden sm:block">
             <Link
               href="/regala-kiri"
-              className="inline-flex text-sm font-semibold px-4 xl:px-5 py-2 rounded-full whitespace-nowrap transition-all duration-300 bg-[hsl(330,80%,62%)] text-white hover:bg-[hsl(330,80%,55%)]"
+              className="inline-flex text-sm font-semibold px-4 2xl:px-5 py-2 rounded-full whitespace-nowrap transition-all duration-300 bg-[hsl(330,80%,62%)] text-white hover:bg-[hsl(330,80%,55%)]"
               aria-label="Regala Kiri"
             >
               Regala Kiri
