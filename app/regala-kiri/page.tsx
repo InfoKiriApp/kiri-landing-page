@@ -5,8 +5,11 @@ import Footer from "@/components/footer"
 import BirthDatePicker from "@/components/birth-date-picker"
 import Image from "next/image"
 import Link from "next/link"
-import { useRef, useState } from "react"
-import { ChevronRight, ChevronLeft, Check, ImagePlus, X } from "lucide-react"
+import AddressAutocomplete from "@/components/regala-kiri/address-autocomplete"
+import GiftSummary from "@/components/regala-kiri/gift-summary"
+import { clearDraft, loadDraft, saveDraft } from "@/lib/regala-kiri-draft"
+import { useEffect, useRef, useState } from "react"
+import { ChevronRight, ChevronLeft, Check, ImagePlus, X, RotateCcw } from "lucide-react"
 
 const occasions = [
   "Primera Comunión",
@@ -65,7 +68,7 @@ function resizeImageToDataUrl(file: File): Promise<string> {
   })
 }
 
-const FORM_STEPS = ["Tus datos", "El niño/a", "Envío", "El regalo"] as const
+const FORM_STEPS = ["Tus datos", "El niño/a", "Envío", "El regalo", "Resumen"] as const
 const LAST_STEP = FORM_STEPS.length - 1
 
 const steps = [
@@ -126,6 +129,44 @@ export default function RegalaKiriPage() {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [postalTouched, setPostalTouched] = useState(false)
+  const [draftRestored, setDraftRestored] = useState(false)
+  const [editingFromSummary, setEditingFromSummary] = useState(false)
+  const draftLoadedRef = useRef(false)
+
+  // Restore after mount so the server-rendered HTML and first client render match.
+  useEffect(() => {
+    const draft = loadDraft()
+    draftLoadedRef.current = true
+    if (!draft) return
+    const { privacy: _ignored, ...savedFields } = draft.form as Record<string, unknown>
+    setForm((prev) => ({ ...prev, ...(savedFields as Partial<typeof prev>) }))
+    setStep(Math.min(Math.max(draft.step, 0), LAST_STEP - 1))
+    setDraftRestored(true)
+  }, [])
+
+  useEffect(() => {
+    if (!draftLoadedRef.current || submitted) return
+    const timer = setTimeout(() => {
+      const { privacy: _consent, ...fields } = form
+      saveDraft(step, fields)
+    }, 400)
+    return () => clearTimeout(timer)
+  }, [form, step, submitted])
+
+  const startOver = () => {
+    clearDraft()
+    setForm((prev) => ({
+      ...prev,
+      ...Object.fromEntries(Object.keys(prev).map((k) => [k, ""])),
+      country: "España",
+      privacy: false,
+    }))
+    setPhoto(null)
+    setStep(0)
+    setPostalTouched(false)
+    setEditingFromSummary(false)
+    setDraftRestored(false)
+  }
 
   const SQUARE_CHECKOUT_URL =
     "https://checkout.square.site/merchant/ML80VD2C4SMJA/checkout/X2FBTHLVIZFD2NQOA3KACQ2Z"
@@ -189,7 +230,34 @@ export default function RegalaKiriPage() {
       setPostalTouched(true)
       return
     }
+    if (editingFromSummary) {
+      setEditingFromSummary(false)
+      goToStep(LAST_STEP)
+      return
+    }
     goToStep(Math.min(step + 1, LAST_STEP))
+  }
+
+  const editFromSummary = (target: number) => {
+    setEditingFromSummary(true)
+    goToStep(target)
+  }
+
+  const handleAddressSelect = (s: { street: string; number: string; postal: string; city: string }) => {
+    setForm((prev) => ({
+      ...prev,
+      street: s.street,
+      number: s.number || prev.number,
+      postal: s.postal || prev.postal,
+      city: s.city,
+    }))
+    setPostalTouched(Boolean(s.postal))
+    requestAnimationFrame(() => {
+      const next = formRef.current?.querySelector<HTMLInputElement>(
+        s.number ? 'input[name="floor"]' : 'input[name="number"]',
+      )
+      next?.focus()
+    })
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -225,6 +293,7 @@ export default function RegalaKiriPage() {
       }
 
       // Only redirect to Square checkout after a successful Google Sheets save.
+      clearDraft()
       setSubmitted(true)
       window.location.href = SQUARE_CHECKOUT_URL
     } catch (err) {
@@ -353,6 +422,26 @@ export default function RegalaKiriPage() {
                       onSubmit={handleSubmit}
                       className="flex flex-col gap-6 animate-in fade-in slide-in-from-top-2 duration-500"
                     >
+                      {draftRestored && (
+                        <div
+                          role="status"
+                          className="flex items-center justify-between gap-3 rounded-xl border border-primary/20 bg-primary/5 px-4 py-3 text-sm animate-in fade-in duration-300"
+                        >
+                          <p className="text-foreground">
+                            <span className="font-semibold">Hemos recuperado tu borrador.</span>{" "}
+                            <span className="text-muted-foreground">Sigue donde lo dejaste.</span>
+                          </p>
+                          <button
+                            type="button"
+                            onClick={startOver}
+                            className="inline-flex flex-shrink-0 items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold text-primary hover:bg-primary/10 transition-colors"
+                          >
+                            <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
+                            Empezar de cero
+                          </button>
+                        </div>
+                      )}
+
                       {/* Progress */}
                       <div>
                         <div className="flex items-center justify-between mb-3">
@@ -519,15 +608,13 @@ export default function RegalaKiriPage() {
                         {step === 2 && (
                           <fieldset className="flex flex-col gap-4">
                             <legend className={legendClass}>Dirección de envío del niño/a</legend>
-                            <input
-                              type="text"
-                              name="street"
-                              placeholder="Calle / vía *"
-                              aria-label="Calle o vía"
-                              autoComplete="address-line1"
+                            <p className="-mt-2 text-xs leading-relaxed text-muted-foreground">
+                              Escribe la calle y el número, elige tu dirección y completaremos el resto.
+                            </p>
+                            <AddressAutocomplete
                               value={form.street}
-                              onChange={handleChange}
-                              required
+                              onType={(street) => setForm((prev) => ({ ...prev, street }))}
+                              onSelect={handleAddressSelect}
                               className={inputClass}
                             />
                             <div className="grid grid-cols-2 gap-4">
@@ -711,6 +798,23 @@ export default function RegalaKiriPage() {
                                 )}
                               </div>
                             </fieldset>
+                          </div>
+                        )}
+
+                        {step === 4 && (
+                          <div className="flex flex-col gap-6">
+                            <div>
+                              <h3 className="font-serif text-xl font-bold text-foreground">Revisa tu regalo</h3>
+                              <p className="mt-1 text-sm text-muted-foreground leading-relaxed">
+                                Un último vistazo antes de pagar. Puedes editar cualquier apartado.
+                              </p>
+                            </div>
+                            <GiftSummary
+                              form={form}
+                              photoUrl={photo?.dataUrl ?? null}
+                              isParent={isParent}
+                              onEdit={editFromSummary}
+                            />
 
                             <label className="flex items-start gap-3 text-sm text-muted-foreground cursor-pointer">
                               <input
@@ -784,7 +888,7 @@ export default function RegalaKiriPage() {
                             onClick={goNext}
                             className="flex-1 inline-flex items-center justify-center gap-1 py-3.5 bg-primary text-primary-foreground font-semibold rounded-full hover:bg-accent transition-colors duration-300 text-sm"
                           >
-                            Siguiente
+                            {editingFromSummary ? "Guardar y volver al resumen" : step === LAST_STEP - 1 ? "Revisar el regalo" : "Siguiente"}
                             <ChevronRight className="w-4 h-4" />
                           </button>
                         ) : (
