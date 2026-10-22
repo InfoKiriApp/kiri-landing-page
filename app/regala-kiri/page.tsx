@@ -6,7 +6,7 @@ import BirthDatePicker from "@/components/birth-date-picker"
 import Image from "next/image"
 import Link from "next/link"
 import { useRef, useState } from "react"
-import { ChevronRight, ChevronLeft, ArrowUpRight, Check, ImagePlus, X } from "lucide-react"
+import { ChevronRight, ChevronLeft, Check, ImagePlus, X } from "lucide-react"
 
 const occasions = [
   "Primera Comunión",
@@ -130,9 +130,9 @@ export default function RegalaKiriPage() {
   const SQUARE_CHECKOUT_URL =
     "https://checkout.square.site/merchant/ML80VD2C4SMJA/checkout/X2FBTHLVIZFD2NQOA3KACQ2Z"
 
-  // The gifter is the parent → they go straight to account opening, no gift form.
+  // A parent gifter is also the guardian, so we skip the guardian fields (the code goes to their own email).
   const isParent = form.relationship === "Padre/Madre"
-  const showGiftForm = form.relationship !== "" && !isParent
+  const showGiftForm = form.relationship !== ""
   const postalValid = SPANISH_POSTAL_REGEX.test(form.postal.trim())
   const showPostalError = postalTouched && form.postal.trim().length > 0 && !postalValid
 
@@ -330,7 +330,7 @@ export default function RegalaKiriPage() {
                       ¿Quién eres para el niño/a? <span className="text-primary">*</span>
                     </label>
                     <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-                      Empecemos por aquí: según tu respuesta te llevaremos por el camino más corto.
+                      Empecemos por aquí: adaptaremos el formulario a tu respuesta.
                     </p>
                     <select
                       id="relationship"
@@ -346,36 +346,7 @@ export default function RegalaKiriPage() {
                     </select>
                   </div>
 
-                  {/* Parent: only the open-account pop-up */}
-                  {isParent && (
-                    <div
-                      role="status"
-                      className="flex flex-col items-center text-center gap-4 rounded-2xl bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border border-primary/25 p-6 md:p-8 shadow-sm animate-in fade-in slide-in-from-top-2 zoom-in-95 duration-500 ease-out"
-                    >
-                      <Image
-                        src="/images/piggy.png"
-                        alt="Cerdito hucha de Kiri rodeado de monedas"
-                        width={140}
-                        height={168}
-                        className="w-28 md:w-32 h-auto animate-in zoom-in-50 duration-500 delay-100"
-                      />
-                      <p className="text-sm md:text-base font-semibold text-foreground leading-relaxed text-balance">
-                        Si eres el Papá o la Mamá, por favor dirígete a Abre tu Cuenta. Desde allí, podrás comenzar toda la experiencia de Kiri de forma directa.
-                      </p>
-                      <a
-                        href="https://indexa.kiriapp.com/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group inline-flex items-center justify-center gap-1.5 rounded-full bg-primary text-primary-foreground text-sm font-semibold px-6 py-3 hover:bg-primary/90 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
-                      >
-                        Abre tu cuenta
-                        <ArrowUpRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                      </a>
-                      <p className="text-xs text-muted-foreground">Gracias por confiar en Kiri.</p>
-                    </div>
-                  )}
-
-                  {/* Everyone else: multi-page gift form */}
+                  {/* Same multi-page flow for everyone; guardian fields only appear when the gifter is not the parent */}
                   {showGiftForm && (
                     <form
                       ref={formRef}
@@ -495,6 +466,14 @@ export default function RegalaKiriPage() {
                               />
                             </fieldset>
 
+                            {isParent ? (
+                              <p
+                                role="note"
+                                className="rounded-xl bg-primary/5 border border-primary/20 px-4 py-3 text-xs leading-relaxed text-muted-foreground"
+                              >
+                                Como eres su padre o madre, el código para crear la cuenta del niño/a llegará a tu correo ({form.gifterEmail || "el que has indicado en el paso 1"}).
+                              </p>
+                            ) : (
                             <fieldset className="flex flex-col gap-4 rounded-xl bg-muted/60 border border-border p-4">
                               <legend className={`${legendClass} px-1`}>Padre, madre o tutor</legend>
                               <p className="text-xs text-muted-foreground leading-relaxed">
@@ -533,6 +512,7 @@ export default function RegalaKiriPage() {
                                 className={inputClass}
                               />
                             </fieldset>
+                            )}
                           </div>
                         )}
 
@@ -760,7 +740,7 @@ export default function RegalaKiriPage() {
                                   política de privacidad
                                   <span className="sr-only"> (se abre en una pestaña nueva)</span>
                                 </Link>
-                                , y confirmo que la familia del niño/a está de acuerdo con el regalo{" "}
+                                {isParent ? "" : ", y confirmo que la familia del niño/a está de acuerdo con el regalo"}{" "}
                                 <span className="text-primary font-semibold">*</span>
                               </span>
                             </label>

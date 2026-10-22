@@ -142,9 +142,10 @@ export async function POST(request: NextRequest) {
       childLastName: data.childLastName,
       childBirthDate: formatDisplayDate(parseIsoDate(data.childBirthDate)!),
       relationship: data.relationship,
-      parentFirstName: data.parentFirstName,
-      parentLastName: data.parentLastName,
-      parentEmail: data.parentEmail,
+      // A parent gifter is the guardian: the account code goes to their own email.
+      parentFirstName: data.relationship === "Padre/Madre" ? data.gifterFirstName : data.parentFirstName,
+      parentLastName: data.relationship === "Padre/Madre" ? data.gifterLastName : data.parentLastName,
+      parentEmail: data.relationship === "Padre/Madre" ? data.gifterEmail : data.parentEmail,
       street: data.street,
       number: data.number,
       floor: data.floor,
