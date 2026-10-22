@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import Link from "next/link"
 import { useState, useEffect, useCallback, useRef } from "react"
 import { ChevronLeft, ChevronRight, Wallet, Gift, Sparkles } from "lucide-react"
 import { motion, useInView } from "framer-motion"
@@ -14,7 +15,7 @@ const slides = [
       "Abre una cuenta de ahorro e inversión para tus seres queridos de 0 a 18 años con nuestro colaborador Indexa Capital.",
     extra:
       "Rellenando tus datos como tutor (Papá o Mamá), comienza la experiencia Kiri de tus niños en esta misma página.",
-    cta: { label: "Abre tu cuenta", href: "https://indexa.kiriapp.com" },
+    cta: { label: "Regala Kiri", href: "/regala-kiri" },
     image: "/images/comofunciona1.svg",
   },
   {
@@ -209,14 +210,12 @@ export default function Featured() {
 
                       {/* CTA button (slide 1) */}
                       {"cta" in slide && slide.cta && (
-                        <a
+                        <Link
                           href={slide.cta.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
                           className="mt-1 inline-flex items-center justify-center self-start bg-primary text-primary-foreground text-sm font-semibold px-5 py-2.5 rounded-xl hover:bg-accent transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                         >
                           {slide.cta.label}
-                        </a>
+                        </Link>
                       )}
                     </div>
                   </div>
