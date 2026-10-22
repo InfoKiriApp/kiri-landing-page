@@ -7,7 +7,7 @@ import Footer from "@/components/footer"
 import JsonLd from "@/components/json-ld"
 import ArticleBreadcrumbs from "@/components/academy/article-breadcrumbs"
 import { GuideTocDesktop, GuideTocMobile } from "@/components/guide/guide-toc"
-import { BulletList, Callout, FaqList, GuideSection, SourcesList, proseText } from "@/components/guide/guide-blocks"
+import { BulletList, Callout, FaqList, GuideSection, proseText } from "@/components/guide/guide-blocks"
 import {
   CheckItems,
   DeeperLink,
@@ -41,7 +41,6 @@ import {
   RELATED_ARTICLE_SLUGS,
   RISK_CHECKS,
   SECTIONS,
-  SOURCES,
   TAX,
   TOC,
   type GiftSectionId,
@@ -290,10 +289,6 @@ export default function GiftIdeasGuidePage() {
                 </ul>
               </section>
             )}
-
-            <Section id="fuentes">
-              <SourcesList sources={SOURCES} />
-            </Section>
 
             <aside aria-label="Aviso" className="rounded-2xl border border-border bg-muted/50 p-5 text-sm leading-relaxed text-foreground/80">
               <p>{GIFT_GUIDE.disclaimer}</p>

@@ -1,4 +1,4 @@
-import type { GuideFaq, GuideSource } from "@/lib/guides/invest-for-kids"
+import type { GuideFaq } from "@/lib/guides/invest-for-kids"
 import { INVEST_GUIDE } from "@/lib/guides/invest-for-kids"
 
 import { INDEXA, INDEXA_CONSULTED, formatPercent } from "@/lib/indexa"
@@ -94,7 +94,6 @@ export const SECTIONS = {
     summary: "Siete comprobaciones para que el regalo encaje con el plazo y la familia mantenga el control de la decisión.",
   },
   preguntas: { label: "Preguntas frecuentes", title: "Preguntas frecuentes", summary: "" },
-  fuentes: { label: "Fuentes", title: "Fuentes para seguir aprendiendo", summary: "" },
 } as const
 
 export type GiftSectionId = keyof typeof SECTIONS
@@ -287,31 +286,6 @@ export const FAQS: GuideFaq[] = [
     question: "¿Una inversión para un menor está protegida como un depósito?",
     answer:
       "No de la misma forma. El Fondo de Garantía de Depósitos cubre el dinero en cuentas y depósitos de entidades adheridas hasta el límite legal, pero no protege el valor de una inversión frente a caídas del mercado.",
-  },
-]
-
-export const SOURCES: GuideSource[] = [
-  {
-    publisher: "Banco de España",
-    label: "Cómo abrir una cuenta para menores de edad",
-    href: "https://clientebancario.bde.es/pcb/es/blog/cuentas-antes-de-los-18.html",
-  },
-  {
-    publisher: "Banco de España",
-    label: "¿Pueden los abuelos abrir cuentas a sus nietos?",
-    href: "https://clientebancario.bde.es/pcb/es/blog/Pueden_los_abu_bfaab8d90351661.html",
-  },
-  { publisher: "CNMV", label: "Fondos de inversión", href: "https://www.cnmv.es/portal/inversor/fondos-inversion?lang=es" },
-  {
-    publisher: "CNMV",
-    label: "Guía sobre fondos de inversión, con el documento de datos fundamentales (PDF)",
-    href: "https://www.cnmv.es/DocPortal/Publicaciones/Guias/guia_FI.pdf",
-  },
-  { publisher: "Fondo de Garantía de Depósitos", label: "Información sobre la garantía de depósitos", href: "https://www.fgd.es/" },
-  {
-    publisher: "Agencia Tributaria",
-    label: "Impuesto sobre Sucesiones y Donaciones",
-    href: "https://sede.agenciatributaria.gob.es/Sede/impuestos-tasas/impuesto-sobre-sucesiones-donaciones.html",
   },
 ]
 
