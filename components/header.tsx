@@ -36,6 +36,7 @@ const NAV_GROUPS = [
     label: "Kiri Academy",
     items: [
       { label: "Todos los artículos", href: "/kiri-academy" },
+      { label: "Cómo invertir para tus hijos", href: "/kiri-academy/como-invertir-para-tus-hijos" },
       { label: "Juegos por edades",   href: "/kiri-academy/juegos" },
     ],
   },

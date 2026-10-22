@@ -3,9 +3,13 @@ import Link from "next/link"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import { getArticleBySlug, getAllSlugs, ARTICLES, type ArticleSection } from "@/lib/academy-articles"
-import { ArrowLeft, Clock, BookOpen, Users } from "lucide-react"
+import { ArrowLeft, ArrowRight, Clock, BookOpen, Gift, Users } from "lucide-react"
 import Image from "next/image"
 import { ADRIANA } from "@/lib/academy-articles"
+import JsonLd from "@/components/json-ld"
+import ArticleBreadcrumbs from "@/components/academy/article-breadcrumbs"
+import { INVEST_GUIDE } from "@/lib/guides/invest-for-kids"
+import { KIRI_ORGANIZATION, absoluteUrl, breadcrumbJsonLd } from "@/lib/site"
 
 export function generateStaticParams() {
   return getAllSlugs().map((slug) => ({ slug }))
@@ -15,11 +19,26 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params
   const article = getArticleBySlug(slug)
   if (!article) return {}
+  const title = `${article.title} | Kiri Academy`
+  const href = `/kiri-academy/${article.slug}`
   return {
-    title: `${article.title} | Kiri Academy`,
+    title,
     description: article.excerpt,
+    alternates: { canonical: href },
+    openGraph: {
+      type: "article",
+      locale: "es_ES",
+      title,
+      description: article.excerpt,
+      url: href,
+      images: [{ url: article.coverUrl, alt: article.title }],
+      authors: [ADRIANA.name],
+    },
+    twitter: { card: "summary_large_image", title, description: article.excerpt, images: [article.coverUrl] },
   }
 }
+
+const GIFT_BRIDGE_CATEGORIES = new Set(["frutos", "bosque"])
 
 const KIRI_CATEGORY_LABELS: Record<string, { label: string; color: string; bg: string }> = {
   raices:  { label: "Las Raíces",              color: "text-rose-600",    bg: "bg-rose-50 border-rose-200" },
@@ -79,26 +98,48 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
   const kiriMeta = KIRI_CATEGORY_LABELS[article.kiriCategory]
 
-  // Related articles: same kiriCategory, excluding current
-  const related = ARTICLES.filter(
-    (a) => a.kiriCategory === article.kiriCategory && a.slug !== article.slug
-  ).slice(0, 3)
+  const sameBranch = ARTICLES.filter((a) => a.kiriCategory === article.kiriCategory && a.slug !== article.slug)
+  const sameTopic = ARTICLES.filter(
+    (a) => a.category === article.category && a.kiriCategory !== article.kiriCategory && a.slug !== article.slug
+  )
+  const related = [...sameBranch, ...sameTopic].slice(0, 3)
+
+  const href = `/kiri-academy/${article.slug}`
+  const breadcrumbs = [
+    { name: "Inicio", href: "/" },
+    { name: "Kiri Academy", href: "/kiri-academy" },
+    { name: article.title, href },
+  ]
+  const structuredData = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: article.title,
+      description: article.excerpt,
+      image: absoluteUrl(article.coverUrl),
+      inLanguage: "es-ES",
+      articleSection: article.category,
+      author: { "@type": "Person", name: ADRIANA.name, jobTitle: ADRIANA.role },
+      publisher: KIRI_ORGANIZATION,
+      mainEntityOfPage: absoluteUrl(href),
+    },
+    breadcrumbJsonLd(breadcrumbs),
+  ]
+  const showGuideLink = article.category === "Inversión"
+  const showGiftBridge = GIFT_BRIDGE_CATEGORIES.has(article.kiriCategory)
 
   return (
     <div className="min-h-screen bg-background">
+      <JsonLd data={structuredData} />
       <Header />
 
       {/* Hero */}
       <section className="bg-foreground pt-28 pb-16 px-6 md:px-12 lg:px-20 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-primary/20 blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
         <div className="max-w-3xl mx-auto relative z-10">
-          <Link
-            href="/kiri-academy"
-            className="inline-flex items-center gap-2 text-white/60 hover:text-white text-sm mb-8 transition-colors duration-200"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Kiri Academy
-          </Link>
+          <div className="mb-8">
+            <ArticleBreadcrumbs items={breadcrumbs} tone="dark" />
+          </div>
 
           <div className="flex flex-wrap items-center gap-3 mb-6">
             <span
@@ -169,6 +210,43 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           {article.body.map((section, i) => (
             <RenderSection key={i} section={section} />
           ))}
+
+          {showGuideLink && (
+            <Link
+              href={INVEST_GUIDE.href}
+              className="group mt-10 flex items-center justify-between gap-4 rounded-2xl border border-border bg-card p-6 transition-colors hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            >
+              <span>
+                <span className="block text-xs font-semibold uppercase tracking-widest text-primary">
+                  {INVEST_GUIDE.eyebrow}
+                </span>
+                <span className="mt-1 block font-serif text-lg font-bold leading-snug text-foreground">
+                  {INVEST_GUIDE.title}
+                </span>
+              </span>
+              <ArrowRight className="h-5 w-5 flex-shrink-0 text-primary transition-transform group-hover:translate-x-1" />
+            </Link>
+          )}
+
+          {showGiftBridge && (
+            <aside className="mt-10 flex flex-col gap-4 rounded-2xl bg-primary/5 p-6 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex gap-4">
+                <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-primary/10">
+                  <Gift className="h-5 w-5 text-primary" aria-hidden="true" />
+                </span>
+                <p className="leading-relaxed text-foreground/80">
+                  ¿Buscas un regalo que crezca con ellos? Con Regala Kiri, la familia puede aportar a su futuro en
+                  cumpleaños y fechas especiales.
+                </p>
+              </div>
+              <Link
+                href="/regala-kiri"
+                className="inline-flex flex-shrink-0 items-center justify-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              >
+                Conocer Regala Kiri
+              </Link>
+            </aside>
+          )}
         </div>
       </article>
 
@@ -201,7 +279,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
               Seguir leyendo
             </p>
             <h2 className="font-serif text-2xl md:text-3xl font-bold text-foreground mb-10">
-              Más artículos de {kiriMeta.label}
+              {sameBranch.length >= 3 ? `Más artículos de ${kiriMeta.label}` : "Artículos relacionados"}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {related.map((rel) => (
