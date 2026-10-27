@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async redirects() {
+    return [{ source: '/privacidad', destination: '/privacidad-candidatos', permanent: true }]
+  },
   typescript: {
     ignoreBuildErrors: true,
   },

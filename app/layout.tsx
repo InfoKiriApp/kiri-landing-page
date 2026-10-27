@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans, Playfair_Display } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import CookieBanner from "@/components/cookie-banner"
 import GenieChat from "@/components/genie-chat"
+import { SITE_URL } from "@/lib/site"
 import "./globals.css"
 
 const plusJakarta = Plus_Jakarta_Sans({
@@ -16,6 +17,7 @@ const playfair = Playfair_Display({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "Kiri — La cuenta de inversión para niños",
   description:
     "Kiri es una cuenta de ahorro e inversión para niños de 0 a 18 años. Regala un futuro financiero mejor a tus seres queridos.",

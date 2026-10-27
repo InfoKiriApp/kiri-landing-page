@@ -7,6 +7,15 @@ import { useState, useEffect, useRef } from "react"
 import { Menu, X, ChevronDown } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
+const LEGAL_PATHS = [
+  "/politica-de-privacidad",
+  "/privacidad-menores-y-familias",
+  "/terminos-y-condiciones",
+  "/politica-de-cookies",
+  "/condiciones-regala-kiri",
+  "/privacidad-candidatos",
+]
+
 // Groups that get a dropdown
 const NAV_GROUPS = [
   {
@@ -27,6 +36,8 @@ const NAV_GROUPS = [
     label: "Kiri Academy",
     items: [
       { label: "Todos los artículos", href: "/kiri-academy" },
+      { label: "Cómo invertir para tus hijos", href: "/kiri-academy/como-invertir-para-tus-hijos" },
+      { label: "Regalos financieros para niños", href: "/kiri-academy/regalos-financieros-para-ninos" },
       { label: "Juegos por edades",   href: "/kiri-academy/juegos" },
     ],
   },
@@ -105,7 +116,9 @@ export default function Header() {
     pathname === "/kiri-academy" ||
     pathname.startsWith("/kiri-academy/") ||
     pathname === "/kiri-en-los-medios" ||
-    pathname === "/regala-kiri"
+    pathname === "/regala-kiri" ||
+    pathname === "/trabaja-con-nosotros" ||
+    LEGAL_PATHS.includes(pathname)
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
@@ -131,7 +144,7 @@ export default function Header() {
     >
       <div className="flex justify-between items-center max-w-7xl mx-auto gap-4">
 
-        {/* Logo + MyInvestor */}
+        {/* Logo + Indexa Capital */}
         <Link href="/" className="flex items-center gap-3 flex-shrink-0">
           <Image
             src="/images/kiri-logo.svg"
@@ -141,20 +154,24 @@ export default function Header() {
             className={isLight ? "" : "brightness-0 invert"}
             priority
           />
+          <span
+            aria-hidden="true"
+            className={`hidden md:block w-px h-6 ${isLight ? "bg-foreground/20" : "bg-white/30"}`}
+          />
           <Image
-            src="/images/agente-de-my-investor.png"
-            alt="Agente de MyInvestor"
-            width={180}
-            height={45}
-            className={`h-7 sm:h-8 w-auto object-contain hidden md:block ${
-              isLight ? "opacity-60" : "brightness-0 invert opacity-70"
+            src="/images/indexa-capital.webp"
+            alt="En colaboración con Indexa Capital"
+            width={160}
+            height={30}
+            className={`h-4 xl:h-[18px] 2xl:h-5 w-auto object-contain hidden md:block ${
+              isLight ? "brightness-0 opacity-60" : "brightness-0 invert opacity-80"
             }`}
           />
         </Link>
 
         {/* Desktop nav */}
         <nav
-          className="hidden lg:flex items-center gap-3 xl:gap-5"
+          className="hidden xl:flex items-center gap-3 2xl:gap-5"
           aria-label="Navegación principal"
         >
           {/* Dropdown groups */}
@@ -182,6 +199,22 @@ export default function Header() {
               {link.label}
             </Link>
           ))}
+
+          {/* Careers: highlighted so it is easy to find */}
+          <Link
+            href="/trabaja-con-nosotros"
+            className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-semibold whitespace-nowrap transition-colors duration-300 ${
+              isLight
+                ? "bg-kiri-lilac/60 text-kiri-purple hover:bg-kiri-lilac"
+                : "bg-white/15 text-white hover:bg-white/25"
+            }`}
+          >
+            <span
+              aria-hidden="true"
+              className={`h-1.5 w-1.5 rounded-full ${isLight ? "bg-kiri-magenta" : "bg-white"}`}
+            />
+            Trabaja con nosotros
+          </Link>
         </nav>
 
         {/* CTA buttons + mobile toggle */}
@@ -189,10 +222,10 @@ export default function Header() {
 
           {/* Iniciar Sesión */}
           <a
-            href="https://cuenta.kiriapp.com/login"
+            href="https://indexa.kiriapp.com/login"
             target="_blank"
             rel="noopener noreferrer"
-            className={`hidden lg:inline-flex text-sm font-medium px-3 xl:px-4 py-2 rounded-full whitespace-nowrap transition-all duration-300 ${
+            className={`hidden xl:inline-flex text-sm font-medium px-3 2xl:px-4 py-2 rounded-full whitespace-nowrap transition-all duration-300 ${
               isLight
                 ? "text-foreground/70 hover:text-foreground border border-border hover:border-foreground/30"
                 : "text-white/80 hover:text-white border border-white/30 hover:border-white/60"
@@ -201,11 +234,23 @@ export default function Header() {
             Iniciar Sesión
           </a>
 
+          {/* Careers shortcut for widths where the full nav is collapsed into the menu */}
+          <Link
+            href="/trabaja-con-nosotros"
+            className={`hidden md:inline-flex xl:hidden items-center rounded-full px-3 py-2 text-sm font-semibold whitespace-nowrap transition-colors duration-300 ${
+              isLight
+                ? "bg-kiri-lilac/60 text-kiri-purple hover:bg-kiri-lilac"
+                : "bg-white/15 text-white hover:bg-white/25"
+            }`}
+          >
+            Trabaja con nosotros
+          </Link>
+
           {/* Regala Kiri — pink bow ribbon positioned at top-right corner */}
           <div className="relative hidden sm:block">
             <Link
               href="/regala-kiri"
-              className="inline-flex text-sm font-semibold px-4 xl:px-5 py-2 rounded-full whitespace-nowrap transition-all duration-300 bg-[hsl(330,80%,62%)] text-white hover:bg-[hsl(330,80%,55%)]"
+              className="inline-flex text-sm font-semibold px-4 2xl:px-5 py-2 rounded-full whitespace-nowrap transition-all duration-300 bg-[hsl(330,80%,62%)] text-white hover:bg-[hsl(330,80%,55%)]"
               aria-label="Regala Kiri"
             >
               Regala Kiri
@@ -223,7 +268,7 @@ export default function Header() {
 
           {/* Mobile hamburger */}
           <button
-            className={`lg:hidden p-2 rounded-lg ${
+            className={`xl:hidden p-2 rounded-lg ${
               isLight ? "text-foreground" : "text-white"
             }`}
             onClick={() => setMenuOpen(!menuOpen)}
@@ -243,7 +288,7 @@ export default function Header() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.22, ease: "easeOut" }}
-            className="lg:hidden absolute top-full left-0 right-0 bg-white border-b border-border shadow-xl px-6 py-4 flex flex-col gap-1"
+            className="xl:hidden absolute top-full left-0 right-0 bg-white border-b border-border shadow-xl px-6 py-4 flex flex-col gap-1"
           >
             {/* Dropdown group items flattened */}
             {NAV_GROUPS.map((group) => (
@@ -279,12 +324,19 @@ export default function Header() {
                   {link.label}
                 </Link>
               ))}
+              <Link
+                href="/trabaja-con-nosotros"
+                onClick={() => setMenuOpen(false)}
+                className="block text-sm font-semibold py-2.5 px-3 rounded-lg bg-kiri-lilac/50 text-kiri-purple hover:bg-kiri-lilac transition-colors"
+              >
+                Trabaja con nosotros
+              </Link>
             </div>
 
             {/* CTAs */}
             <div className="flex flex-col gap-2 mt-3 pt-3 border-t border-border">
               <a
-                href="https://cuenta.kiriapp.com/login"
+                href="https://indexa.kiriapp.com/login"
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setMenuOpen(false)}

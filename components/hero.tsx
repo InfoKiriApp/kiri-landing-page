@@ -56,29 +56,32 @@ export default function Hero() {
               variants={fadeUp}
               className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-bold mb-6 leading-tight"
             >
-              La cuenta de inversión para niños<br />que les asegura un futuro mejor
+              Una inversión para acompañarles hasta el futuro
             </motion.h1>
             <motion.p
               custom={2}
               variants={fadeUp}
-              className="text-base md:text-lg leading-relaxed mb-8 text-white/80 max-w-lg"
+              className="text-base md:text-lg leading-relaxed mb-8 text-white/80 max-w-xl text-pretty"
             >
-              Regala una cuenta Kiri. Invierte en su futuro.
+              Kiri ayuda a las familias a construir una cartera de fondos indexados para menores, con aportaciones a largo plazo, educación financiera y una explicación clara de sus riesgos y costes.
             </motion.p>
             <motion.div custom={3} variants={fadeUp} className="flex flex-col sm:flex-row gap-4">
               <a
                 href="/regala-kiri"
                 className="px-7 py-3 bg-white text-primary font-semibold text-sm rounded-full hover:bg-purple-100 transition-colors duration-300 text-center"
               >
-                Abre tu Cuenta Ahora
+                Regala Kiri
               </a>
               <a
-                href="#sobre"
+                href="#riesgos-y-costes"
                 className="px-7 py-3 border-2 border-white/60 text-white text-sm font-medium rounded-full hover:bg-white/10 transition-colors duration-300 text-center"
               >
-                Descubre más
+                Conoce los riesgos y costes
               </a>
             </motion.div>
+            <motion.p custom={4} variants={fadeUp} className="mt-5 max-w-xl text-sm leading-relaxed text-white/75">
+              La inversión puede perder valor. Las rentabilidades pasadas no garantizan resultados futuros.
+            </motion.p>
           </motion.div>
 
           {/* Right: piggy bank */}

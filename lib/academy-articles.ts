@@ -527,12 +527,12 @@ export const ARTICLES: Article[] = [
   {
     slug: "fondos-de-inversion-indexados",
     icon: "TrendingUp",
-    category: "Inversión",
+    category: "Guía para familias",
     kiriCategory: "tronco",
     ageRange: "15-18" as AgeRange,
-    title: "¿Qué es un Fondo de Inversión Indexado y por qué es ideal para niños?",
+    title: "¿Cómo funciona una cartera de fondos indexados para un menor?",
     excerpt:
-      "Los fondos indexados son la herramienta de inversión más recomendada por los expertos para el largo plazo. Te explicamos cómo funcionan con palabras que hasta un niño puede entender.",
+      "Qué es una cartera de fondos indexados, por qué no garantiza rentabilidad y qué costes tiene. Una guía para familias que invierten a largo plazo para un menor.",
     readTime: "6 min",
     coverUrl: "/images/academy/fondos-de-inversion-indexados.png",
     thumbUrl: "/images/academy/thumbs/fondos-de-inversion-indexados.webp",
@@ -570,7 +570,7 @@ export const ARTICLES: Article[] = [
       {
         type: "callout",
         content:
-          "La Cartera Kiri Ambiciosa, gestionada por MyInvestor, utiliza fondos indexados globales para maximizar el crecimiento a largo plazo con un coste mínimo. Su rentabilidad anualizada desde 2022 ha sido del 11,56%.",
+          "La Cartera Kiri Ambiciosa, gestionada por Indexa Capital, utiliza fondos indexados globales para maximizar el crecimiento a largo plazo con un coste mínimo. Su rentabilidad anualizada desde 2022 ha sido del 11,56%.",
       },
       {
         type: "heading",
@@ -1031,7 +1031,7 @@ export const ARTICLES: Article[] = [
       {
         type: "paragraph",
         content:
-          "Kiri actúa a través de MyInvestor, que ofrece acceso a fondos indexados de bajo coste. Cuando los padres ahorran para sus hijos a través de Kiri, su dinero se invierte de forma eficiente, minimizando comisiones y maximizando el efecto del interés compuesto a lo largo de los años. Entender gestión de activos ayuda a valorar por qué la elección del vehículo de inversión importa tanto como la cantidad que se ahorra.",
+          "Kiri trabaja con Indexa Capital, que ofrece acceso a fondos indexados de bajo coste. Cuando los padres ahorran para sus hijos a través de Kiri, su dinero se invierte de forma eficiente, minimizando comisiones y maximizando el efecto del interés compuesto a lo largo de los años. Entender gestión de activos ayuda a valorar por qué la elección del vehículo de inversión importa tanto como la cantidad que se ahorra.",
       },
     ],
   },

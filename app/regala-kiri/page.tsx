@@ -2,10 +2,14 @@
 
 import Header from "@/components/header"
 import Footer from "@/components/footer"
+import BirthDatePicker from "@/components/birth-date-picker"
 import Image from "next/image"
 import Link from "next/link"
-import { useRef, useState } from "react"
-import { ChevronRight, ChevronLeft, ArrowUpRight, Check } from "lucide-react"
+import AddressAutocomplete from "@/components/regala-kiri/address-autocomplete"
+import GiftSummary from "@/components/regala-kiri/gift-summary"
+import { clearDraft, loadDraft, saveDraft } from "@/lib/regala-kiri-draft"
+import { useEffect, useRef, useState } from "react"
+import { ChevronRight, ChevronLeft, Check, ImagePlus, X, RotateCcw } from "lucide-react"
 
 const occasions = [
   "Primera Comunión",
@@ -28,7 +32,43 @@ const relationships = [
 // Spanish postal codes: 5 digits (00000-52999).
 const SPANISH_POSTAL_REGEX = /^[0-5]\d{4}$/
 
-const FORM_STEPS = ["Tus datos", "El niño/a", "Envío", "El regalo"] as const
+const messageExamples = [
+  "Cuando abras esto, quiero que sepas lo orgulloso/a que estoy de ti. Que el ahorro de hoy te ayude a cumplir tus sueños.",
+  "Feliz Comunión. Que este regalo crezca contigo, igual que tú. Te quiero mucho.",
+  "El día que seas mayor, recuerda que alguien creyó en ti desde pequeño/a. Usa este regalo para hacer algo grande.",
+]
+
+const MAX_PHOTO_INPUT_BYTES = 10 * 1024 * 1024
+const PHOTO_MAX_SIDE = 1024
+
+// Shrinks the photo in the browser so the upload stays small and fast.
+function resizeImageToDataUrl(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const objectUrl = URL.createObjectURL(file)
+    const img = new window.Image()
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl)
+      const scale = Math.min(1, PHOTO_MAX_SIDE / Math.max(img.width, img.height))
+      const canvas = document.createElement("canvas")
+      canvas.width = Math.round(img.width * scale)
+      canvas.height = Math.round(img.height * scale)
+      const ctx = canvas.getContext("2d")
+      if (!ctx) {
+        reject(new Error("canvas-unavailable"))
+        return
+      }
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+      resolve(canvas.toDataURL("image/jpeg", 0.82))
+    }
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl)
+      reject(new Error("image-unreadable"))
+    }
+    img.src = objectUrl
+  })
+}
+
+const FORM_STEPS = ["Tus datos", "El niño/a", "Envío", "El regalo", "Resumen"] as const
 const LAST_STEP = FORM_STEPS.length - 1
 
 const steps = [
@@ -67,6 +107,7 @@ export default function RegalaKiriPage() {
     gifterEmail: "",
     childFirstName: "",
     childLastName: "",
+    childBirthDate: "",
     relationship: "",
     parentFirstName: "",
     parentLastName: "",
@@ -78,22 +119,61 @@ export default function RegalaKiriPage() {
     city: "",
     country: "España",
     occasion: "",
+    occasionOther: "",
     message: "",
-    wantsPersonalizedStory: false,
-    childDescription: "",
     privacy: false,
   })
+  const [photo, setPhoto] = useState<{ dataUrl: string; name: string } | null>(null)
+  const [photoError, setPhotoError] = useState<string | null>(null)
   const [submitted, setSubmitted] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [postalTouched, setPostalTouched] = useState(false)
+  const [draftRestored, setDraftRestored] = useState(false)
+  const [editingFromSummary, setEditingFromSummary] = useState(false)
+  const draftLoadedRef = useRef(false)
+
+  // Restore after mount so the server-rendered HTML and first client render match.
+  useEffect(() => {
+    const draft = loadDraft()
+    draftLoadedRef.current = true
+    if (!draft) return
+    const { privacy: _ignored, ...savedFields } = draft.form as Record<string, unknown>
+    setForm((prev) => ({ ...prev, ...(savedFields as Partial<typeof prev>) }))
+    setStep(Math.min(Math.max(draft.step, 0), LAST_STEP - 1))
+    setDraftRestored(true)
+  }, [])
+
+  useEffect(() => {
+    if (!draftLoadedRef.current || submitted) return
+    const timer = setTimeout(() => {
+      const { privacy: _consent, ...fields } = form
+      saveDraft(step, fields)
+    }, 400)
+    return () => clearTimeout(timer)
+  }, [form, step, submitted])
+
+  const startOver = () => {
+    clearDraft()
+    setForm((prev) => ({
+      ...prev,
+      ...Object.fromEntries(Object.keys(prev).map((k) => [k, ""])),
+      country: "España",
+      privacy: false,
+    }))
+    setPhoto(null)
+    setStep(0)
+    setPostalTouched(false)
+    setEditingFromSummary(false)
+    setDraftRestored(false)
+  }
 
   const SQUARE_CHECKOUT_URL =
     "https://checkout.square.site/merchant/ML80VD2C4SMJA/checkout/X2FBTHLVIZFD2NQOA3KACQ2Z"
 
-  // The gifter is the parent → they go straight to account opening, no gift form.
+  // A parent gifter is also the guardian, so we skip the guardian fields (the code goes to their own email).
   const isParent = form.relationship === "Padre/Madre"
-  const showGiftForm = form.relationship !== "" && !isParent
+  const showGiftForm = form.relationship !== ""
   const postalValid = SPANISH_POSTAL_REGEX.test(form.postal.trim())
   const showPostalError = postalTouched && form.postal.trim().length > 0 && !postalValid
 
@@ -105,6 +185,33 @@ export default function RegalaKiriPage() {
       ...prev,
       [name]: type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
     }))
+  }
+
+  const handlePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    e.target.value = ""
+    if (!file) return
+
+    setPhotoError(null)
+    if (!file.type.startsWith("image/")) {
+      setPhotoError("El archivo debe ser una imagen (JPG o PNG).")
+      return
+    }
+    if (file.size > MAX_PHOTO_INPUT_BYTES) {
+      setPhotoError("La foto es demasiado grande. El máximo es 10 MB.")
+      return
+    }
+
+    try {
+      const dataUrl = await resizeImageToDataUrl(file)
+      setPhoto({ dataUrl, name: file.name })
+    } catch {
+      setPhotoError("No hemos podido leer la foto. Prueba con un archivo JPG o PNG.")
+    }
+  }
+
+  const insertExample = (text: string) => {
+    setForm((prev) => ({ ...prev, message: text }))
   }
 
   const scrollToFormTop = () => {
@@ -123,7 +230,34 @@ export default function RegalaKiriPage() {
       setPostalTouched(true)
       return
     }
+    if (editingFromSummary) {
+      setEditingFromSummary(false)
+      goToStep(LAST_STEP)
+      return
+    }
     goToStep(Math.min(step + 1, LAST_STEP))
+  }
+
+  const editFromSummary = (target: number) => {
+    setEditingFromSummary(true)
+    goToStep(target)
+  }
+
+  const handleAddressSelect = (s: { street: string; number: string; postal: string; city: string }) => {
+    setForm((prev) => ({
+      ...prev,
+      street: s.street,
+      number: s.number || prev.number,
+      postal: s.postal || prev.postal,
+      city: s.city,
+    }))
+    setPostalTouched(Boolean(s.postal))
+    requestAnimationFrame(() => {
+      const next = formRef.current?.querySelector<HTMLInputElement>(
+        s.number ? 'input[name="floor"]' : 'input[name="number"]',
+      )
+      next?.focus()
+    })
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -142,7 +276,12 @@ export default function RegalaKiriPage() {
       const res = await fetch("/api/regala-kiri", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          ...form,
+          occasionOther: form.occasion === "Otro" ? form.occasionOther : "",
+          childPhoto: photo?.dataUrl ?? "",
+          childPhotoName: photo?.name ?? "",
+        }),
       })
 
       const data = await res.json().catch(() => ({}))
@@ -154,6 +293,7 @@ export default function RegalaKiriPage() {
       }
 
       // Only redirect to Square checkout after a successful Google Sheets save.
+      clearDraft()
       setSubmitted(true)
       window.location.href = SQUARE_CHECKOUT_URL
     } catch (err) {
@@ -196,6 +336,15 @@ export default function RegalaKiriPage() {
                     </div>
                   </div>
                 ))}
+                <p className="mt-8 text-sm leading-relaxed text-muted-foreground">
+                  ¿Dudas entre regalar dinero, ahorro o inversión?{" "}
+                  <Link
+                    href="/kiri-academy/regalos-financieros-para-ninos"
+                    className="font-semibold text-primary underline underline-offset-4 hover:text-accent"
+                  >
+                    Lee la guía de regalos financieros para niños
+                  </Link>
+                </p>
               </div>
 
               <div className="order-first lg:order-last">
@@ -250,7 +399,7 @@ export default function RegalaKiriPage() {
                       ¿Quién eres para el niño/a? <span className="text-primary">*</span>
                     </label>
                     <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-                      Empecemos por aquí: según tu respuesta te llevaremos por el camino más corto.
+                      Empecemos por aquí: adaptaremos el formulario a tu respuesta.
                     </p>
                     <select
                       id="relationship"
@@ -266,42 +415,33 @@ export default function RegalaKiriPage() {
                     </select>
                   </div>
 
-                  {/* Parent: only the open-account pop-up */}
-                  {isParent && (
-                    <div
-                      role="status"
-                      className="flex flex-col items-center text-center gap-4 rounded-2xl bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border border-primary/25 p-6 md:p-8 shadow-sm animate-in fade-in slide-in-from-top-2 zoom-in-95 duration-500 ease-out"
-                    >
-                      <Image
-                        src="/images/piggy.png"
-                        alt="Cerdito hucha de Kiri rodeado de monedas"
-                        width={140}
-                        height={168}
-                        className="w-28 md:w-32 h-auto animate-in zoom-in-50 duration-500 delay-100"
-                      />
-                      <p className="text-sm md:text-base font-semibold text-foreground leading-relaxed text-balance">
-                        Si eres el Papá o la Mamá, por favor dirígete a Abre tu Cuenta. Desde allí, podrás comenzar toda la experiencia de Kiri de forma directa.
-                      </p>
-                      <a
-                        href="https://cuenta.kiriapp.com/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group inline-flex items-center justify-center gap-1.5 rounded-full bg-primary text-primary-foreground text-sm font-semibold px-6 py-3 hover:bg-primary/90 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
-                      >
-                        Abre tu cuenta
-                        <ArrowUpRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                      </a>
-                      <p className="text-xs text-muted-foreground">Gracias por confiar en Kiri.</p>
-                    </div>
-                  )}
-
-                  {/* Everyone else: multi-page gift form */}
+                  {/* Same multi-page flow for everyone; guardian fields only appear when the gifter is not the parent */}
                   {showGiftForm && (
                     <form
                       ref={formRef}
                       onSubmit={handleSubmit}
                       className="flex flex-col gap-6 animate-in fade-in slide-in-from-top-2 duration-500"
                     >
+                      {draftRestored && (
+                        <div
+                          role="status"
+                          className="flex items-center justify-between gap-3 rounded-xl border border-primary/20 bg-primary/5 px-4 py-3 text-sm animate-in fade-in duration-300"
+                        >
+                          <p className="text-foreground">
+                            <span className="font-semibold">Hemos recuperado tu borrador.</span>{" "}
+                            <span className="text-muted-foreground">Sigue donde lo dejaste.</span>
+                          </p>
+                          <button
+                            type="button"
+                            onClick={startOver}
+                            className="inline-flex flex-shrink-0 items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold text-primary hover:bg-primary/10 transition-colors"
+                          >
+                            <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
+                            Empezar de cero
+                          </button>
+                        </div>
+                      )}
+
                       {/* Progress */}
                       <div>
                         <div className="flex items-center justify-between mb-3">
@@ -407,8 +547,22 @@ export default function RegalaKiriPage() {
                                   className={inputClass}
                                 />
                               </div>
+                              <BirthDatePicker
+                                value={form.childBirthDate}
+                                onChange={(childBirthDate) =>
+                                  setForm((prev) => ({ ...prev, childBirthDate }))
+                                }
+                              />
                             </fieldset>
 
+                            {isParent ? (
+                              <p
+                                role="note"
+                                className="rounded-xl bg-primary/5 border border-primary/20 px-4 py-3 text-xs leading-relaxed text-muted-foreground"
+                              >
+                                Como eres su padre o madre, el código para crear la cuenta del niño/a llegará a tu correo ({form.gifterEmail || "el que has indicado en el paso 1"}).
+                              </p>
+                            ) : (
                             <fieldset className="flex flex-col gap-4 rounded-xl bg-muted/60 border border-border p-4">
                               <legend className={`${legendClass} px-1`}>Padre, madre o tutor</legend>
                               <p className="text-xs text-muted-foreground leading-relaxed">
@@ -447,21 +601,20 @@ export default function RegalaKiriPage() {
                                 className={inputClass}
                               />
                             </fieldset>
+                            )}
                           </div>
                         )}
 
                         {step === 2 && (
                           <fieldset className="flex flex-col gap-4">
                             <legend className={legendClass}>Dirección de envío del niño/a</legend>
-                            <input
-                              type="text"
-                              name="street"
-                              placeholder="Calle / vía *"
-                              aria-label="Calle o vía"
-                              autoComplete="address-line1"
+                            <p className="-mt-2 text-xs leading-relaxed text-muted-foreground">
+                              Escribe la calle y el número, elige tu dirección y completaremos el resto.
+                            </p>
+                            <AddressAutocomplete
                               value={form.street}
-                              onChange={handleChange}
-                              required
+                              onType={(street) => setForm((prev) => ({ ...prev, street }))}
+                              onSelect={handleAddressSelect}
                               className={inputClass}
                             />
                             <div className="grid grid-cols-2 gap-4">
@@ -554,41 +707,114 @@ export default function RegalaKiriPage() {
                                   <option key={o} value={o}>{o}</option>
                                 ))}
                               </select>
-                              <textarea
-                                name="message"
-                                placeholder="Mensaje personal para el futuro (opcional)"
-                                aria-label="Mensaje personal para el futuro (opcional)"
-                                value={form.message}
-                                onChange={handleChange}
-                                rows={4}
-                                className={`${inputClass} resize-none`}
-                              />
-
-                              <label className="flex items-start gap-3 cursor-pointer">
+                              {form.occasion === "Otro" && (
                                 <input
-                                  type="checkbox"
-                                  name="wantsPersonalizedStory"
-                                  checked={form.wantsPersonalizedStory}
+                                  type="text"
+                                  name="occasionOther"
+                                  placeholder="¿Qué ocasión es? *"
+                                  aria-label="Indica cuál es la ocasión"
+                                  maxLength={120}
+                                  value={form.occasionOther}
                                   onChange={handleChange}
-                                  className="mt-1 accent-primary flex-shrink-0"
-                                />
-                                <span className="text-sm text-foreground">
-                                  Quiero recibir una mini historia personalizada sobre educación financiera para el niño / la niña
-                                </span>
-                              </label>
-
-                              {form.wantsPersonalizedStory && (
-                                <textarea
-                                  name="childDescription"
-                                  placeholder="Cuéntanos sobre tu hijo/a: edad, intereses, personalidad, hobbies... esto nos ayudará a personalizar la historia"
-                                  aria-label="Descripción del niño/a para personalizar la historia"
-                                  value={form.childDescription}
-                                  onChange={handleChange}
-                                  rows={4}
-                                  className={`${inputClass} resize-none`}
+                                  required
+                                  autoFocus
+                                  className={`${inputClass} animate-in fade-in slide-in-from-top-2 duration-300`}
                                 />
                               )}
+
+                              <div className="flex flex-col gap-3">
+                                <label htmlFor="message" className="text-sm font-semibold text-foreground">
+                                  Mensaje personal para el futuro{" "}
+                                  <span className="text-muted-foreground font-normal">(opcional)</span>
+                                </label>
+                                <p className="text-xs text-muted-foreground leading-relaxed -mt-1">
+                                  Lo guardaremos para que lo lea cuando sea mayor. Toca un ejemplo para usarlo como punto de partida.
+                                </p>
+                                <ul className="flex flex-col gap-2" aria-label="Ejemplos de mensajes">
+                                  {messageExamples.map((example) => (
+                                    <li key={example}>
+                                      <button
+                                        type="button"
+                                        onClick={() => insertExample(example)}
+                                        className="w-full text-left text-xs leading-relaxed text-foreground rounded-xl border border-dashed border-primary/40 bg-primary/5 px-3 py-2 hover:bg-primary/10 hover:border-primary transition-colors"
+                                      >
+                                        &ldquo;{example}&rdquo;
+                                      </button>
+                                    </li>
+                                  ))}
+                                </ul>
+                                <textarea
+                                  id="message"
+                                  name="message"
+                                  placeholder="Escribe aquí tu mensaje para cuando crezca…"
+                                  value={form.message}
+                                  onChange={handleChange}
+                                  maxLength={2000}
+                                  rows={5}
+                                  className={`${inputClass} resize-none`}
+                                />
+                              </div>
+
+                              <div className="flex flex-col gap-3">
+                                <p className="text-sm font-semibold text-foreground">
+                                  Foto del niño/a{" "}
+                                  <span className="text-muted-foreground font-normal">(opcional)</span>
+                                </p>
+                                {photo ? (
+                                  <div className="flex items-center gap-4 rounded-xl border border-border bg-white p-3">
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    <img
+                                      src={photo.dataUrl || "/placeholder.svg"}
+                                      alt="Vista previa de la foto del niño/a"
+                                      className="h-20 w-20 rounded-lg object-cover flex-shrink-0"
+                                    />
+                                    <p className="flex-1 min-w-0 truncate text-sm text-foreground">{photo.name}</p>
+                                    <button
+                                      type="button"
+                                      onClick={() => setPhoto(null)}
+                                      aria-label="Quitar la foto"
+                                      className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+                                    >
+                                      <X className="h-4 w-4" />
+                                    </button>
+                                  </div>
+                                ) : (
+                                  <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border bg-white px-4 py-6 text-center hover:border-primary/50 hover:bg-primary/5 transition-colors focus-within:ring-2 focus-within:ring-primary/40">
+                                    <ImagePlus className="h-6 w-6 text-primary" aria-hidden="true" />
+                                    <span className="text-sm font-medium text-foreground">Subir una foto</span>
+                                    <span className="text-xs text-muted-foreground">JPG o PNG, hasta 10 MB</span>
+                                    <input
+                                      type="file"
+                                      accept="image/*"
+                                      onChange={handlePhotoChange}
+                                      className="sr-only"
+                                    />
+                                  </label>
+                                )}
+                                {photoError && (
+                                  <p role="alert" className="text-xs text-destructive">
+                                    {photoError}
+                                  </p>
+                                )}
+                              </div>
                             </fieldset>
+                          </div>
+                        )}
+
+                        {step === 4 && (
+                          <div className="flex flex-col gap-6">
+                            <div>
+                              <h3 className="font-serif text-xl font-bold text-foreground">Revisa tu regalo</h3>
+                              <p className="mt-1 text-sm text-muted-foreground leading-relaxed">
+                                Un último vistazo antes de pagar. Puedes editar cualquier apartado.
+                              </p>
+                            </div>
+                            <GiftSummary
+                              form={form}
+                              photoUrl={photo?.dataUrl ?? null}
+                              isParent={isParent}
+                              onEdit={editFromSummary}
+                            />
 
                             <label className="flex items-start gap-3 text-sm text-muted-foreground cursor-pointer">
                               <input
@@ -600,10 +826,25 @@ export default function RegalaKiriPage() {
                                 className="mt-0.5 accent-primary"
                               />
                               <span>
-                                Acepto compartir mis datos y la{" "}
-                                <Link href="#" className="text-primary underline underline-offset-4 hover:text-accent">
-                                  política de privacidad
+                                Acepto las{" "}
+                                <Link
+                                  href="/condiciones-regala-kiri"
+                                  target="_blank"
+                                  className="text-primary underline underline-offset-4 hover:text-accent"
+                                >
+                                  condiciones de Regala Kiri
+                                  <span className="sr-only"> (se abre en una pestaña nueva)</span>
                                 </Link>{" "}
+                                y la{" "}
+                                <Link
+                                  href="/politica-de-privacidad"
+                                  target="_blank"
+                                  className="text-primary underline underline-offset-4 hover:text-accent"
+                                >
+                                  política de privacidad
+                                  <span className="sr-only"> (se abre en una pestaña nueva)</span>
+                                </Link>
+                                {isParent ? "" : ", y confirmo que la familia del niño/a está de acuerdo con el regalo"}{" "}
                                 <span className="text-primary font-semibold">*</span>
                               </span>
                             </label>
@@ -647,7 +888,7 @@ export default function RegalaKiriPage() {
                             onClick={goNext}
                             className="flex-1 inline-flex items-center justify-center gap-1 py-3.5 bg-primary text-primary-foreground font-semibold rounded-full hover:bg-accent transition-colors duration-300 text-sm"
                           >
-                            Siguiente
+                            {editingFromSummary ? "Guardar y volver al resumen" : step === LAST_STEP - 1 ? "Revisar el regalo" : "Siguiente"}
                             <ChevronRight className="w-4 h-4" />
                           </button>
                         ) : (
@@ -683,7 +924,7 @@ export default function RegalaKiriPage() {
                 className="w-full h-auto rounded-3xl object-cover"
               />
               <p className="text-xs text-muted-foreground leading-relaxed mt-6 text-center">
-                Kiri es agente bancario de MyInvestor Banco S.A., supervisado por el Banco de España y la CNMV. Tus ahorros están garantizados por el Fondo de Garantía de Depósitos Español.
+                Kiri trabaja en colaboración con Indexa Capital A.V., S.A., agencia de valores supervisada por la CNMV con el n.º 257. Las inversiones están cubiertas por el Fondo de Garantía de Inversiones (FOGAIN).
               </p>
             </div>
           </div>

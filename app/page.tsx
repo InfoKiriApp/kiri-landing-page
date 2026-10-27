@@ -6,6 +6,8 @@ import Hero from "@/components/hero"
 import SobreKiri from "@/components/sobre-kiri"
 import ExperienciaKiri from "@/components/experiencia-kiri"
 import Featured from "@/components/featured"
+import KeyFacts from "@/components/key-facts"
+import RiskAndCosts from "@/components/risk-and-costs"
 import Calculator from "@/components/calculator"
 import Promo from "@/components/promo"
 import Testimonials from "@/components/testimonials"
@@ -28,7 +30,9 @@ export default function Home() {
     <main>
       <Hero />
       <SobreKiri />
+      <KeyFacts />
       <Featured />
+      <RiskAndCosts />
       <Calculator />
       <ExperienciaKiri />
       <Promo />
