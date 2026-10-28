@@ -44,6 +44,15 @@ Contenido editable: `lib/guides/index-funds.ts`
 - [ ] Autoría y revisión, igual que en la guía de inversión.
 - [ ] Revisión legal o de compliance del texto.
 
+## Página de gracias de Regala Kiri
+
+Página: `/regala-kiri/gracias` (con `noindex`, fuera del sitemap)
+Contenido editable: `app/regala-kiri/gracias/page.tsx`
+
+- [ ] En Square, poner `https://www.kiriapp.com/regala-kiri/gracias` como URL de redirección tras el pago del enlace "Kiri Regalo". Lo tiene que hacer quien tenga acceso a Square.
+- [ ] Confirmar el texto de "Qué pasa ahora", sobre todo el tercer paso (qué hace Kiri y cuándo se contacta con el padre, la madre o el tutor legal).
+- [ ] Confirmar si Square envía recibo por correo cuando el pedido es de 0 € con un código de descuento. Si no lo envía, ajustar el segundo paso.
+
 ## Al actualizar la guía
 
 Cambiar `reviewed` en `lib/guides/invest-for-kids.ts`. Esa fecha alimenta la página, el JSON-LD y el sitemap.
