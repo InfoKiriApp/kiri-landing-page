@@ -728,7 +728,7 @@ export default function RegalaKiriPage() {
                                   <span className="text-muted-foreground font-normal">(opcional)</span>
                                 </label>
                                 <p className="text-xs text-muted-foreground leading-relaxed -mt-1">
-                                  Lo guardaremos para que lo lea cuando sea mayor. Toca un ejemplo para usarlo como punto de partida.
+                                  Lo guardaremos en su cápsula del tiempo para que pueda atesorar fotos, mensajes y recuerdos.
                                 </p>
                                 <ul className="flex flex-col gap-2" aria-label="Ejemplos de mensajes">
                                   {messageExamples.map((example) => (
@@ -746,7 +746,7 @@ export default function RegalaKiriPage() {
                                 <textarea
                                   id="message"
                                   name="message"
-                                  placeholder="Escribe aquí tu mensaje para cuando crezca…"
+                                  placeholder="Escribe aquí tu mensaje para su cápsula del tiempo"
                                   value={form.message}
                                   onChange={handleChange}
                                   maxLength={2000}
