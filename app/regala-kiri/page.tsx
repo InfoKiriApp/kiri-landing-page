@@ -855,7 +855,7 @@ export default function RegalaKiriPage() {
                                 <p className="font-semibold text-foreground text-sm">Pago único</p>
                                 <p className="text-xs text-muted-foreground mt-0.5">Welcome Pack incluido</p>
                               </div>
-                              <p className="font-serif text-2xl font-bold text-primary">€29</p>
+                              <p className="font-serif text-2xl font-bold text-primary">€49</p>
                             </div>
 
                             {error && (
