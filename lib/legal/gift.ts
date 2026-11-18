@@ -8,9 +8,9 @@ export const GIFT_DOC: LegalDoc = {
   intro:
     "Todo lo que necesitas saber antes de regalar Kiri: qué incluye, cómo llega a la familia y qué pasa si cambias de opinión.",
   description:
-    "Condiciones de contratación de Regala Kiri: qué incluye el regalo de €29, cómo se envía el Welcome Pack, el código de alta para la familia, desistimiento, devoluciones y datos personales.",
+    "Condiciones de contratación de Regala Kiri: qué incluye el regalo de €49, cómo se envía el Welcome Pack, el código de alta para la familia, desistimiento, devoluciones y datos personales.",
   summary: [
-    { term: "Precio", description: "€29, pago único con IVA incluido. Welcome Pack y envío incluidos." },
+    { term: "Precio", description: "€49, pago único con IVA incluido. Welcome Pack y envío incluidos." },
     { term: "Qué recibe la familia", description: "El Welcome Pack en casa con un código para abrir la cuenta del menor gratis." },
     { term: "Lo que no incluye", description: "Aportaciones a la inversión. El dinero lo decide e ingresa la familia." },
     { term: "Si cambias de opinión", description: "Tienes 14 días mientras no hayamos personalizado el Welcome Pack." },
@@ -51,7 +51,7 @@ export const GIFT_DOC: LegalDoc = {
       title: "Cómo funciona",
       list: [
         { label: "Rellenas el formulario", text: "con tus datos, los del menor, los de su familia y la dirección de envío." },
-        { label: "Pagas €29", text: "en nuestra pasarela de pago segura. Te enviaremos la confirmación por email." },
+        { label: "Pagas €49", text: "en nuestra pasarela de pago segura. Te enviaremos la confirmación por email." },
         { label: "Preparamos el Welcome Pack", text: "personalizado y lo enviamos a la dirección indicada." },
         { label: "La familia recibe el código", text: "y, si quiere, abre la cuenta del menor siguiendo las instrucciones." },
       ],
@@ -61,7 +61,7 @@ export const GIFT_DOC: LegalDoc = {
       id: "precio",
       title: "Precio y pago",
       paragraphs: [
-        "El precio es de €29 con IVA incluido e incluye el envío. El pago es único: no hay suscripciones ni cargos posteriores.",
+        "El precio es de €49 con IVA incluido e incluye el envío. El pago es único: no hay suscripciones ni cargos posteriores.",
         "El pago se procesa a través de un proveedor de pagos seguro. Kiri no tiene acceso a los datos completos de tu tarjeta.",
       ],
     },
