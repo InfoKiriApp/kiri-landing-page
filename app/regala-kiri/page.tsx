@@ -80,9 +80,9 @@ const steps = [
   },
   {
     number: "2",
-    title: "Regala el alta por €29 con Welcome Pack incluido",
+    title: "Regala el alta por €49 con Welcome Pack incluido",
     description:
-      "Realiza un pago único de €29 para crear el alta de la cuenta Kiri que le vas a regalar. El Welcome Pack está incluido y es parte de su experiencia de bienvenida, junto con un mensaje personalizado para su futuro y un montón de sorpresas.",
+      "Realiza un pago único de €49 para crear el alta de la cuenta Kiri que le vas a regalar. El Welcome Pack está incluido y es parte de su experiencia de bienvenida, junto con un mensaje personalizado para su futuro y un montón de sorpresas.",
   },
   {
     number: "3",
@@ -379,7 +379,7 @@ export default function RegalaKiriPage() {
                     ¡Gracias por tu regalo!
                   </h3>
                   <p className="text-muted-foreground text-sm leading-relaxed">
-                    Hemos guardado tu solicitud correctamente. Te estamos redirigiendo a la página de pago segura para completar tu regalo de €29 con el Welcome Pack incluido.
+                    Hemos guardado tu solicitud correctamente. Te estamos redirigiendo a la página de pago segura para completar tu regalo de €49 con el Welcome Pack incluido.
                   </p>
                   <a
                     href={SQUARE_CHECKOUT_URL}
@@ -902,7 +902,7 @@ export default function RegalaKiriPage() {
                             ) : (
                               <>
                                 <Check className="w-4 h-4" />
-                                Regalar Kiri por €29
+                                Regalar Kiri por €49
                               </>
                             )}
                           </button>
